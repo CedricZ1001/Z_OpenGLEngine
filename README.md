@@ -2,9 +2,9 @@
 
 Real-time rendering engine based on C++ and OpenGL
 
-## Preparations(准备工作)
+Docs(https://learnopengl-cn.github.io/intro/)
 
-![learnOpenGL docs](https://learnopengl-cn.github.io/intro/)
+## Preparations(准备工作)
 
 #### Install vistual Studio Cpp components
 
@@ -14,11 +14,11 @@ Real-time rendering engine based on C++ and OpenGL
 
 #### Install GLFW
 
-- ![download GLFW](https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.bin.WIN32.zip)
+- download GLFW(https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.bin.WIN32.zip)
 
 #### install GLEW
 
-- ![download GLEW](https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
+- download GLEW(https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
 
 Create a new folder and extract the downloaded GLEW and GLFW into it
 ![pic](pic/extract_zip.png)
