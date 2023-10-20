@@ -2,23 +2,19 @@
 
 Real-time rendering engine based on C++ and OpenGL
 
-Docs(https://learnopengl-cn.github.io/intro/)
+[OpenGL docs](https://learnopengl.com)
 
-<<<<<<< HEAD
-![OpenGL docs](https://learnopengl.com)
+[中文文档](https://learnopengl-cn.github.io/intro/)
 
-![中文文档](https://learnopengl-cn.github.io/intro/)
+[glfw docs](https://www.glfw.org/docs/latest/index.html)
 
-![glfw docs](https://www.glfw.org/docs/latest/index.html)
-=======
 ## Preparations(准备工作)
->>>>>>> b0a9d185a5a47e1a521be7aea54fa6a211b927dd
 
 #### Install vistual Studio Cpp components
 
-![pic](pic/install_component.png)
+![](pic/install_component.png)
 
-![pic](pic/intsall_component_cpp.png)
+![](pic/intsall_component_cpp.png)
 
 #### Install GLFW
 
@@ -29,24 +25,24 @@ Docs(https://learnopengl-cn.github.io/intro/)
 - download GLEW(https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
 
 Create a new folder and extract the downloaded GLEW and GLFW into it
-![pic](pic/extract_zip.png)
+![](pic/extract_zip.png)
 
 Create a new project
-![pic](pic/new_obj.png)
+![](pic/new_obj.png)
 
 #### Setup include
 
-![pic](pic/setup_project.png)
+![](pic/setup_project.png)
 
 - Include GLFW and GLEW
-  ![pic](pic/set_up_project2.png)
+  ![](pic/set_up_project2.png)
 
 - Link GLFW and GLEW
-  ![pic](pic/set_up3.png)
+  ![](pic/set_up3.png)
 
   Pay attention to choosing the right path
-  ![pic](pic/setup4.png)
+  ![](pic/setup4.png)
 
-  ![pic](pic/setup5.png)
+  ![](pic/setup5.png)
 
-  ![pic](pic/setup6.png)
+  ![](pic/setup6.png)
