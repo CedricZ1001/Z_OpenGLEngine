@@ -26,7 +26,7 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-
+	 
 
 	//Init GLEW
 	glewExperimental = true; //实验性模式
@@ -43,7 +43,7 @@ int main() {
 
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
-
+		 
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
 	}
