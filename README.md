@@ -4,7 +4,11 @@ Real-time rendering engine based on C++ and OpenGL
 
 ## Preparations(准备工作)
 
-![learnOpenGL docs](https://learnopengl-cn.github.io/intro/)
+![OpenGL docs](https://learnopengl.com)
+
+![中文文档](https://learnopengl-cn.github.io/intro/)
+
+![glfw docs](https://www.glfw.org/docs/latest/index.html)
 
 #### Install vistual Studio Cpp components
 
