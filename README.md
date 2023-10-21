@@ -18,7 +18,7 @@ Real-time rendering engine based on C++ and OpenGL
 
 ## Install GLFW
 
-- download GLFW(https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.bin.WIN32.zip)
+- download GLFW(https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.bin.WIN64.zip)
 
 ## install GLEW
 
