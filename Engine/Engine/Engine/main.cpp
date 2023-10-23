@@ -3,21 +3,31 @@
 #include <GL/glew.h>
 #include<GLFW/glfw3.h>
 
+//float vertices[] = {
+//	-0.5f, -0.5f, 0.0f,
+//	 0.5f, -0.5f, 0.0f,
+//	 0.0f,  0.5f, 0.0f,
+//	 0.0f, 0.5f, 0.0f,
+//	 0.5f, -0.5f, 0.0f,
+//	 0.9f,  0.5f,  0.0f
+//};
 float vertices[] = {
-	-0.1f, -0.1f, 0.0f,
-	 0.1f, -0.1f, 0.0f,
-	 0.0f,  0.1f, 0.0f,
-	 -0.4f, -0.1f, 0.0f,
-	 -0.2f, -0.1f, 0.0f,
-	 -0.3f,  0.1f, 0.0f,
-	 0.2f, -0.1f, 0.0f,
-	 0.4f, -0.1f, 0.0f,
-	 0.3f,  0.1f, 0.0f
+	-0.5f, -0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f,
+	 0.0f,  0.5f, 0.0f,
+	 //0.5f, -0.5f, 0.0f,
+	 //0.0f, 0.5f, 0.0f,
+	 0.9f,  0.5f,  0.0f
+};
+//0,1,2    2,1,3
+unsigned int indices[] = {
+	0,1,2,
+	2,1,3
 };
 
 const char* vertexShaderSource =
 "#version 330 core\n"
-"layout(location = 0) in vec3 aPos;\n"
+"layout(location = 6) in vec3 aPos;\n"
 "void main(){\n"
 "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);}\n";
 
@@ -63,16 +73,32 @@ int main() {
 	}
 
 	glViewport(0, 0, 800, 600); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
+	//声明VBO 存储模型数据 
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+	//绑定VBO
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	//声明VAO 
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//挖取VBO中的数据 做解释
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(6);
+
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	
 
 	//init shader
 	unsigned int vertexShader;
@@ -91,9 +117,6 @@ int main() {
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
 
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
@@ -101,13 +124,15 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 
-		glBindVertexArray(VAO);
 		glUseProgram(shaderProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 9);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
-
+		
 	}
 	glfwTerminate();
 	return 0;
