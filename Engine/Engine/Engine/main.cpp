@@ -3,6 +3,17 @@
 #include <GL/glew.h>
 #include<GLFW/glfw3.h>
 
+
+/*透视投影
+{
+f/aspect,	0,		0,			0,
+	0,		f,		0,			0,
+	0,		0,(f+n)/(n-f),	(2*f*n)/(n-f),
+	0，		0,		-1,			0
+}
+*/
+
+
 //float vertices[] = {
 //	-0.5f, -0.5f, 0.0f,
 //	 0.5f, -0.5f, 0.0f,
@@ -28,14 +39,19 @@ unsigned int indices[] = {
 const char* vertexShaderSource =
 "#version 330 core\n"
 "layout(location = 6) in vec3 aPos;\n"
+"out vec4 vertexColor;\n"
 "void main(){\n"
-"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);}\n";
+"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"vertexColor = vec4(1.0,0.3,0.4,0.6);\n"
+"}\n";
 
 const char* fragmentShaderSource =
 "#version 330 core\n"
 "out vec4 FragColor;\n"
+"in vec4 vertexColor;\n"
+"uniform vec4 ourColor;\n"
 "void main(){\n"
-"FragColor = vec4(1.0f, 0.8f, 0.2f, 1.0f);}\n";
+"FragColor = ourColor;}\n";
 
 
 
@@ -43,7 +59,7 @@ void processInput(GLFWwindow* window ) { //输入检测
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
-}
+} 
 
 int main() {
 	
@@ -73,9 +89,9 @@ int main() {
 	}
 
 	glViewport(0, 0, 800, 600); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//声明VBO 存储模型数据 
 	unsigned int VBO;
@@ -116,15 +132,24 @@ int main() {
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
-
+	//获取事件 找到ourcolor的地址
+	float timeValue = glfwGetTime();
+	float greenValue = (sin(timeValue) / 2) + 0.5f;
+	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+	
 
 	while (!glfwWindowShouldClose(window)) {
+		
 		processInput(window);
 
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
-
+		
+		timeValue = glfwGetTime();
+		greenValue = (sin(timeValue) / 2) + 0.5f;
 		glUseProgram(shaderProgram);
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -132,6 +157,7 @@ int main() {
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
+
 		
 	}
 	glfwTerminate();
