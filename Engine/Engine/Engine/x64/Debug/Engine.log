@@ -1,4 +1,2 @@
 ﻿  main.cpp
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(136,18): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(148,26): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-  Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe
+  Engine.vcxproj -> D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe

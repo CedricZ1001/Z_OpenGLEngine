@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include<GLFW/glfw3.h>
 
+#include "Shader.h"
+
 
 /*透视投影
 {
@@ -22,36 +24,43 @@ f/aspect,	0,		0,			0,
 //	 0.5f, -0.5f, 0.0f,
 //	 0.9f,  0.5f,  0.0f
 //};
+
+
 float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f,
+	-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+	 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
 	 //0.5f, -0.5f, 0.0f,
 	 //0.0f, 0.5f, 0.0f,
-	 0.9f,  0.5f,  0.0f
+	 0.9f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
+	 -0.9f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f
 };
+
 //0,1,2    2,1,3
+
 unsigned int indices[] = {
-	0,1,2,
-	2,1,3
+	0, 1, 2,
+	2, 1, 3,
+	2, 4, 0
 };
 
 const char* vertexShaderSource =
 "#version 330 core\n"
 "layout(location = 6) in vec3 aPos;\n"
+"layout(location = 7) in vec3 aColor;\n"
 "out vec4 vertexColor;\n"
 "void main(){\n"
 "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"vertexColor = vec4(1.0,0.3,0.4,0.6);\n"
+"vertexColor = vec4(aColor.x,aColor.y,aColor.z,1.0f);\n"
 "}\n";
 
 const char* fragmentShaderSource =
 "#version 330 core\n"
 "out vec4 FragColor;\n"
 "in vec4 vertexColor;\n"
-"uniform vec4 ourColor;\n"
+//"uniform vec4 ourColor;\n"
 "void main(){\n"
-"FragColor = ourColor;}\n";
+"FragColor = vertexColor;}\n";
 
 
 
@@ -59,7 +68,7 @@ void processInput(GLFWwindow* window ) { //输入检测
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
-} 
+}
 
 int main() {
 	
@@ -106,9 +115,12 @@ int main() {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	//挖取VBO中的数据 做解释
-	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//挖取VBO中的顶点坐标数据 放入VAO中
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(6);
+
+	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(7);
 
 	unsigned int EBO;
 	glGenBuffers(1, &EBO);
@@ -117,25 +129,28 @@ int main() {
 	
 
 	//init shader
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	Shader* myshader = new Shader("vertexSource.txt", "fragmentSource.txt");
 
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
+	//unsigned int vertexShader;
+	//vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	//glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	//glCompileShader(vertexShader);
 
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
+	//unsigned int fragmentShader;
+	//fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	//glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	//glCompileShader(fragmentShader);
+
+	//unsigned int shaderProgram;
+	//shaderProgram = glCreateProgram();
+	//glAttachShader(shaderProgram, vertexShader);
+	//glAttachShader(shaderProgram, fragmentShader);
+	//glLinkProgram(shaderProgram);
+
 	//获取事件 找到ourcolor的地址
-	float timeValue = glfwGetTime();
+	/*float timeValue = glfwGetTime();
 	float greenValue = (sin(timeValue) / 2) + 0.5f;
-	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");*/
 	
 
 	while (!glfwWindowShouldClose(window)) {
@@ -145,14 +160,14 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 		
-		timeValue = glfwGetTime();
-		greenValue = (sin(timeValue) / 2) + 0.5f;
-		glUseProgram(shaderProgram);
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		//timeValue = glfwGetTime();
+		//greenValue = (sin(timeValue) / 2) + 0.5f;
+		glUseProgram(myshader->ID);
+		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glfwSwapBuffers(window);
