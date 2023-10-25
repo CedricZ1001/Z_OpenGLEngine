@@ -1,2 +1,17 @@
 ﻿  main.cpp
-  Engine.vcxproj -> D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe
+glew32s.lib(glew.obj) : warning LNK4099: ??? PDB""(??"glew32s.lib(glew.obj)"??""???);??????,??????????
+LINK : warning LNK4098: ???"LIBCMT"?????????;??? /NODEFAULTLIB:library
+LINK : warning LNK4098: ???"MSVCRT"?????????;??? /NODEFAULTLIB:library
+LINK : warning LNK4217: ??"__glewAttachShader"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewCompileShader"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewCreateProgram"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewCreateShader"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewDeleteShader"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewGetProgramInfoLog"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""private: void __cdecl Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AEAAXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)"?)??
+LINK : warning LNK4217: ??"__glewGetProgramiv"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""private: void __cdecl Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AEAAXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)"?)??
+LINK : warning LNK4217: ??"__glewGetShaderInfoLog"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""private: void __cdecl Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AEAAXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)"?)??
+LINK : warning LNK4217: ??"__glewGetShaderiv"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""private: void __cdecl Shader::checkCompileErrors(unsigned int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?checkCompileErrors@Shader@@AEAAXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)"?)??
+LINK : warning LNK4217: ??"__glewLinkProgram"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewShaderSource"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: __cdecl Shader::Shader(char const *,char const *)" (??0Shader@@QEAA@PEBD0@Z)"?)??
+LINK : warning LNK4217: ??"__glewUseProgram"(?" glew32s.lib(glew.obj)"???)??"Shader.obj"(??""public: void __cdecl Shader::Use(void)" (?Use@Shader@@QEAAXXZ)"?)??
+  Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe
