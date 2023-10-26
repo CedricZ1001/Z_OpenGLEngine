@@ -35,7 +35,13 @@
     <Text Include="fragmentSource.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="pic.jpg">
+    <Image Include="pic.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="leather.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="awesomeface.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

@@ -151,7 +151,9 @@
     <Text Include="vertexSource.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="pic.jpg" />
+    <Image Include="awesomeface.png" />
+    <Image Include="leather.png" />
+    <Image Include="pic.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -38,10 +38,10 @@ f/aspect,	0,		0,			0,
 //};
 float vertices[] = {
 	//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-		 0.5f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-		 0.5f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-		-0.5f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-		-0.5f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
 };
 
 //0, 1, 2   2, 1, 3   2, 4, 0
@@ -112,7 +112,8 @@ int main() {
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+	//glEnable(GL_BLEND);//混合模式
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//声明VBO 存储模型数据 
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
@@ -146,24 +147,37 @@ int main() {
 	Shader* myshader = new Shader("vertexSource.txt", "fragmentSource.txt");
 	
 	//init TexBuffer
-	unsigned int TexBuffer;
-	glGenTextures(1, &TexBuffer);
-	glBindTexture(GL_TEXTURE_2D, TexBuffer);
+	unsigned int TexBufferA;
+	glGenTextures(1, &TexBufferA);
+	glBindTexture(GL_TEXTURE_2D, TexBufferA);
 
 	//load img
-	int width, height, nrChannel;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load("pic.jpg", &width, &height, &nrChannel, 0);
-	if (data){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	int width, height, nrChannel;
+	unsigned char* dataA = stbi_load("awesomeface.png", &width, &height, &nrChannel, 0);
+	if (dataA){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataA);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else{
 		std::cout << "load image failed!";
 	}
-	stbi_image_free(data);
+	stbi_image_free(dataA);
 
-	
+	unsigned int TexBufferB;
+	glGenTextures(1, &TexBufferB);
+	glBindTexture(GL_TEXTURE_2D, TexBufferB);
+
+	unsigned char* dataB = stbi_load("leather.png", &width, &height, &nrChannel, 0);
+	if (dataB) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataB);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else {
+		std::cout << "load image failed!";
+	}
+	stbi_image_free(dataB);
+
 
 	//unsigned int vertexShader;
 	//vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -193,11 +207,16 @@ int main() {
 
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
-		glBindTexture(GL_TEXTURE_2D, TexBuffer);
 		//timeValue = glfwGetTime();
 		//greenValue = (sin(timeValue) / 2) + 0.5f;
+		glUniform1i(glGetUniformLocation(myshader->ID, "ourTexture"),0);
+		glUniform1i(glGetUniformLocation(myshader->ID, "leatherTexture"), 1);
 		myshader->Use();
 		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, TexBufferB);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, TexBufferA);
 		
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
