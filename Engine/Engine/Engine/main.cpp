@@ -1,13 +1,12 @@
 ﻿#define GLEW_STATIC
-#define STB_IMAGE_IMPLEMENTATION
 #include<iostream>
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
-#include"stb_image.h"
 #include<glm.hpp>
 #include<gtc/matrix_transform.hpp>
 #include<gtc/type_ptr.hpp>
 #include"Shader.h"
+#include "Loadimg.h"
 
 
 /*透视投影
@@ -151,37 +150,9 @@ int main() {
 	//init shader
 	Shader* myshader = new Shader("vertexSource.txt", "fragmentSource.txt");
 	
-	//init TexBuffer
-	unsigned int TexBufferA;
-	glGenTextures(1, &TexBufferA);
-	glBindTexture(GL_TEXTURE_2D, TexBufferA);
-
 	//load img
-	stbi_set_flip_vertically_on_load(true);
-	int width, height, nrChannel;
-	unsigned char* dataA = stbi_load("awesomeface.png", &width, &height, &nrChannel, 0);
-	if (dataA){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataA);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else{
-		std::cout << "load image failed!";
-	}
-	stbi_image_free(dataA);
-
-	unsigned int TexBufferB;
-	glGenTextures(1, &TexBufferB);
-	glBindTexture(GL_TEXTURE_2D, TexBufferB);
-
-	unsigned char* dataB = stbi_load("leather.png", &width, &height, &nrChannel, 0);
-	if (dataB) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataB);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "load image failed!";
-	}
-	stbi_image_free(dataB);
+	Loadimg* awesome = new Loadimg("awesomeface.png");
+	Loadimg* leather = new Loadimg("leather.png");
 
 	//获取事件 找到ourcolor的地址
 	/*float timeValue = glfwGetTime();
@@ -225,9 +196,9 @@ int main() {
 		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, TexBufferB);
+		glBindTexture(GL_TEXTURE_2D, awesome->TexBuffer);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, TexBufferA);
+		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
 		
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
