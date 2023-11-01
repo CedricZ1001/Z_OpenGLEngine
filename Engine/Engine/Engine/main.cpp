@@ -163,21 +163,22 @@ int main() {
 	//trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
 	//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0, 0, 1.0f));
 	//trans = glm::scale(trans, glm::vec3(2.0f, 2.0f, 2.0f));
-	//bool isbigger = true;s
+	//bool isbigger = true;
+
+	//model mat
+	glm::mat4 modelMat;
+	modelMat = glm::rotate(modelMat, glm::radians(-55.0f), glm::vec3(1.0f, 0, 0));
+	glm::mat4 viewMat;
+	viewMat = glm::translate(viewMat, glm::vec3(0, 0, -3.0f));
+	glm::mat4 projMat;
+	projMat = glm::perspective( glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	while (!glfwWindowShouldClose(window)) {
-		glm::mat4 trans;
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0, 0, 1.0f));
+		//glm::mat4 trans;
+		//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0, 0, 1.0f));
+		//trans = glm::matrixCompMult(trans, modelMat);
 		processInput(window);
-		//std::cout << trans[3].x << std::endl;
-		/*if (isbigger == false) {
-			trans = glm::scale(trans, glm::vec3(0.99f, 0.99f, 0.99f));
-			isbigger = trans[0].x < 1.0f ? 1 : 0;
-		}
-		else {
-			trans = glm::scale(trans, glm::vec3(1.01f, 1.01f, 1.01f));
-			isbigger = trans[0].x > 2.0f ? 0 : 1;
-		}*/
+
 		//trans = glm::translate(trans, glm::vec3(0.01f, 0.0f, 0.0f));
 		//trans = glm::rotate(trans, glm::radians(1.0f), glm::vec3(0, 0, 1.0f));
 		
@@ -190,10 +191,15 @@ int main() {
 		glUniform1i(glGetUniformLocation(myshader->ID, "ourTexture"), 0);
 		glUniform1i(glGetUniformLocation(myshader->ID, "leatherTexture"), 1);
 		//calculate our transform
-		unsigned int transformLoc = glGetUniformLocation(myshader->ID, "transform");
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+		//unsigned int transformLoc = glGetUniformLocation(myshader->ID, "transform");
+		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+		//MVP
+		glUniformMatrix4fv(glGetUniformLocation(myshader->ID,"modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
+		glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
+		glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
 		myshader->Use();
-		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
 		
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, awesome->TexBuffer);
