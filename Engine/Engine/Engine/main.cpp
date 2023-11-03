@@ -9,70 +9,79 @@
 #include "Loadimg.h"
 
 
-/*透视投影
-{
-f/aspect,	0,		0,			0,
-	0,		f,		0,			0,
-	0,		0,(f+n)/(n-f),	(2*f*n)/(n-f),
-	0，		0,		-1,			0
-}*/
+
+
 
 //float vertices[] = {
-//	-0.5f, -0.5f, 0.0f,
-//	 0.5f, -0.5f, 0.0f,
-//	 0.0f,  0.5f, 0.0f,
-//	 0.0f, 0.5f, 0.0f,
-//	 0.5f, -0.5f, 0.0f,
-//	 0.9f,  0.5f,  0.0f
+//	//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+//		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
+//		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
+//		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
+//		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
 //};
 
-//float vertices[] = {
-//	-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-//	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-//	 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-//	 //0.5f, -0.5f, 0.0f,
-//	 //0.0f, 0.5f, 0.0f,
-//	 0.9f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
-//	 -0.9f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f
+//unsigned int indices[] = {
+//	0, 1, 2,
+//	2, 3, 0
 //};
 
 float vertices[] = {
-	//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-//0, 1, 2   2, 1, 3   2, 4, 0
-//unsigned int indices[] = {
-//	0, 1, 2,
-//	2, 1, 3,
-//	2, 4, 0
-//};
-
-unsigned int indices[] = {
-	0, 1, 2,
-	2, 3, 0
+glm::vec3 cubePositions[] = {
+  glm::vec3(0.0f,  0.0f,  0.0f),
+  glm::vec3(2.0f,  5.0f, -15.0f),
+  glm::vec3(-1.5f, -2.2f, -2.5f),
+  glm::vec3(-3.8f, -2.0f, -12.3f),
+  glm::vec3(2.4f, -0.4f, -3.5f),
+  glm::vec3(-1.7f,  3.0f, -7.5f),
+  glm::vec3(1.3f, -2.0f, -2.5f),
+  glm::vec3(1.5f,  2.0f, -2.5f),
+  glm::vec3(1.5f,  0.2f, -1.5f),
+  glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
-//const char* vertexShaderSource =
-//"#version 330 core\n"
-//"layout(location = 6) in vec3 aPos;\n"
-//"layout(location = 7) in vec3 aColor;\n"
-//"out vec4 vertexColor;\n"
-//"void main(){\n"
-//"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-//"vertexColor = vec4(aColor.x,aColor.y,aColor.z,1.0f);\n"
-//"}\n";
-//
-//const char* fragmentShaderSource =
-//"#version 330 core\n"
-//"out vec4 FragColor;\n"
-//"in vec4 vertexColor;\n"
-////"uniform vec4 ourColor;\n"
-//"void main(){\n"
-//"FragColor = vertexColor;}\n";
 
 void processInput(GLFWwindow* window ) { //输入检测
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -94,7 +103,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//早期固定流水线，现在可编程化流水线一般都使用GLFW_OPENGL_CORE_PROFILE，另一个配置GLFW_OPENGL_COMPAT_PROFILE可以使用过时的特性和固定流水线
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // on Mac OS X you need to add
 
-	GLFWwindow* window = glfwCreateWindow(1080, 960, "MY OpenGL Game", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "MY OpenGL Game", NULL, NULL);
 	// Open GLFW window
 	if (window == NULL) {
 		printf("failed");
@@ -111,8 +120,9 @@ int main() {
 		return -1;
 	}
 
-	glViewport(0, 0, 1080, 960); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
+	glViewport(0, 0, 1920, 1080); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
 
+	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -133,19 +143,19 @@ int main() {
 	glBindVertexArray(VAO);
 
 	//挖取VBO中的顶点坐标数据 放入VAO中
-	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(6);
 
-	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(7);
+	//glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(7);
 
-	glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(8);
 
-	unsigned int EBO;
+	/*unsigned int EBO;
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
 
 	//init shader
 	Shader* myshader = new Shader("vertexSource.txt", "fragmentSource.txt");
@@ -154,62 +164,72 @@ int main() {
 	Loadimg* awesome = new Loadimg("awesomeface.png");
 	Loadimg* leather = new Loadimg("leather.png");
 
-	//获取事件 找到ourcolor的地址
-	/*float timeValue = glfwGetTime();
-	float greenValue = (sin(timeValue) / 2) + 0.5f;
-	int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");*/
-	
 	//glm::mat4 trans;
 	//trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
 	//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0, 0, 1.0f));
 	//trans = glm::scale(trans, glm::vec3(2.0f, 2.0f, 2.0f));
-	//bool isbigger = true;
 
 	//model mat
 	glm::mat4 modelMat;
-	modelMat = glm::rotate(modelMat, glm::radians(-55.0f), glm::vec3(1.0f, 0, 0));
+	glm::mat4 trans;
+	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	modelMat = glm::rotate(trans, glm::radians(-45.0f), glm::vec3(1.0f, 0, 0));
 	glm::mat4 viewMat;
 	viewMat = glm::translate(viewMat, glm::vec3(0, 0, -3.0f));
 	glm::mat4 projMat;
-	projMat = glm::perspective( glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	projMat = glm::perspective( glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
 
+	float x=1;
 	while (!glfwWindowShouldClose(window)) {
 		//glm::mat4 trans;
 		//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0, 0, 1.0f));
 		//trans = glm::matrixCompMult(trans, modelMat);
 		processInput(window);
-
+		//modelMat = glm::rotate(modelMat, glm::radians(-1.0f), glm::vec3(1.0f, 0, 0));
+		
 		//trans = glm::translate(trans, glm::vec3(0.01f, 0.0f, 0.0f));
 		//trans = glm::rotate(trans, glm::radians(1.0f), glm::vec3(0, 0, 1.0f));
-		
+		x+=0.1;
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
-		
-		//timeValue = glfwGetTime();
-		//greenValue = (sin(timeValue) / 2) + 0.5f;
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
+		glBindVertexArray(VAO);
+		for (int i = 0; i < 10; i++)
+		{
+			myshader->Use();	
+			glm::mat4 Mat;
+			Mat = glm::translate(Mat, cubePositions[i]);
+			Mat = glm::rotate(Mat, glm::radians(x), glm::vec3(1, 0, 0));
+			//MVP
+			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(Mat));
+			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
+			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
 
-		glUniform1i(glGetUniformLocation(myshader->ID, "ourTexture"), 0);
-		glUniform1i(glGetUniformLocation(myshader->ID, "leatherTexture"), 1);
+			glUniform1i(glGetUniformLocation(myshader->ID, "ourTexture"), 0);
+			glUniform1i(glGetUniformLocation(myshader->ID, "leatherTexture"), 1);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		
+
+		
 		//calculate our transform
 		//unsigned int transformLoc = glGetUniformLocation(myshader->ID, "transform");
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
-		//MVP
-		glUniformMatrix4fv(glGetUniformLocation(myshader->ID,"modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-		glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
-		glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
-		myshader->Use();
-
+		
 		
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, awesome->TexBuffer);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
 		
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
+	
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		//glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+		
+
+
+		
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件

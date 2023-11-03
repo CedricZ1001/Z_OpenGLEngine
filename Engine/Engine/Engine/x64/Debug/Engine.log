@@ -1,2 +1,3 @@
 ﻿  main.cpp
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(192,9): warning C4305: “+=”: 从“double”到“float”截断
   Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe
