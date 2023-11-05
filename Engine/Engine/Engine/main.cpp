@@ -90,12 +90,6 @@ void processInput(GLFWwindow* window ) { //输入检测
 }
 
 int main() {
-	//glm::vec4 vec(1.0f, 0.0f, 0.0f,1.0f);
-	//std::cout << vec.x << vec.y << vec.z << std::endl;
-	//glm::mat4 trans;
-	//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-	//vec = trans * vec;
-	//std::cout << vec.x << vec.y << vec.z << vec.w;
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -146,9 +140,6 @@ int main() {
 	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(6);
 
-	//glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(7);
-
 	glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(8);
 
@@ -164,11 +155,6 @@ int main() {
 	Loadimg* awesome = new Loadimg("awesomeface.png");
 	Loadimg* leather = new Loadimg("leather.png");
 
-	//glm::mat4 trans;
-	//trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
-	//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0, 0, 1.0f));
-	//trans = glm::scale(trans, glm::vec3(2.0f, 2.0f, 2.0f));
-
 	//model mat
 	glm::mat4 modelMat;
 	glm::mat4 trans;
@@ -181,14 +167,7 @@ int main() {
 
 	float x=1;
 	while (!glfwWindowShouldClose(window)) {
-		//glm::mat4 trans;
-		//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0, 0, 1.0f));
-		//trans = glm::matrixCompMult(trans, modelMat);
 		processInput(window);
-		//modelMat = glm::rotate(modelMat, glm::radians(-1.0f), glm::vec3(1.0f, 0, 0));
-		
-		//trans = glm::translate(trans, glm::vec3(0.01f, 0.0f, 0.0f));
-		//trans = glm::rotate(trans, glm::radians(1.0f), glm::vec3(0, 0, 1.0f));
 		x+=0.1;
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
@@ -210,27 +189,14 @@ int main() {
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 		
-
-		
-		//calculate our transform
-		//unsigned int transformLoc = glGetUniformLocation(myshader->ID, "transform");
-		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
-		
-		
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, awesome->TexBuffer);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
 		
-	
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		//glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 		
-
-
-		
-
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
 
