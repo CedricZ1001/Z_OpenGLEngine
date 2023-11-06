@@ -6,7 +6,8 @@
 #include<gtc/matrix_transform.hpp>
 #include<gtc/type_ptr.hpp>
 #include"Shader.h"
-#include "Loadimg.h"
+#include"Loadimg.h"
+#include"Camera.h"
 
 
 
@@ -82,6 +83,9 @@ glm::vec3 cubePositions[] = {
   glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+float lastX;
+float lastY;
+bool isFirstMouse = true;
 
 void processInput(GLFWwindow* window ) { //输入检测
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -89,11 +93,26 @@ void processInput(GLFWwindow* window ) { //输入检测
 	}
 }
 
+void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
+	if (isFirstMouse) {
+		lastX = xPos;
+		lastY = yPos;
+		isFirstMouse = false;
+	}
+	float deltaX, deltaY;
+	deltaX = xPos - lastX;
+	deltaY = yPos - lastY;
+
+	lastX = xPos;
+	lastY = yPos;
+	
+}
+
 int main() {
 
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);//3.3开始使用可编程渲染管线
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);//3.3开始使用可编程渲染管线
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//早期固定流水线，现在可编程化流水线一般都使用GLFW_OPENGL_CORE_PROFILE，另一个配置GLFW_OPENGL_COMPAT_PROFILE可以使用过时的特性和固定流水线
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // on Mac OS X you need to add
 
@@ -105,7 +124,8 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window, mouse_callback);
 	//Init GLEW
 	glewExperimental = true; //实验性模式
 	if (glewInit() != GLEW_OK) {
@@ -117,6 +137,7 @@ int main() {
 	glViewport(0, 0, 1920, 1080); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
 
 	glEnable(GL_DEPTH_TEST);
+	
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -155,13 +176,17 @@ int main() {
 	Loadimg* awesome = new Loadimg("awesomeface.png");
 	Loadimg* leather = new Loadimg("leather.png");
 
+	//init camera
+	//Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	Camera* mycamera= new Camera(glm::vec3(0, 0, 3.0f), glm::radians(5.0f), glm::radians(0.0f), glm::vec3(0, 1.0f, 0));
+	
 	//model mat
 	glm::mat4 modelMat;
 	glm::mat4 trans;
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	modelMat = glm::rotate(trans, glm::radians(-45.0f), glm::vec3(1.0f, 0, 0));
 	glm::mat4 viewMat;
-	viewMat = glm::translate(viewMat, glm::vec3(0, 0, -3.0f));
+	//viewMat = glm::translate(viewMat, glm::vec3(0, 0, -3.0f));
 	glm::mat4 projMat;
 	projMat = glm::perspective( glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
 
@@ -172,6 +197,9 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 		glBindVertexArray(VAO);
+		
+		viewMat = mycamera->GetViewMatrix();
+
 		for (int i = 0; i < 10; i++)
 		{
 			myshader->Use();	
