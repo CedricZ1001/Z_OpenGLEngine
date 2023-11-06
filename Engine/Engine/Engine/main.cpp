@@ -9,23 +9,7 @@
 #include"Loadimg.h"
 #include"Camera.h"
 
-
-
-
-
-//float vertices[] = {
-//	//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-//		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-//		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-//		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-//		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
-//};
-
-//unsigned int indices[] = {
-//	0, 1, 2,
-//	2, 3, 0
-//};
-
+//model data
 float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -83,6 +67,12 @@ glm::vec3 cubePositions[] = {
   glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+
+//init camera
+//Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::radians(5.0f), glm::radians(0.0f), glm::vec3(0, 1.0f, 0));
+
+
 float lastX;
 float lastY;
 bool isFirstMouse = true;
@@ -102,7 +92,7 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 	float deltaX, deltaY;
 	deltaX = xPos - lastX;
 	deltaY = yPos - lastY;
-
+	mycamera->ProcessMouseMovement(deltaX, deltaY);
 	lastX = xPos;
 	lastY = yPos;
 	
@@ -176,10 +166,6 @@ int main() {
 	Loadimg* awesome = new Loadimg("awesomeface.png");
 	Loadimg* leather = new Loadimg("leather.png");
 
-	//init camera
-	//Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	Camera* mycamera= new Camera(glm::vec3(0, 0, 3.0f), glm::radians(5.0f), glm::radians(0.0f), glm::vec3(0, 1.0f, 0));
-	
 	//model mat
 	glm::mat4 modelMat;
 	glm::mat4 trans;
