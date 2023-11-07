@@ -63,10 +63,6 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	glDeleteShader(fragment);
 }
 
-void Shader::Use(){
-	glUseProgram(ID);
-}
-
 void Shader::checkCompileErrors(unsigned int ID, std::string type){
 	int success;
 	char infoLog[512];
@@ -85,5 +81,26 @@ void Shader::checkCompileErrors(unsigned int ID, std::string type){
 		}
 	}
 }
+
+void Shader::Use(){
+	glUseProgram(ID);
+}
+
+void Shader::SetUniform3f(const char* paramNameString, glm::vec3 param){
+	glUniform3f(glGetUniformLocation(ID, paramNameString), param.x, param.y, param.z);
+}
+
+void Shader::SetUniformMatrix4fv(const char* paramNameString, glm::mat4 param){
+	glUniformMatrix4fv(glGetUniformLocation(ID, paramNameString), 1, GL_FALSE, glm::value_ptr(param));
+}
+
+void Shader::SetUniform1f(const char* paramNameString, float param){
+	glUniform1f(glGetUniformLocation(ID, paramNameString), param);
+}
+
+void Shader::SetUniform1i(const char* paramNameString, unsigned int param){
+	glUniform1i(glGetUniformLocation(ID, paramNameString), param);
+}
+
 
 
