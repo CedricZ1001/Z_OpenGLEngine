@@ -18,7 +18,7 @@ Camera::Camera(glm::vec3 position, float pitch, float yaw, glm::vec3 worldUp){
 	forward.y = glm::sin(pitch);
 	forward.z = -glm::cos(pitch) * glm::cos(yaw);
 	right = glm::normalize(glm::cross(forward, worldUp));
-	up = glm::normalize(glm::cross(forward, right));
+	up = glm::normalize(glm::cross(right, forward));
 }
 
 glm::mat4 Camera::GetViewMatrix(){
@@ -30,7 +30,7 @@ void Camera::UpdateCameraVector(){
 	forward.y = glm::sin(pitch);
 	forward.z = -glm::cos(pitch) * glm::cos(yaw);
 	right = glm::normalize(glm::cross(forward, worldUp));
-	up = glm::normalize(glm::cross(forward, right));
+	up = glm::normalize(glm::cross(right, forward));
 }
 
 void Camera::ProcessMouseMovement(float deltaX, float deltaY)

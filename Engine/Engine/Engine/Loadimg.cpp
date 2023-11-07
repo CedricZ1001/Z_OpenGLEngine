@@ -5,7 +5,7 @@
 #include "Loadimg.h"
 #include"stb_image.h"
 
-Loadimg::Loadimg(const char* Path)
+Loadimg::Loadimg(const char* Path,GLint inputbit, GLint outputbit)
 {
 	glGenTextures(1, &TexBuffer);
 	glBindTexture(GL_TEXTURE_2D, TexBuffer);
@@ -13,7 +13,7 @@ Loadimg::Loadimg(const char* Path)
 	int width, height, nrChannel;
 	unsigned char* data = stbi_load(Path, &width, &height, &nrChannel, 0);
 	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, inputbit, width, height, 0, outputbit, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
