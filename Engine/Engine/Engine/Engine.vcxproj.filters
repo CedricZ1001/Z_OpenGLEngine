@@ -43,8 +43,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertexSource.txt" />
-    <Text Include="fragmentSource.txt" />
+    <Text Include="vertexSource.vert" />
+    <Text Include="fragmentSource.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="pic.png">

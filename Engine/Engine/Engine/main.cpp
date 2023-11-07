@@ -81,6 +81,31 @@ void processInput(GLFWwindow* window ) { //输入检测
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
+
+	mycamera->speedX = 0;
+	mycamera->speedY = 0;
+	mycamera->speedZ = 0;
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		mycamera->speedZ = 0.1;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		mycamera->speedZ = -0.1;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		mycamera->speedX = -0.1;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		mycamera->speedX = 0.1;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+		mycamera->speedY = 0.1;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		mycamera->speedY = -0.1;
+	}
 }
 
 void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
@@ -160,7 +185,7 @@ int main() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
 
 	//init shader
-	Shader* myshader = new Shader("vertexSource.txt", "fragmentSource.txt");
+	Shader* myshader = new Shader("vertexSource.vert", "fragmentSource.frag");
 	
 	//load img
 	Loadimg* awesome = new Loadimg("awesomeface.png");
@@ -213,7 +238,7 @@ int main() {
 		
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
-
+		mycamera->UpdateCameraPos();
 	}
 
 	glfwTerminate();

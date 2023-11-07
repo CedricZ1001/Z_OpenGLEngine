@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp):mouseSensitivity(0.001){
+Camera::Camera(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp){
 	this->position = position;
 	this->worldUp = worldUp;
 	this->forward = glm::normalize(target - position);
@@ -9,7 +9,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp):mouseSen
 	//up = worldUp;
 }
 
-Camera::Camera(glm::vec3 position, float pitch, float yaw, glm::vec3 worldUp):mouseSensitivity(0.001){
+Camera::Camera(glm::vec3 position, float pitch, float yaw, glm::vec3 worldUp){
 	this->position = position;
 	this->worldUp = worldUp;
 	this->pitch = pitch;
@@ -40,7 +40,14 @@ void Camera::ProcessMouseMovement(float deltaX, float deltaY)
 	UpdateCameraVector();
 }
 
-void Camera::SetSensortivity(double sensitivity = 0.001) {
+void Camera::UpdateCameraPos(){
+	//position += forward * speedZ + right * speedX + up * speedY;
+	position += right * speedX;
+	position += up * speedY;
+	position += forward * speedZ;
+}
+
+void Camera::SetSensortivity(float sensitivity = 0.001) {
 	mouseSensitivity = sensitivity;
 }
 
