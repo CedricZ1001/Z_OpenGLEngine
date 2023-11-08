@@ -17,3 +17,12 @@ Material::Material(Shader* _shader, unsigned int _diffuse, glm::vec3 _ambient, g
 	shininess(_shininess)
 {
 }
+
+Material::Material(Shader* _shader, unsigned int _diffuse, glm::vec3 _ambient, unsigned int _specular, float _shininess) :
+	shader(_shader),
+	diffuseTexture(_diffuse),
+	ambient(_ambient),
+	specularTexture(_specular),
+	shininess(_shininess)
+{
+}

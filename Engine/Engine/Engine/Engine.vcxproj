@@ -153,13 +153,12 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="fragmentSource.frag" />
-    <Text Include="vertexSource.vert" />
+    <None Include="assets\Material\Shader\fragmentSource.frag" />
+    <None Include="assets\Material\Shader\vertexSource.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="awesomeface.png" />
-    <Image Include="leather.png" />
-    <Image Include="pic.png" />
+    <Image Include="assets\Material\Texture\container.png" />
+    <Image Include="assets\Material\Texture\container_specular.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

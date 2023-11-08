@@ -49,17 +49,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertexSource.vert" />
-    <Text Include="fragmentSource.frag" />
+    <None Include="assets\Material\Shader\fragmentSource.frag" />
+    <None Include="assets\Material\Shader\vertexSource.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="pic.png">
+    <Image Include="assets\Material\Texture\container.png">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="leather.png">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="awesomeface.png">
+    <Image Include="assets\Material\Texture\container_specular.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

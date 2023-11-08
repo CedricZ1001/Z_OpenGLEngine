@@ -122,7 +122,7 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 		lastY = yPos;
 		isFirstMouse = false;
 	}
-	float deltaX, deltaY;
+	double deltaX, deltaY;
 	deltaX = xPos - lastX;
 	deltaY = yPos - lastY;
 	mycamera->ProcessMouseMovement(deltaX, deltaY);
@@ -173,7 +173,10 @@ int main() {
 	#pragma region Load IMG
 	//load img
 	//Loadimg* awesome = new Loadimg("awesomeface.png",GL_RGBA, GL_RGBA);
-	Loadimg* leather = new Loadimg("leather.png", GL_RGBA, GL_RGBA);
+	Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
+	Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
+	std::cout << container->TexBuffer << std::endl;
+	std::cout << container_specular->TexBuffer << std::endl;
 #pragma endregion
 
 	#pragma region Init VBO and VAO
@@ -203,19 +206,19 @@ int main() {
 
 	#pragma region Init Shader
 	//init shader
-	Shader* myshader = new Shader("vertexSource.vert", "fragmentSource.frag");
+	Shader* myshader = new Shader("assets/Material/Shader/vertexSource.vert", "assets/Material/Shader/fragmentSource.frag");
 #pragma endregion
 
 	#pragma region Init Material
 	Material* myMaterial = new Material(myshader,
 		glm::vec3(0.7f, 0.5f, 0.3f),
 		glm::vec3(0.3f, 0.2f, 0.2f),
-		glm::vec3(1.0f, 0.0f, 0.6f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
 		64);
-	Material* leatherMaterial = new Material(myshader,
-		leather->TexBuffer,
+	Material* containerMaterial = new Material(myshader,
+		container->TexBuffer,
 		glm::vec3(0.3f, 0.2f, 0.2f),
-		glm::vec3(1.0f, 0.0f, 0.6f),
+		container_specular->TexBuffer,
 		64);
 
 #pragma endregion
@@ -227,7 +230,7 @@ int main() {
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
 	projMat = glm::perspective( glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
-	float x = 1;
+
 #pragma endregion
 
 	#pragma region Render Loop
@@ -245,11 +248,10 @@ int main() {
 			// Set ModelMatrix
 			modelMat = glm::mat4(1.0f);
 			modelMat = glm::translate(modelMat, cubePositions[i]);
-			modelMat = glm::rotate(modelMat, glm::radians(x), glm::vec3(1, 0, 0));
-			modelMat = glm::rotate(modelMat, glm::radians(45.0f + x), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelMat = glm::rotate(modelMat, glm::radians(45.0f), glm::vec3(1, 0, 0));
+			modelMat = glm::rotate(modelMat, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 			// Set ViewMatrix
-			x += 0.01;
 			viewMat = mycamera->GetViewMatrix();
 
 			// Set Material -> Shader Program
@@ -259,7 +261,9 @@ int main() {
 			//glActiveTexture(GL_TEXTURE1);
 			//glBindTexture(GL_TEXTURE_2D, awesome->TexBuffer);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
+			glBindTexture(GL_TEXTURE_2D, containerMaterial->diffuseTexture);
+			glActiveTexture(GL_TEXTURE0 + 1);
+			glBindTexture(GL_TEXTURE_2D, containerMaterial->specularTexture);
 
 			// Set Material -> Uniform
 			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
@@ -272,10 +276,10 @@ int main() {
 			glUniform3f(glGetUniformLocation(myshader->ID, "lightPos"), 10.0f, 10.0f, 10.0f);
 			glUniform3f(glGetUniformLocation(myshader->ID, "lightColor"), 1.0f, 1.0f, 1.0f);
 			myMaterial->shader->SetUniform3f("cameraPos", mycamera->position);
-			myMaterial->shader->SetUniform3f("material.diffuse", myMaterial->diffuse);
-			myMaterial->shader->SetUniform3f("material.ambient", myMaterial->ambient);
-			myMaterial->shader->SetUniform3f("material.specular", myMaterial->specular);
-			myMaterial->shader->SetUniform1f("material.shininess", myMaterial->shininess);
+			myMaterial->shader->SetUniform3f("material.ambient", containerMaterial->ambient);
+			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);
+			myMaterial->shader->SetUniform1i("material.specular", Shader::SPECULAR);
+			myMaterial->shader->SetUniform1f("material.shininess", containerMaterial->shininess);
 
 			// Set Model
 			glBindVertexArray(VAO);

@@ -33,7 +33,7 @@ void Camera::UpdateCameraVector(){
 	up = glm::normalize(glm::cross(right, forward));
 }
 
-void Camera::ProcessMouseMovement(float deltaX, float deltaY)
+void Camera::ProcessMouseMovement(double deltaX, double deltaY)
 {
 	pitch -= deltaY * mouseSensitivity;
 	yaw += deltaX * mouseSensitivity;

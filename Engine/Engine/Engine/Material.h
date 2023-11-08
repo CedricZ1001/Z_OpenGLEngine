@@ -8,11 +8,13 @@ public:
 	Shader* shader;
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
-	unsigned int diffuseTexture = 0;
+	unsigned int diffuseTexture;
 	glm::vec3 specular;
+	unsigned int specularTexture;
 	float shininess;
 
 	Material(Shader* _shader, glm::vec3 _diffuse, glm::vec3 _ambient, glm::vec3 _specular, float _shininess);
 	Material(Shader* _shader, unsigned int _diffuse, glm::vec3 _ambient, glm::vec3 _specular, float _shininess);
+	Material(Shader* _shader, unsigned int _diffuse, glm::vec3 _ambient, unsigned int _specular, float _shininess);
 };
 

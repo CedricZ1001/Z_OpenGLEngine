@@ -24,7 +24,7 @@ public:
 	Camera(glm::vec3 position, float pitch, float yaw, glm::vec3 worldUp);
 	glm::mat4 GetViewMatrix();
 	void SetSensortivity(float sensitivity);
-	void ProcessMouseMovement(float deltaX, float deltaY);
+	void ProcessMouseMovement(double deltaX, double deltaY);
 	void UpdateCameraPos();
 
 private:
