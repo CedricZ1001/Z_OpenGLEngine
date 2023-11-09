@@ -1,4 +1,7 @@
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\Camera.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\Camera.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\LightDirectional.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\LightDirectional.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\LightPoint.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\LightPoint.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\LightSpot.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\LightSpot.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\Loadimg.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\Loadimg.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\main.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\Material.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\Material.obj

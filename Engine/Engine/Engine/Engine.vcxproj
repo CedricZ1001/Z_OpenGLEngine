@@ -140,6 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="LightDirectional.cpp" />
+    <ClCompile Include="LightPoint.cpp" />
+    <ClCompile Include="LightSpot.cpp" />
     <ClCompile Include="Loadimg.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -147,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="LightDirectional.h" />
+    <ClInclude Include="LightPoint.h" />
+    <ClInclude Include="LightSpot.h" />
     <ClInclude Include="Loadimg.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Shader.h" />

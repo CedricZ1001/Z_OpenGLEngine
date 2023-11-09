@@ -9,6 +9,9 @@
 #include"Loadimg.h"
 #include"Camera.h"
 #include"Material.h"
+#include"LightDirectional.h"
+#include"LightPoint.h"
+#include"LightSpot.h"
 
 #pragma region Model data
 GLfloat vertices[] = {
@@ -68,6 +71,16 @@ glm::vec3 cubePositions[] = {
 	  glm::vec3(1.5f,  0.2f, -1.5f),
 	  glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
+
+#pragma endregion
+
+#pragma region Light Declare
+
+//LightDirectional* light = new LightDirectional(glm::vec3(10.0f, 10.0f, -5.0f), glm::vec3(glm::radians(45.0f), 0, 0));
+
+//LightPoint* light = new LightPoint(glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(glm::radians(45.0f), 0, 0));
+
+LightSpot* light = new LightSpot(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(glm::radians(90.0f), 0, 0));
 
 #pragma endregion
 
@@ -132,6 +145,8 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 }
 #pragma endregion
 
+
+
 int main() {
 
 	#pragma region Open Window
@@ -175,8 +190,7 @@ int main() {
 	//Loadimg* awesome = new Loadimg("awesomeface.png",GL_RGBA, GL_RGBA);
 	Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
 	Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
-	std::cout << container->TexBuffer << std::endl;
-	std::cout << container_specular->TexBuffer << std::endl;
+
 #pragma endregion
 
 	#pragma region Init VBO and VAO
@@ -217,12 +231,11 @@ int main() {
 		64);
 	Material* containerMaterial = new Material(myshader,
 		container->TexBuffer,
-		glm::vec3(0.3f, 0.2f, 0.2f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
 		container_specular->TexBuffer,
 		64);
 
 #pragma endregion
-
 
 	#pragma region Perpare MVP
 	//model mat
@@ -248,8 +261,8 @@ int main() {
 			// Set ModelMatrix
 			modelMat = glm::mat4(1.0f);
 			modelMat = glm::translate(modelMat, cubePositions[i]);
-			modelMat = glm::rotate(modelMat, glm::radians(45.0f), glm::vec3(1, 0, 0));
-			modelMat = glm::rotate(modelMat, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			//modelMat = glm::rotate(modelMat, glm::radians(i*45.0f), glm::vec3(1, 0, 0));
+			//modelMat = glm::rotate(modelMat, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 			// Set ViewMatrix
 			viewMat = mycamera->GetViewMatrix();
@@ -271,10 +284,18 @@ int main() {
 			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
 			//glUniform1i(glGetUniformLocation(myshader->ID, "ourTexture"), 0);
 			//glUniform1i(glGetUniformLocation(myshader->ID, "leatherTexture"), 1);
-			glUniform3f(glGetUniformLocation(myshader->ID, "objColor"), 1.0f, 0.8f, 0.8f);
-			glUniform3f(glGetUniformLocation(myshader->ID, "ambientColor"), 0.2f, 0.2f, 0.2f);
-			glUniform3f(glGetUniformLocation(myshader->ID, "lightPos"), 10.0f, 10.0f, 10.0f);
-			glUniform3f(glGetUniformLocation(myshader->ID, "lightColor"), 1.0f, 1.0f, 1.0f);
+			glUniform3f(glGetUniformLocation(myshader->ID, "objColor"), 1.0f, 1.0f, 1.0f);
+			glUniform3f(glGetUniformLocation(myshader->ID, "ambientColor"), 0.1f, 0.1f, 0.1f);
+
+			glUniform3f(glGetUniformLocation(myshader->ID, "lightPos"), light->position.x, light->position.y, light->position.z);
+			glUniform3f(glGetUniformLocation(myshader->ID, "lightDirUniform"), light->direction.x, light->direction.y, light->direction.z);
+			glUniform3f(glGetUniformLocation(myshader->ID, "lightColor"), light->color.r, light->color.g, light->color.b);
+			
+			//glUniform1f(glGetUniformLocation(myshader->ID, "lightPoint.constant"), light->constant);
+			//glUniform1f(glGetUniformLocation(myshader->ID, "lightPoint.linear"), light->linear);
+			//glUniform1f(glGetUniformLocation(myshader->ID, "lightPoint.quadratic"), light->quadratic);
+			glUniform1f(glGetUniformLocation(myshader->ID, "lightSpot.cosPhy"), light->cosPhy);
+
 			myMaterial->shader->SetUniform3f("cameraPos", mycamera->position);
 			myMaterial->shader->SetUniform3f("material.ambient", containerMaterial->ambient);
 			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);
