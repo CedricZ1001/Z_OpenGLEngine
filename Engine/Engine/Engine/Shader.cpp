@@ -82,25 +82,58 @@ void Shader::checkCompileErrors(unsigned int ID, std::string type){
 	}
 }
 
-void Shader::Use(){
+void Shader::Use() const{
 	glUseProgram(ID);
 }
 
-void Shader::SetUniform3f(const char* paramNameString, glm::vec3 param){
-	glUniform3f(glGetUniformLocation(ID, paramNameString), param.x, param.y, param.z);
+
+void Shader::SetUniform1i(const char* paramNameString, unsigned int value) const {
+	glUniform1i(glGetUniformLocation(ID, paramNameString), value);
 }
 
-void Shader::SetUniformMatrix4fv(const char* paramNameString, glm::mat4 param){
-	glUniformMatrix4fv(glGetUniformLocation(ID, paramNameString), 1, GL_FALSE, glm::value_ptr(param));
+void Shader::SetUniform1f(const char* paramNameString, float value) const{
+	glUniform1f(glGetUniformLocation(ID, paramNameString), value);
 }
 
-void Shader::SetUniform1f(const char* paramNameString, float param){
-	glUniform1f(glGetUniformLocation(ID, paramNameString), param);
+void Shader::SetUniform2f(const char* paramNameString, float x, float y) const
+{
+	glUniform2f(glGetUniformLocation(ID, paramNameString), x, y);
 }
 
-void Shader::SetUniform1i(const char* paramNameString, unsigned int param){
-	glUniform1i(glGetUniformLocation(ID, paramNameString), param);
+void Shader::SetUniform2fv(const char* paramNameString, const glm::vec2& value) const
+{
+	glUniform2fv(glGetUniformLocation(ID, paramNameString), 1, &value[0]);
 }
+
+void Shader::SetUniform3f(const char* paramNameString, float x, float y, float z) const{
+	glUniform3f(glGetUniformLocation(ID, paramNameString), x, y, z);
+}
+
+void Shader::SetUniform3fv(const char* paramNameString, const glm::vec3 &value) const{
+	glUniform3fv(glGetUniformLocation(ID, paramNameString), 1, &value[0]);
+}
+
+void Shader::SetUniform4f(const char* paramNameString, float x, float y, float z, float w) const{
+	glUniform4f(glGetUniformLocation(ID, paramNameString), x, y, z, w);
+}
+
+void Shader::SetUniform4fv(const char* paramNameString, glm::vec4& value) const{
+	glUniform4fv(glGetUniformLocation(ID, paramNameString), 1, &value[0]);
+}
+
+void Shader::SetUniformMatrix2fv(const char* paramNameString, const glm::mat2 &value) const{
+	glUniformMatrix2fv(glGetUniformLocation(ID, paramNameString), 1, GL_FALSE, &value[0][0]);
+}
+
+void Shader::SetUniformMatrix3fv(const char* paramNameString, const glm::mat3 &value) const{
+	glUniformMatrix3fv(glGetUniformLocation(ID, paramNameString), 1, GL_FALSE, &value[0][0]);
+}
+
+void Shader::SetUniformMatrix4fv(const char* paramNameString, const glm::mat4 &value) const{
+	glUniformMatrix4fv(glGetUniformLocation(ID, paramNameString), 1, GL_FALSE, &value[0][0]);
+}
+
+
 
 
 

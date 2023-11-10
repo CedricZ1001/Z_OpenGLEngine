@@ -60,7 +60,7 @@ GLfloat vertices[] = {
 };
 
 glm::vec3 cubePositions[] = {
-	  glm::vec3(0.0f,  0.0f,  0.0f),
+	  glm::vec3(0.0f,  0.0f,  -5.0f),
 	  glm::vec3(2.0f,  5.0f, -15.0f),
 	  glm::vec3(-1.5f, -2.2f, -2.5f),
 	  glm::vec3(-3.8f, -2.0f, -12.3f),
@@ -80,7 +80,12 @@ glm::vec3 cubePositions[] = {
 
 //LightPoint* light = new LightPoint(glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(glm::radians(45.0f), 0, 0));
 
-LightSpot* light = new LightSpot(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(glm::radians(90.0f), 0, 0));
+LightSpot* light = new LightSpot(
+	glm::vec3(0.0f, 0.0f, 5.0f),
+	glm::vec3(0, 0, -1), 
+	glm::vec3(0.5f, 0.5f, 0.5f), 
+	glm::vec3(0.8f, 0.8f, 0.8f),
+	glm::vec3(1.0f, 1.0f, 1.0f));
 
 #pragma endregion
 
@@ -245,7 +250,6 @@ int main() {
 	projMat = glm::perspective( glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
 
 #pragma endregion
-
 	#pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
 		// ProcessInput
@@ -261,8 +265,6 @@ int main() {
 			// Set ModelMatrix
 			modelMat = glm::mat4(1.0f);
 			modelMat = glm::translate(modelMat, cubePositions[i]);
-			//modelMat = glm::rotate(modelMat, glm::radians(i*45.0f), glm::vec3(1, 0, 0));
-			//modelMat = glm::rotate(modelMat, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 			// Set ViewMatrix
 			viewMat = mycamera->GetViewMatrix();
@@ -282,22 +284,22 @@ int main() {
 			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
 			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
-			//glUniform1i(glGetUniformLocation(myshader->ID, "ourTexture"), 0);
-			//glUniform1i(glGetUniformLocation(myshader->ID, "leatherTexture"), 1);
-			glUniform3f(glGetUniformLocation(myshader->ID, "objColor"), 1.0f, 1.0f, 1.0f);
-			glUniform3f(glGetUniformLocation(myshader->ID, "ambientColor"), 0.1f, 0.1f, 0.1f);
-
-			glUniform3f(glGetUniformLocation(myshader->ID, "lightPos"), light->position.x, light->position.y, light->position.z);
-			glUniform3f(glGetUniformLocation(myshader->ID, "lightDirUniform"), light->direction.x, light->direction.y, light->direction.z);
-			glUniform3f(glGetUniformLocation(myshader->ID, "lightColor"), light->color.r, light->color.g, light->color.b);
 			
-			//glUniform1f(glGetUniformLocation(myshader->ID, "lightPoint.constant"), light->constant);
-			//glUniform1f(glGetUniformLocation(myshader->ID, "lightPoint.linear"), light->linear);
-			//glUniform1f(glGetUniformLocation(myshader->ID, "lightPoint.quadratic"), light->quadratic);
-			glUniform1f(glGetUniformLocation(myshader->ID, "lightSpot.cosPhy"), light->cosPhy);
 
-			myMaterial->shader->SetUniform3f("cameraPos", mycamera->position);
-			myMaterial->shader->SetUniform3f("material.ambient", containerMaterial->ambient);
+			myMaterial->shader->SetUniform3fv("light.position", light->position);
+			myMaterial->shader->SetUniform3fv("light.direction", light->direction);
+			myMaterial->shader->SetUniform1f("light.cutOff", 0.95f);
+			myMaterial->shader->SetUniform1f("light.outerCutOff", 0.90);
+
+			glUniform3f(glGetUniformLocation(myshader->ID, "light.ambient"), 0.3f, 0.3f, 0.3f);
+			glUniform3f(glGetUniformLocation(myshader->ID, "light.diffuse"), 0.8f, 0.8f, 0.8f);
+			glUniform3f(glGetUniformLocation(myshader->ID, "light.specular"), 1.0f, 1.0f, 1.0f);
+			
+			glUniform1f(glGetUniformLocation(myshader->ID, "light.constant"), light->constant);
+			glUniform1f(glGetUniformLocation(myshader->ID, "light.linear"), light->linear);
+			glUniform1f(glGetUniformLocation(myshader->ID, "light.quadratic"), light->quadratic);
+			
+			myMaterial->shader->SetUniform3fv("cameraPos", mycamera->position);
 			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);
 			myMaterial->shader->SetUniform1i("material.specular", Shader::SPECULAR);
 			myMaterial->shader->SetUniform1f("material.shininess", containerMaterial->shininess);

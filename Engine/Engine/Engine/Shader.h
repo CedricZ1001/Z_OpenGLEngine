@@ -21,11 +21,20 @@ public:
 	};
 
 	Shader(const char* vertexPath, const char* fragmentPath);
-	void Use();
-	void SetUniform3f(const char* paramNameString, glm::vec3 param);
-	void SetUniformMatrix4fv(const char* paramNameString, glm::mat4 param);
-	void SetUniform1f(const char* paramNameString, float param);
-	void SetUniform1i(const char* paramNameString, unsigned int  param);
+	void Use() const;
+
+	void SetUniform1i(const char* paramNameString, unsigned int  value) const;
+	void SetUniform1f(const char* paramNameString, float value) const;
+	void SetUniform2f(const char* paramNameString, float x, float y) const;
+	void SetUniform2fv(const char* paramNameString, const glm::vec2& value) const;
+	void SetUniform3f(const char* paramNameString, float x ,float y ,float z) const;
+	void SetUniform3fv(const char* paramNameString, const glm::vec3& value) const;
+	void SetUniform4f(const char* paramNameString, float x, float y, float z,float w) const;
+	void SetUniform4fv(const char* paramNameString, glm::vec4& value) const;
+	void SetUniformMatrix2fv(const char* paramNameString, const glm::mat2& value) const;
+	void SetUniformMatrix3fv(const char* paramNameString, const glm::mat3& value) const;
+	void SetUniformMatrix4fv(const char* paramNameString, const glm::mat4& value) const;
+
 
 private:
 	void checkCompileErrors(unsigned int ID, std::string type);

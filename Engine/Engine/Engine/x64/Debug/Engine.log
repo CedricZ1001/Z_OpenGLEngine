@@ -1,12 +1,13 @@
 ﻿  main.cpp
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(111,22): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(114,23): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(118,23): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(121,22): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(125,22): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(128,23): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(134,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(135,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(142,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(143,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(116,22): warning C4305: “=”: 从“double”到“float”截断
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(119,23): warning C4305: “=”: 从“double”到“float”截断
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(123,23): warning C4305: “=”: 从“double”到“float”截断
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(126,22): warning C4305: “=”: 从“double”到“float”截断
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(130,22): warning C4305: “=”: 从“double”到“float”截断
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(133,23): warning C4305: “=”: 从“double”到“float”截断
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(139,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(140,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(147,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(148,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(292,58): warning C4305: “参数”: 从“double”到“float”截断
   Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe

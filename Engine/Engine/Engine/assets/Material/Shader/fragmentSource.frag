@@ -4,63 +4,63 @@ in vec3 Normal;
 in vec2 TexCoord;
 
 struct Material{
-	vec3 ambient;
 	sampler2D diffuse;
 	sampler2D specular;
 	float shininess;
 };
 
-struct LightPoint{
+struct Light{
+	vec3 position;
+	vec3 direction;
+	float cutOff;
+	float outerCutOff;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
 	float constant;
 	float linear;
 	float quadratic;
 };
 
-struct LightSpot{
-	float cosPhy;
-};
-
 uniform Material material;
-uniform LightPoint lightPoint;
-uniform LightSpot lightspot;
-//uniform sampler2D  ourTexture;
-//uniform sampler2D  leatherTexture;
-uniform vec3 objColor;
-uniform vec3 ambientColor;
-uniform vec3 lightPos;
-uniform vec3 lightColor;
-uniform vec3 lightDirUniform;
+uniform Light light;
 uniform vec3 cameraPos;
-
 
 out vec4 FragColor;
 
 void main(){
+
+	// ambient
+	vec3 ambient = light.ambient * texture(material.diffuse,TexCoord).rgb;
+
+	// diffuse
+	vec3 norm = normalize(Normal);
+	vec3 lightDirection = normalize(light.position - FragPos);
+	float diffuseIntensity = max(dot(norm, lightDirection), 0.0);
+	vec3 diffuse = light.diffuse * diffuseIntensity * texture(material.diffuse,TexCoord).rgb;
+
+	// specular
+	vec3 viewDirection = normalize(cameraPos - FragPos);
+	vec3 reflectDirection = reflect(-lightDirection,norm);
+	float specularIntensity = pow(max(dot(viewDirection, reflectDirection),0),material.shininess);
+	vec3 specular = light.specular * specularIntensity * texture(material.specular,TexCoord).rgb;
+
+	//spotlight (soft edges)
+	float theta = dot(lightDirection,normalize(-light.direction));
 	
-	float dist = length(lightPos-FragPos);
-	float attenuation = 1.0 / (lightPoint.constant + lightPoint.linear * dist + lightPoint.quadratic * (dist * dist));
+	float epsilon = (light.cutOff - light.outerCutOff);
+	float intensity = clamp((theta - light.outerCutOff) / epsilon , 0.0, 1.0);
+	diffuse *= intensity;
+	specular *= intensity;
 
-	vec3 lightDir = normalize(lightPos - FragPos); 
-	vec3 reflectVec = reflect(-lightDir , Normal);
-	vec3 cameraVec = normalize(cameraPos - FragPos);
+	//attenuation 
+	float lightdistance = length(light.position - FragPos);
+	float attenuation = 1.0 / (light.constant + light.linear * lightdistance + light.quadratic * (lightdistance * lightdistance),0);
+    
 
-	//specular
-	float specularAmount = pow(max(dot(reflectVec,cameraVec), 0), material.shininess);
-	vec3 specular = texture(material.specular, TexCoord).rgb * specularAmount * lightColor; 
 
-	//diffuse
-	vec3 diffuse = texture(material.diffuse, TexCoord).rgb * max(dot(lightDir, Normal), 0) * lightColor;
-	//vec3 diffuse = texture(material.diffuse, TexCoord).rgb;
-
-	//ambient
-	vec3 ambient = texture(material.diffuse, TexCoord).rgb * ambientColor;
-	//FragColor = vec4(objColor * ambientColor , 1.0);
-
-	float cosTheta = dot(normalize(FragPos - lightPos), -1 * lightDirUniform);
-	if(cosTheta > lightspot.cosPhy){
-		FragColor = vec4((diffuse + ambient + specular) * objColor, 1.0);
-	}else{
-		FragColor = vec4((ambient)* objColor, 1.0);	
-	}
+	FragColor = vec4((ambient + diffuse + specular) * attenuation, 1.0);
 	
 }
