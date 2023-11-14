@@ -9,5 +9,4 @@ D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(139,11): warnin
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(140,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(147,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(148,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(292,58): warning C4305: “参数”: 从“double”到“float”截断
   Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe

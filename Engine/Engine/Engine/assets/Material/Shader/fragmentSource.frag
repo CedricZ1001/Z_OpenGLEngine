@@ -45,11 +45,10 @@ void main(){
 	vec3 viewDirection = normalize(cameraPos - FragPos);
 	vec3 reflectDirection = reflect(-lightDirection,norm);
 	float specularIntensity = pow(max(dot(viewDirection, reflectDirection),0),material.shininess);
-	vec3 specular = light.specular * specularIntensity * texture(material.specular,TexCoord).rgb;
+	vec3 specular = light.specular * specularIntensity * texture(material.specular, TexCoord).rgb;
 
 	//spotlight (soft edges)
-	float theta = dot(lightDirection,normalize(-light.direction));
-	
+	float theta = dot(lightDirection, normalize(-light.direction));
 	float epsilon = (light.cutOff - light.outerCutOff);
 	float intensity = clamp((theta - light.outerCutOff) / epsilon , 0.0, 1.0);
 	diffuse *= intensity;
@@ -57,7 +56,7 @@ void main(){
 
 	//attenuation 
 	float lightdistance = length(light.position - FragPos);
-	float attenuation = 1.0 / (light.constant + light.linear * lightdistance + light.quadratic * (lightdistance * lightdistance),0);
+	float attenuation = 1.0 / (light.constant + light.linear * lightdistance + light.quadratic * (lightdistance * lightdistance));
     
 
 
