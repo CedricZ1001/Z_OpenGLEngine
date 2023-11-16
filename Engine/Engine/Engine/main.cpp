@@ -225,9 +225,8 @@ int main() {
 
 	#pragma region Init Shader
 	//init shader
-	Shader* myshader = new Shader("assets/Material/Shader/vertexSource.vert", "assets/Material/Shader/fragmentSource.frag");
+	Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
 #pragma endregion
-
 	#pragma region Init Material
 	Material* myMaterial = new Material(myshader,
 		glm::vec3(0.7f, 0.5f, 0.3f),
@@ -250,6 +249,7 @@ int main() {
 	projMat = glm::perspective( glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
 
 #pragma endregion
+
 	#pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
 		// ProcessInput
@@ -270,34 +270,32 @@ int main() {
 			viewMat = mycamera->GetViewMatrix();
 
 			// Set Material -> Shader Program
-			myshader->Use();	
+			myshader->Use();
 			
 			// Set Material -> Textures
-			//glActiveTexture(GL_TEXTURE1);
-			//glBindTexture(GL_TEXTURE_2D, awesome->TexBuffer);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, containerMaterial->diffuseTexture);
 			glActiveTexture(GL_TEXTURE0 + 1);
 			glBindTexture(GL_TEXTURE_2D, containerMaterial->specularTexture);
 
 			// Set Material -> Uniform
-			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
-			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
-			glUniformMatrix4fv(glGetUniformLocation(myshader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
-			
+
+			myMaterial->shader->SetUniformMatrix4fv("modelMat", modelMat);
+			myMaterial->shader->SetUniformMatrix4fv("viewMat", viewMat);
+			myMaterial->shader->SetUniformMatrix4fv("projMat", projMat);
 
 			myMaterial->shader->SetUniform3fv("light.position", mycamera->position);
 			myMaterial->shader->SetUniform3fv("light.direction", mycamera->forward);
 			myMaterial->shader->SetUniform1f("light.cutOff", glm::cos(glm::radians(12.5f)));
 			myMaterial->shader->SetUniform1f("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-			glUniform3f(glGetUniformLocation(myshader->ID, "light.ambient"), 0.3f, 0.3f, 0.3f);
-			glUniform3f(glGetUniformLocation(myshader->ID, "light.diffuse"), 0.8f, 0.8f, 0.8f);
-			glUniform3f(glGetUniformLocation(myshader->ID, "light.specular"), 1.0f, 1.0f, 1.0f);
+			myMaterial->shader->SetUniform3fv("light.ambient", glm::vec3(0.3f, 0.3f, 0.3f));
+			myMaterial->shader->SetUniform3fv("light.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+			myMaterial->shader->SetUniform3fv("light.specular", glm::vec3(1.0f,1.0f,1.0f));
 			
-			glUniform1f(glGetUniformLocation(myshader->ID, "light.constant"), light->constant);
-			glUniform1f(glGetUniformLocation(myshader->ID, "light.linear"), light->linear);
-			glUniform1f(glGetUniformLocation(myshader->ID, "light.quadratic"), light->quadratic);
+			myMaterial->shader->SetUniform1f("light.constant", light->constant);
+			myMaterial->shader->SetUniform1f("light.linear", light->linear);
+			myMaterial->shader->SetUniform1f("light.quadratic", light->quadratic);
 			
 			myMaterial->shader->SetUniform3fv("cameraPos", mycamera->position);
 			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);

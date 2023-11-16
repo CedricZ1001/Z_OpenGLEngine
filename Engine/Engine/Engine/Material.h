@@ -8,8 +8,8 @@ public:
 	Shader* shader;
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
-	unsigned int diffuseTexture;
 	glm::vec3 specular;
+	unsigned int diffuseTexture;
 	unsigned int specularTexture;
 	float shininess;
 

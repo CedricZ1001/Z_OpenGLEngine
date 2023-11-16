@@ -159,8 +159,12 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\Material\Shader\fragmentSource.frag" />
-    <None Include="assets\Material\Shader\vertexSource.vert" />
+    <None Include="assets\Material\Shader\DirectionalLight.frag" />
+    <None Include="assets\Material\Shader\DirectionalLight.vert" />
+    <None Include="assets\Material\Shader\PointLight.frag" />
+    <None Include="assets\Material\Shader\PointLight.vert" />
+    <None Include="assets\Material\Shader\SpotLight.frag" />
+    <None Include="assets\Material\Shader\SpotLight.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png" />
