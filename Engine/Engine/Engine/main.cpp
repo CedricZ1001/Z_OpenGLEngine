@@ -169,8 +169,8 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouse_callback);
+
 	//Init GLEW
 	glewExperimental = true; //实验性模式
 	if (glewInit() != GLEW_OK) {
