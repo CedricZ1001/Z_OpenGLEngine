@@ -284,18 +284,18 @@ int main() {
 			myMaterial->shader->SetUniformMatrix4fv("viewMat", viewMat);
 			myMaterial->shader->SetUniformMatrix4fv("projMat", projMat);
 
-			myMaterial->shader->SetUniform3fv("light.position", mycamera->position);
-			myMaterial->shader->SetUniform3fv("light.direction", mycamera->forward);
-			myMaterial->shader->SetUniform1f("light.cutOff", glm::cos(glm::radians(12.5f)));
-			myMaterial->shader->SetUniform1f("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+			myMaterial->shader->SetUniform3fv("spotLight.position", mycamera->position);
+			myMaterial->shader->SetUniform3fv("spotLight.direction", mycamera->forward);
+			myMaterial->shader->SetUniform1f("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+			myMaterial->shader->SetUniform1f("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-			myMaterial->shader->SetUniform3fv("light.ambient", glm::vec3(0.3f, 0.3f, 0.3f));
-			myMaterial->shader->SetUniform3fv("light.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-			myMaterial->shader->SetUniform3fv("light.specular", glm::vec3(1.0f,1.0f,1.0f));
+			myMaterial->shader->SetUniform3fv("spotLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+			myMaterial->shader->SetUniform3fv("spotLight.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+			myMaterial->shader->SetUniform3fv("spotLight.specular", glm::vec3(1.0f,1.0f,1.0f));
 			
-			myMaterial->shader->SetUniform1f("light.constant", light->constant);
-			myMaterial->shader->SetUniform1f("light.linear", light->linear);
-			myMaterial->shader->SetUniform1f("light.quadratic", light->quadratic);
+			myMaterial->shader->SetUniform1f("spotLight.constant", light->constant);
+			myMaterial->shader->SetUniform1f("spotLight.linear", light->linear);
+			myMaterial->shader->SetUniform1f("spotLight.quadratic", light->quadratic);
 			
 			myMaterial->shader->SetUniform3fv("cameraPos", mycamera->position);
 			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);

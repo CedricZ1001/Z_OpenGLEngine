@@ -15,5 +15,6 @@ void main(){
 	FragPos = vec3(modelMat *vec4(aPos , 1.0)); 
 	Normal = mat3(transpose(inverse(modelMat))) * aNormal;
 	TexCoord = aTexCoord;
+
 	gl_Position = projMat * viewMat * vec4(FragPos, 1.0);
 }

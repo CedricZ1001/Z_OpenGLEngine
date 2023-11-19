@@ -9,7 +9,7 @@ struct Material{
 	float shininess;
 };
 
-struct Light{
+struct SpotLight {
 	vec3 position;
 	vec3 direction;
 	float cutOff;
@@ -25,7 +25,7 @@ struct Light{
 };
 
 uniform Material material;
-uniform Light light;
+uniform SpotLight  spotLight;
 uniform vec3 cameraPos;
 
 out vec4 FragColor;
@@ -33,30 +33,30 @@ out vec4 FragColor;
 void main(){
 
 	// ambient
-	vec3 ambient = light.ambient * texture(material.diffuse,TexCoord).rgb;
+	vec3 ambient = spotLight.ambient * texture(material.diffuse,TexCoord).rgb;
 
 	// diffuse
 	vec3 norm = normalize(Normal);
-	vec3 lightDirection = normalize(light.position - FragPos);
+	vec3 lightDirection = normalize(spotLight.position - FragPos);
 	float diffuseIntensity = max(dot(norm, lightDirection), 0.0);
-	vec3 diffuse = light.diffuse * diffuseIntensity * texture(material.diffuse,TexCoord).rgb;
+	vec3 diffuse = spotLight.diffuse * diffuseIntensity * texture(material.diffuse,TexCoord).rgb;
 
 	// specular
 	vec3 viewDirection = normalize(cameraPos - FragPos);
 	vec3 reflectDirection = reflect(-lightDirection,norm);
 	float specularIntensity = pow(max(dot(viewDirection, reflectDirection),0),material.shininess);
-	vec3 specular = light.specular * specularIntensity * texture(material.specular, TexCoord).rgb;
+	vec3 specular = spotLight.specular * specularIntensity * texture(material.specular, TexCoord).rgb;
 
 	//spotlight (soft edges)
-	float theta = dot(lightDirection, normalize(-light.direction));
-	float epsilon = (light.cutOff - light.outerCutOff);
-	float intensity = clamp((theta - light.outerCutOff) / epsilon , 0.0, 1.0);
+	float theta = dot(lightDirection, normalize(-spotLight.direction));
+	float epsilon = (spotLight.cutOff - spotLight.outerCutOff);
+	float intensity = clamp((theta - spotLight.outerCutOff) / epsilon , 0.0, 1.0);
 	diffuse *= intensity;
 	specular *= intensity;
 
 	//attenuation 
-	float lightdistance = length(light.position - FragPos);
-	float attenuation = 1.0 / (light.constant + light.linear * lightdistance + light.quadratic * (lightdistance * lightdistance));
+	float lightdistance = length(spotLight.position - FragPos);
+	float attenuation = 1.0 / (spotLight.constant + spotLight.linear * lightdistance + spotLight.quadratic * (lightdistance * lightdistance));
     
 
 
