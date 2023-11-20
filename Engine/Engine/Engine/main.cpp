@@ -5,6 +5,7 @@
 #include<glm.hpp>
 #include<gtc/matrix_transform.hpp>
 #include<gtc/type_ptr.hpp>
+#include<filesystem>
 #include"Shader.h"
 #include"Loadimg.h"
 #include"Camera.h"
@@ -13,6 +14,7 @@
 #include"LightPoint.h"
 #include"LightSpot.h"
 #include"Mesh.h"
+#include"Model.h"
 
 #pragma region Model data
 GLfloat vertices[] = {
@@ -153,8 +155,8 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 
 
 
-int main() {
-
+int main(int argc, char* argv[]) {
+	
 	#pragma region Open Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -201,6 +203,11 @@ int main() {
 
 	#pragma region Init VBO and VAO
 	Mesh cube(vertices);
+	std::filesystem::path exePath = argv[0];
+	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
+	/*cout << path << endl;*/
+	Model model(path);
+
 	////声明VBO 存储模型数据
 	//unsigned int VBO;
 	//glGenBuffers(1, &VBO);
