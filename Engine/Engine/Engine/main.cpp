@@ -12,6 +12,7 @@
 #include"LightDirectional.h"
 #include"LightPoint.h"
 #include"LightSpot.h"
+#include"Mesh.h"
 
 #pragma region Model data
 GLfloat vertices[] = {
@@ -199,28 +200,29 @@ int main() {
 #pragma endregion
 
 	#pragma region Init VBO and VAO
-	//声明VBO 存储模型数据
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	Mesh cube(vertices);
+	////声明VBO 存储模型数据
+	//unsigned int VBO;
+	//glGenBuffers(1, &VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	//绑定VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	////绑定VBO
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	//声明VAO
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	////声明VAO
+	//unsigned int VAO;
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
 
-	//挖取VBO中的顶点坐标数据 放入VAO中
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	////挖取VBO中的顶点坐标数据 放入VAO中
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
 #pragma endregion
 
 	#pragma region Init Shader
@@ -273,10 +275,10 @@ int main() {
 			myshader->Use();
 			
 			// Set Material -> Textures
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, containerMaterial->diffuseTexture);
-			glActiveTexture(GL_TEXTURE0 + 1);
-			glBindTexture(GL_TEXTURE_2D, containerMaterial->specularTexture);
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, containerMaterial->diffuseTexture);
+			//glActiveTexture(GL_TEXTURE0 + 1);
+			//glBindTexture(GL_TEXTURE_2D, containerMaterial->specularTexture);
 
 			// Set Material -> Uniform
 
@@ -303,10 +305,11 @@ int main() {
 			myMaterial->shader->SetUniform1f("material.shininess", containerMaterial->shininess);
 
 			// Set Model
-			glBindVertexArray(VAO);
+			//glBindVertexArray(VAO);
 
 			// DrawCall
-			glDrawArrays(GL_TRIANGLES, 0, 36);
+			//glDrawArrays(GL_TRIANGLES, 0, 36);
+			cube.Draw(myMaterial->shader);
 		}
 		
 		// Clean up, prepare for next render loop
