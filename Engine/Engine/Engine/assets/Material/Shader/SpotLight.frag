@@ -60,6 +60,6 @@ void main(){
     
 
 
-	FragColor = vec4((ambient + diffuse + specular) * attenuation, 1.0);
+	FragColor = vec4((ambient + diffuse + specular) , 1.0);
 	
 }

@@ -64,15 +64,15 @@ GLfloat vertices[] = {
 
 glm::vec3 cubePositions[] = {
 	  glm::vec3(0.0f,  0.0f,  0.0f),
-	  glm::vec3(2.0f,  5.0f, -15.0f),
-	  glm::vec3(-1.5f, -2.2f, -2.5f),
-	  glm::vec3(-3.8f, -2.0f, -12.3f),
-	  glm::vec3(2.4f, -0.4f, -3.5f),
-	  glm::vec3(-1.7f,  3.0f, -7.5f),
-	  glm::vec3(1.3f, -2.0f, -2.5f),
-	  glm::vec3(1.5f,  2.0f, -2.5f),
-	  glm::vec3(1.5f,  0.2f, -1.5f),
-	  glm::vec3(-1.3f,  1.0f, -1.5f)
+	  glm::vec3(20.0f,  5.0f, -15.0f),
+	  glm::vec3(-20.5f, -2.2f, -2.5f),
+	  glm::vec3(-15.8f, -2.0f, -12.3f),
+	  glm::vec3(15.4f, -0.4f, -3.5f),
+	  glm::vec3(-10.7f,  3.0f, -7.5f),
+	  glm::vec3(10.3f, -2.0f, -2.5f),
+	  glm::vec3(-5.5f,  2.0f, -2.5f),
+	  glm::vec3(5.5f,  0.2f, -1.5f),
+	  glm::vec3(-1.3f,  1.0f, -20.5f)
 	};
 
 #pragma endregion
@@ -202,7 +202,7 @@ int main(int argc, char* argv[]) {
 #pragma endregion
 
 	#pragma region Init VBO and VAO
-	Mesh cube(vertices);
+	//Mesh cube(vertices);
 	std::filesystem::path exePath = argv[0];
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
@@ -316,7 +316,8 @@ int main(int argc, char* argv[]) {
 
 			// DrawCall
 			//glDrawArrays(GL_TRIANGLES, 0, 36);
-			cube.Draw(myMaterial->shader);
+			//cube.Draw(myMaterial->shader);
+			model.Draw(myMaterial->shader);
 		}
 		
 		// Clean up, prepare for next render loop
