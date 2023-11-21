@@ -1,12 +1,20 @@
 ﻿  main.cpp
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(119,22): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(122,23): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(126,23): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(129,22): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(133,22): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(136,23): warning C4305: “=”: 从“double”到“float”截断
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(142,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(143,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(150,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(151,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-  Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\Mesh.h(40,20): error C2086: “unsigned int Mesh::VAO”: 重定义
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(119,22): warning C4305: “=”: 从“double”到“float”截断
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(122,23): warning C4305: “=”: 从“double”到“float”截断
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(126,23): warning C4305: “=”: 从“double”到“float”截断
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(129,22): warning C4305: “=”: 从“double”到“float”截断
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(133,22): warning C4305: “=”: 从“double”到“float”截断
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(136,23): warning C4305: “=”: 从“double”到“float”截断
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(142,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(143,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(150,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(151,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+  Material.cpp
+  Mesh.cpp
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\Mesh.h(40,20): error C2086: “unsigned int Mesh::VAO”: 重定义
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\Mesh.cpp(45,43): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
+  Model.cpp
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\Mesh.h(40,20): error C2086: “unsigned int Mesh::VAO”: 重定义
+  Shader.cpp
+  正在生成代码...

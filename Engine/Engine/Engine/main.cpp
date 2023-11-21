@@ -317,7 +317,7 @@ int main(int argc, char* argv[]) {
 			// DrawCall
 			//glDrawArrays(GL_TRIANGLES, 0, 36);
 			//cube.Draw(myMaterial->shader);
-			model.Draw(myMaterial->shader);
+			model.Draw(*myMaterial->shader);
 		}
 		
 		// Clean up, prepare for next render loop
