@@ -8,7 +8,11 @@
 #include <sstream>
 #include"Mesh.h"
 #include"Shader.h"
+#include"stb_image.h"
+
 using std::vector, std::cout, std::endl;
+
+unsigned int TextureFromFile(const char* path, const string& directory, bool gamma = false);
 
 class Model
 {
@@ -26,7 +30,5 @@ private:
 	void ProcessNode(aiNode* node,const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
-	unsigned int TextureFromFile(const char* path, const string& directory, bool gamma);
-
 };
 

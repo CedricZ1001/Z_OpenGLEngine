@@ -16,6 +16,11 @@
 #include"Mesh.h"
 #include"Model.h"
 
+#pragma region Config
+const unsigned int SCR_WIDTH = 1980;
+const unsigned int SCR_HEIGHT = 1080;
+#pragma endregion
+
 #pragma region Model data
 GLfloat vertices[] = {
 	// positions          // normals           // texture coords
@@ -153,7 +158,14 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 }
 #pragma endregion
 
-
+#pragma region framebuffer_size_callback
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+}
+#pragma endregion
 
 int main(int argc, char* argv[]) {
 	
@@ -162,9 +174,12 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);//3.3开始使用可编程渲染管线
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//早期固定流水线，现在可编程化流水线一般都使用GLFW_OPENGL_CORE_PROFILE，另一个配置GLFW_OPENGL_COMPAT_PROFILE可以使用过时的特性和固定流水线
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // on Mac OS X you need to add
+	
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// on MacOS  you need to add
+#endif
 
-	GLFWwindow* window = glfwCreateWindow(1920, 1080, "MY OpenGL Game", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MY OpenGL Game", NULL, NULL);
 	// Open GLFW window
 	if (window == NULL) {
 		printf("failed");
@@ -172,6 +187,7 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 
 	//Init GLEW
@@ -200,7 +216,7 @@ int main(int argc, char* argv[]) {
 	Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
 
 #pragma endregion
-
+	
 	#pragma region Init VBO and VAO
 	//Mesh cube(vertices);
 	std::filesystem::path exePath = argv[0];
