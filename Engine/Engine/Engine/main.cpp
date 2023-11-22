@@ -17,8 +17,19 @@
 #include"Model.h"
 
 #pragma region Config
+// Screen
 const unsigned int SCR_WIDTH = 1980;
 const unsigned int SCR_HEIGHT = 1080;
+
+// Input
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool isFirstMouse = true;
+
+//time
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 #pragma endregion
 
 #pragma region Model data
@@ -100,13 +111,10 @@ LightSpot* light = new LightSpot(
 #pragma region Camera Declare
 //init camera
 //Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::radians(5.0f), glm::radians(0.0f), glm::vec3(0, 1.0f, 0));
+Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f));
 #pragma endregion
 
 #pragma region Input Declare
-float lastX;
-float lastY;
-bool isFirstMouse = true;
 
 void ProcessInput(GLFWwindow* window ) { //输入检测
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -116,46 +124,53 @@ void ProcessInput(GLFWwindow* window ) { //输入检测
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
-	mycamera->speedX = 0;
-	mycamera->speedY = 0;
-	mycamera->speedZ = 0;
-
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		mycamera->speedZ = 0.1;
+		mycamera->ProcessKeyboard(FORWARD, deltaTime);
 	}
 	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		mycamera->speedZ = -0.1;
+		mycamera->ProcessKeyboard(BACKWARD, deltaTime);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		mycamera->speedX = -0.1;
+		mycamera->ProcessKeyboard(LEFT, deltaTime);
 	}
 	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		mycamera->speedX = 0.1;
+		mycamera->ProcessKeyboard(RIGHT, deltaTime);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-		mycamera->speedY = 0.1;
+		mycamera->ProcessKeyboard(LIFT, deltaTime);
 	}
 	else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-		mycamera->speedY = -0.1;
+		mycamera->ProcessKeyboard(DOWN, deltaTime);
 	}
 }
 
-void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
+void mouse_callback(GLFWwindow* window, double xPosIn, double yPosIn) {
+
+	float xPos = static_cast<float>(xPosIn);
+	float yPos = static_cast<float>(yPosIn);
+
 	if (isFirstMouse) {
 		lastX = xPos;
 		lastY = yPos;
 		isFirstMouse = false;
 	}
-	double deltaX, deltaY;
-	deltaX = xPos - lastX;
-	deltaY = yPos - lastY;
-	mycamera->ProcessMouseMovement(deltaX, deltaY);
+
+	float xOffset = xPos - lastX;
+	float yOffset = lastY - yPos;
+
 	lastX = xPos;
 	lastY = yPos;
 
+	mycamera->ProcessMouseMovement(xOffset, yOffset);
 }
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	mycamera->ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
 #pragma endregion
 
 #pragma region framebuffer_size_callback
@@ -182,23 +197,23 @@ int main(int argc, char* argv[]) {
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MY OpenGL Game", NULL, NULL);
 	// Open GLFW window
 	if (window == NULL) {
-		printf("failed");
+		printf("Failed to create GLFW window");
 		glfwTerminate();
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
-
+	glfwSetScrollCallback(window, scroll_callback);
 	//Init GLEW
-	glewExperimental = true; //实验性模式
+	//glewExperimental = true; //实验性模式
 	if (glewInit() != GLEW_OK) {
 		printf("init glew failed");
 		glfwTerminate();
 		return -1;
 	}
 
-	glViewport(0, 0, 1920, 1080); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
 
 	glEnable(GL_DEPTH_TEST);
 	
@@ -224,28 +239,6 @@ int main(int argc, char* argv[]) {
 	/*cout << path << endl;*/
 	Model model(path);
 
-	////声明VBO 存储模型数据
-	//unsigned int VBO;
-	//glGenBuffers(1, &VBO);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	////绑定VBO
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	////声明VAO
-	//unsigned int VAO;
-	//glGenVertexArrays(1, &VAO);
-	//glBindVertexArray(VAO);
-
-	////挖取VBO中的顶点坐标数据 放入VAO中
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
-
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
-
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	//glEnableVertexAttribArray(2);
 #pragma endregion
 
 	#pragma region Init Shader
@@ -271,12 +264,17 @@ int main(int argc, char* argv[]) {
 	glm::mat4 modelMat;
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
-	projMat = glm::perspective( glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
+	projMat = glm::perspective( glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 #pragma endregion
 
 	#pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
+		// per-frame time logic
+	   // --------------------
+		float currentFrame = static_cast<float>(glfwGetTime());
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 		// ProcessInput
 		ProcessInput(window);
 
@@ -339,7 +337,6 @@ int main(int argc, char* argv[]) {
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
-		mycamera->UpdateCameraPos();
 	}
 #pragma endregion
 
