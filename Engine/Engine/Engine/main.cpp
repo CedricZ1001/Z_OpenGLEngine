@@ -208,7 +208,7 @@ int main(int argc, char* argv[]) {
 	//Init GLEW
 	//glewExperimental = true; //实验性模式
 	if (glewInit() != GLEW_OK) {
-		printf("init glew failed");
+		printf("Failed to initialize GLEW");
 		glfwTerminate();
 		return -1;
 	}
@@ -216,7 +216,7 @@ int main(int argc, char* argv[]) {
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
 
 	glEnable(GL_DEPTH_TEST);
-	
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -227,8 +227,8 @@ int main(int argc, char* argv[]) {
 	#pragma region Load IMG
 	//load img
 	//Loadimg* awesome = new Loadimg("awesomeface.png",GL_RGBA, GL_RGBA);
-	Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
-	Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
+	//Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
+	//Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
 
 #pragma endregion
 	
@@ -243,19 +243,20 @@ int main(int argc, char* argv[]) {
 
 	#pragma region Init Shader
 	//init shader
-	Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
+	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
+	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
 #pragma endregion
 	#pragma region Init Material
-	Material* myMaterial = new Material(myshader,
-		glm::vec3(0.7f, 0.5f, 0.3f),
-		glm::vec3(0.3f, 0.2f, 0.2f),
-		glm::vec3(1.0f, 1.0f, 1.0f),
-		64);
-	Material* containerMaterial = new Material(myshader,
-		container->TexBuffer,
-		glm::vec3(1.0f, 1.0f, 1.0f),
-		container_specular->TexBuffer,
-		64);
+	//Material* myMaterial = new Material(myshader,
+	//	glm::vec3(0.7f, 0.5f, 0.3f),
+	//	glm::vec3(0.3f, 0.2f, 0.2f),
+	//	glm::vec3(1.0f, 1.0f, 1.0f),
+	//	64);
+	//Material* containerMaterial = new Material(myshader,
+	//	container->TexBuffer,
+	//	glm::vec3(1.0f, 1.0f, 1.0f),
+	//	container_specular->TexBuffer,
+	//	64);
 
 #pragma endregion
 
@@ -264,17 +265,17 @@ int main(int argc, char* argv[]) {
 	glm::mat4 modelMat;
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
-	projMat = glm::perspective( glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
+	
 #pragma endregion
 
 	#pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
 		// per-frame time logic
-	   // --------------------
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
+		cout << 1 / deltaTime << endl;
 		lastFrame = currentFrame;
+
 		// ProcessInput
 		ProcessInput(window);
 
@@ -283,56 +284,27 @@ int main(int argc, char* argv[]) {
 		glClearColor(0, 0, 0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 		
-		for (int i = 0; i < 10; i++)
-		{
-			// Set ModelMatrix
-			modelMat = glm::mat4(1.0f);
-			modelMat = glm::translate(modelMat, cubePositions[i]);
+		// Set MVPMatrixs
+		modelMat = glm::mat4(1.0f);
+		modelMat = glm::translate(modelMat, glm::vec3(0.0f, -10.0f, 0.0f));
 
-			// Set ViewMatrix
-			viewMat = mycamera->GetViewMatrix();
+		viewMat = mycamera->GetViewMatrix();
 
-			// Set Material -> Shader Program
-			myshader->Use();
-			
-			// Set Material -> Textures
-			//glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, containerMaterial->diffuseTexture);
-			//glActiveTexture(GL_TEXTURE0 + 1);
-			//glBindTexture(GL_TEXTURE_2D, containerMaterial->specularTexture);
+		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-			// Set Material -> Uniform
+		// Set Material -> Shader Program
+		myshader->Use();
 
-			myMaterial->shader->SetUniformMatrix4fv("modelMat", modelMat);
-			myMaterial->shader->SetUniformMatrix4fv("viewMat", viewMat);
-			myMaterial->shader->SetUniformMatrix4fv("projMat", projMat);
+		// Set Material -> Uniform
+		myshader->SetUniformMatrix4fv("model", modelMat);
+		myshader->SetUniformMatrix4fv("view", viewMat);
+		myshader->SetUniformMatrix4fv("projection", projMat);
 
-			myMaterial->shader->SetUniform3fv("spotLight.position", mycamera->position);
-			myMaterial->shader->SetUniform3fv("spotLight.direction", mycamera->forward);
-			myMaterial->shader->SetUniform1f("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-			myMaterial->shader->SetUniform1f("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+		// Set Model
+		//glBindVertexArray(VAO);
 
-			myMaterial->shader->SetUniform3fv("spotLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-			myMaterial->shader->SetUniform3fv("spotLight.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-			myMaterial->shader->SetUniform3fv("spotLight.specular", glm::vec3(1.0f,1.0f,1.0f));
-			
-			myMaterial->shader->SetUniform1f("spotLight.constant", light->constant);
-			myMaterial->shader->SetUniform1f("spotLight.linear", light->linear);
-			myMaterial->shader->SetUniform1f("spotLight.quadratic", light->quadratic);
-			
-			myMaterial->shader->SetUniform3fv("cameraPos", mycamera->position);
-			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);
-			myMaterial->shader->SetUniform1i("material.specular", Shader::SPECULAR);
-			myMaterial->shader->SetUniform1f("material.shininess", containerMaterial->shininess);
-
-			// Set Model
-			//glBindVertexArray(VAO);
-
-			// DrawCall
-			//glDrawArrays(GL_TRIANGLES, 0, 36);
-			//cube.Draw(myMaterial->shader);
-			model.Draw(*myMaterial->shader);
-		}
+		// DrawCall
+		model.Draw(*myshader);
 		
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);

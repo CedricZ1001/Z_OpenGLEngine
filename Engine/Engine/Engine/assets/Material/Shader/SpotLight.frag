@@ -27,6 +27,7 @@ struct SpotLight {
 uniform Material material;
 uniform SpotLight  spotLight;
 uniform vec3 cameraPos;
+uniform sampler2D texture_diffuse1;
 
 out vec4 FragColor;
 
@@ -57,9 +58,7 @@ void main(){
 	//attenuation 
 	float lightdistance = length(spotLight.position - FragPos);
 	float attenuation = 1.0 / (spotLight.constant + spotLight.linear * lightdistance + spotLight.quadratic * (lightdistance * lightdistance));
-    
-
 
 	FragColor = vec4((ambient + diffuse + specular) , 1.0);
-	
+		
 }

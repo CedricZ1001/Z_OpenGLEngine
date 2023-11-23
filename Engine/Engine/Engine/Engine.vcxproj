@@ -169,6 +169,8 @@
   <ItemGroup>
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
+    <None Include="assets\Material\Shader\Model_loading.frag" />
+    <None Include="assets\Material\Shader\Model_loading.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
     <None Include="assets\Material\Shader\PointLight.vert" />
     <None Include="assets\Material\Shader\SpotLight.frag" />

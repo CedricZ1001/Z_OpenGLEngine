@@ -88,6 +88,8 @@
     <None Include="assets\Material\Shader\DirectionalLight.frag">
       <Filter>源文件</Filter>
     </None>
+    <None Include="assets\Material\Shader\Model_loading.vert" />
+    <None Include="assets\Material\Shader\Model_loading.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">
