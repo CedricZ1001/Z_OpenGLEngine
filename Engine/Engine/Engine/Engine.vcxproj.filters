@@ -90,6 +90,8 @@
     </None>
     <None Include="assets\Material\Shader\Model_loading.vert" />
     <None Include="assets\Material\Shader\Model_loading.frag" />
+    <None Include="assets\Material\Shader\stencil_testing.frag" />
+    <None Include="assets\Material\Shader\stencil_testing.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

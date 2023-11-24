@@ -95,16 +95,16 @@ glm::vec3 cubePositions[] = {
 
 #pragma region Light Declare
 
-//LightDirectional* light = new LightDirectional(glm::vec3(10.0f, 10.0f, -5.0f), glm::vec3(glm::radians(45.0f), 0, 0));
+LightDirectional* light = new LightDirectional(glm::vec3(10.0f, 10.0f, -5.0f), glm::vec3(glm::radians(45.0f), 0, 0));
 
 //LightPoint* light = new LightPoint(glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(glm::radians(45.0f), 0, 0));
 
-LightSpot* light = new LightSpot(
-	glm::vec3(0.0f, 0.0f, 5.0f),
-	glm::vec3(0, 0, -1), 
-	glm::vec3(0.5f, 0.5f, 0.5f), 
-	glm::vec3(0.8f, 0.8f, 0.8f),
-	glm::vec3(1.0f, 1.0f, 1.0f));
+//LightSpot* light = new LightSpot(
+//	glm::vec3(0.0f, 0.0f, 5.0f),
+//	glm::vec3(0, 0, -1), 
+//	glm::vec3(0.5f, 0.5f, 0.5f), 
+//	glm::vec3(0.8f, 0.8f, 0.8f),
+//	glm::vec3(1.0f, 1.0f, 1.0f));
 
 #pragma endregion
 
@@ -216,6 +216,10 @@ int main(int argc, char* argv[]) {
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //设置视口(Viewport)的大小 及定义屏幕上绘制图形的位置和大小
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
@@ -245,6 +249,8 @@ int main(int argc, char* argv[]) {
 	//init shader
 	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
 	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
+	Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
+	
 #pragma endregion
 	#pragma region Init Material
 	//Material* myMaterial = new Material(myshader,
@@ -282,30 +288,32 @@ int main(int argc, char* argv[]) {
 		// Clear Screen
 		//glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClearColor(0, 0, 0, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
-		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
+
+		// Shader Program
+		myshader->Use();
 		// Set MVPMatrixs
 		modelMat = glm::mat4(1.0f);
-		modelMat = glm::translate(modelMat, glm::vec3(0.0f, -10.0f, 0.0f));
-
 		viewMat = mycamera->GetViewMatrix();
-
 		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-		// Set Material -> Shader Program
-		myshader->Use();
-
-		// Set Material -> Uniform
+		// Uniform
 		myshader->SetUniformMatrix4fv("model", modelMat);
 		myshader->SetUniformMatrix4fv("view", viewMat);
 		myshader->SetUniformMatrix4fv("projection", projMat);
 
+		myshader->SetUniform3fv("dirLight.direction", light->direction);
+		myshader->SetUniform3fv("dirLight.ambient", glm::vec3(0.2, 0.2, 0.2));
+		myshader->SetUniform3fv("dirLight.diffuse", glm::vec3(0.8, 0.8, 0.8));
+		myshader->SetUniform3fv("dirLight.specular", glm::vec3(1, 1, 1));
+
+		myshader->SetUniform3fv("dirLight.viewPos", mycamera->position);
 		// Set Model
 		//glBindVertexArray(VAO);
 
 		// DrawCall
 		model.Draw(*myshader);
-		
+	
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件

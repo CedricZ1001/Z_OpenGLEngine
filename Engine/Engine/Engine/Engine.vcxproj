@@ -175,6 +175,8 @@
     <None Include="assets\Material\Shader\PointLight.vert" />
     <None Include="assets\Material\Shader\SpotLight.frag" />
     <None Include="assets\Material\Shader\SpotLight.vert" />
+    <None Include="assets\Material\Shader\stencil_testing.frag" />
+    <None Include="assets\Material\Shader\stencil_testing.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
