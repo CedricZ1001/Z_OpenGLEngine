@@ -54,7 +54,6 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 		position += up * velocity;
 	else if(direction == DOWN)
 		position -= up * velocity;
-
 }
 
 void Camera::ProcessMouseScroll(float yoffset)
@@ -65,7 +64,6 @@ void Camera::ProcessMouseScroll(float yoffset)
 	if (zoom > 45.0f)
 		zoom = 45.0f;
 }
-
 
 void Camera::SetSensortivity(float sensitivity) {
 	mouseSensitivity = sensitivity;

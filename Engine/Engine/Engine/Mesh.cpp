@@ -30,7 +30,6 @@ Mesh::Mesh(vector<Vertex> _vertices, vector<unsigned int> _indices, vector<Textu
 	vertices(_vertices),
 	indices(_indices),
 	textures(_textures){
-
 	StepMesh();
 }
 

@@ -102,7 +102,7 @@ LightDirectional* light = new LightDirectional(glm::vec3(10.0f, 10.0f, -5.0f), g
 //LightSpot* light = new LightSpot(
 //	glm::vec3(0.0f, 0.0f, 5.0f),
 //	glm::vec3(0, 0, -1), 
-//	glm::vec3(0.5f, 0.5f, 0.5f), 
+//	glm::vec3(0.5f, 0.5f, 0.5f),
 //	glm::vec3(0.8f, 0.8f, 0.8f),
 //	glm::vec3(1.0f, 1.0f, 1.0f));
 
@@ -217,9 +217,9 @@ int main(int argc, char* argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	//glEnable(GL_STENCIL_TEST);
+	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
