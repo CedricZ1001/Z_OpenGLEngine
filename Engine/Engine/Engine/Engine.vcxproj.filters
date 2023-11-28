@@ -92,6 +92,8 @@
     <None Include="assets\Material\Shader\Model_loading.frag" />
     <None Include="assets\Material\Shader\stencil_testing.frag" />
     <None Include="assets\Material\Shader\stencil_testing.vert" />
+    <None Include="assets\Material\Shader\vegetation.frag" />
+    <None Include="assets\Material\Shader\vegetation.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

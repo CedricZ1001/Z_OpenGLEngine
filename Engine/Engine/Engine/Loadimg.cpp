@@ -9,7 +9,7 @@ Loadimg::Loadimg(const char* Path,GLint inputbit, GLint outputbit)
 {
 	glGenTextures(1, &TexBuffer);
 	glBindTexture(GL_TEXTURE_2D, TexBuffer);
-	stbi_set_flip_vertically_on_load(true);
+	//stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChannel;
 	unsigned char* data = stbi_load(Path, &width, &height, &nrChannel, 0);
 	if (data) {

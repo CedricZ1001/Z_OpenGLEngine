@@ -91,6 +91,26 @@ glm::vec3 cubePositions[] = {
 	  glm::vec3(-1.3f,  1.0f, -20.5f)
 	};
 
+float transparentVertices[] = {
+	// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+	0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+	0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+	1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+	0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+	1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+	1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+};
+
+vector<glm::vec3> vegetation
+{
+	glm::vec3(-5.0f, 0.0f, -0.48f),
+	glm::vec3(5.0f, 0.0f, 0.51f),
+	glm::vec3(0.0f, 0.0f, 0.7f),
+	glm::vec3(-2.5f, 0.0f, -2.3f),
+	glm::vec3(2.5f, 0.0f, -0.6f)
+};
+
 #pragma endregion
 
 #pragma region Light Declare
@@ -242,6 +262,18 @@ int main(int argc, char* argv[]) {
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
 	Model model(path);
+	unsigned int transparentVAO, transparentVBO;
+	glGenVertexArrays(1, &transparentVAO);
+	glGenBuffers(1, &transparentVBO);
+	glBindVertexArray(transparentVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, transparentVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glBindVertexArray(0);
+	Loadimg* transparentTex = new Loadimg("assets/Material/Texture/grass.png", GL_RGBA, GL_RGBA);;
 
 #pragma endregion
 
@@ -250,7 +282,7 @@ int main(int argc, char* argv[]) {
 	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
 	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
 	Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
-	
+	Shader* grassShader = new Shader("assets/Material/Shader/vegetation.vert", "assets/Material/Shader/vegetation.frag");
 #pragma endregion
 	#pragma region Init Material
 	//Material* myMaterial = new Material(myshader,
@@ -291,9 +323,13 @@ int main(int argc, char* argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 
 		// Shader Program
-		myshader->Use();
+		myshader->Use(); 
+		//glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		//glStencilMask(0xFF);
+
 		// Set MVPMatrixs
 		modelMat = glm::mat4(1.0f);
+		modelMat = glm::translate(modelMat,glm::vec3(0, -1, 0));
 		viewMat = mycamera->GetViewMatrix();
 		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
@@ -310,9 +346,42 @@ int main(int argc, char* argv[]) {
 		myshader->SetUniform3fv("dirLight.viewPos", mycamera->position);
 		// Set Model
 		//glBindVertexArray(VAO);
-
+		
 		// DrawCall
 		model.Draw(*myshader);
+		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		//glStencilMask(0x00); // 禁止模板缓冲的写入
+		//glDisable(GL_DEPTH_TEST);
+		//shaderSingleColor->Use();
+
+		//modelMat = glm::mat4(1.0f);
+		//modelMat = glm::scale(modelMat, glm::vec3(1.005, 1.005, 1.005));
+		//viewMat = mycamera->GetViewMatrix();
+		//projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		//// Uniform
+		//shaderSingleColor->SetUniformMatrix4fv("model", modelMat);
+		//shaderSingleColor->SetUniformMatrix4fv("view", viewMat);
+		//shaderSingleColor->SetUniformMatrix4fv("projection", projMat);
+		//model.Draw(*shaderSingleColor);
+		//glStencilMask(0xFF);
+		//glStencilFunc(GL_ALWAYS, 0, 0xFF);
+		//glEnable(GL_DEPTH_TEST);
+		grassShader->Use();
+		glBindVertexArray(transparentVAO);
+		glBindTexture(GL_TEXTURE_2D, transparentTex->TexBuffer);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		for (unsigned int i = 0; i < vegetation.size(); i++)
+		{
+			modelMat = glm::mat4(1.0f);
+			modelMat = glm::translate(modelMat, vegetation[i]);
+			modelMat = glm::scale(modelMat, glm::vec3(2, 2, 2));
+			grassShader->SetUniformMatrix4fv("model", modelMat);
+			grassShader->SetUniformMatrix4fv("view", viewMat);
+			grassShader->SetUniformMatrix4fv("projection", projMat);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 	
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
