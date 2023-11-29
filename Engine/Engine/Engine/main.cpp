@@ -316,14 +316,14 @@ int main(int argc, char* argv[]) {
 
 		// ProcessInput
 		ProcessInput(window);
-
+		
 		// Clear Screen
 		//glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClearColor(0, 0, 0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 
 		// Shader Program
-		myshader->Use(); 
+		myshader->Use();
 		//glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		//glStencilMask(0xFF);
 
