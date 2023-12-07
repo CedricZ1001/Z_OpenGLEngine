@@ -273,7 +273,7 @@ int main(int argc, char* argv[]) {
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glBindVertexArray(0);
-	Loadimg* transparentTex = new Loadimg("assets/Material/Texture/grass.png", GL_RGBA, GL_RGBA);;
+	Loadimg* transparentTex = new Loadimg("assets/Material/Texture/grass.png", GL_RGBA, GL_RGBA);
 
 #pragma endregion
 
@@ -290,6 +290,7 @@ int main(int argc, char* argv[]) {
 	//	glm::vec3(0.3f, 0.2f, 0.2f),
 	//	glm::vec3(1.0f, 1.0f, 1.0f),
 	//	64);
+
 	//Material* containerMaterial = new Material(myshader,
 	//	container->TexBuffer,
 	//	glm::vec3(1.0f, 1.0f, 1.0f),
@@ -308,6 +309,7 @@ int main(int argc, char* argv[]) {
 
 	#pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
+
 		// per-frame time logic
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -338,7 +340,7 @@ int main(int argc, char* argv[]) {
 		myshader->SetUniformMatrix4fv("view", viewMat);
 		myshader->SetUniformMatrix4fv("projection", projMat);
 
-		myshader->SetUniform3fv("dirLight.direction", light->direction);
+		myshader->SetUniform3fv("dirLight.direction", mycamera->forward);
 		myshader->SetUniform3fv("dirLight.ambient", glm::vec3(0.2, 0.2, 0.2));
 		myshader->SetUniform3fv("dirLight.diffuse", glm::vec3(0.8, 0.8, 0.8));
 		myshader->SetUniform3fv("dirLight.specular", glm::vec3(1, 1, 1));
@@ -386,6 +388,7 @@ int main(int argc, char* argv[]) {
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
 		glfwPollEvents();//执行事件
+
 	}
 #pragma endregion
 
