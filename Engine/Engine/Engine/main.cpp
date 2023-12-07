@@ -274,7 +274,9 @@ int main(int argc, char* argv[]) {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glBindVertexArray(0);
 	Loadimg* transparentTex = new Loadimg("assets/Material/Texture/grass.png", GL_RGBA, GL_RGBA);
-
+	unsigned int FBO;
+	glGenFramebuffers(1, &FBO);
+	//glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 #pragma endregion
 
 	#pragma region Init Shader
