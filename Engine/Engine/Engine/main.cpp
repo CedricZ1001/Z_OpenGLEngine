@@ -381,6 +381,7 @@ int main(int argc, char* argv[]) {
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glEnable(GL_BLEND);//混合模式
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_PROGRAM_POINT_SIZE);//启用顶点图元
 #pragma endregion
 
 	#pragma region Load IMG
@@ -422,6 +423,7 @@ int main(int argc, char* argv[]) {
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glBindVertexArray(0);
+
 
 	// screen quad VAO
 	unsigned int quadVAO, quadVBO;

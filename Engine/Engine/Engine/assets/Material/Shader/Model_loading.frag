@@ -3,6 +3,7 @@ in vec2 TexCoords;
 in vec3 Normal;
 in vec3 FragPos;
 
+
 out vec4 FragColor;
 
 struct DirLight {
@@ -40,6 +41,8 @@ void main(){
     vec3 viewDir = normalize(viewPos - FragPos);
 
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
-    FragColor = vec4(result , 1.0);
+    //FragColor = vec4(result , 1.0);
+    FragColor = vec4(gl_FragCoord.z ,gl_FragCoord.z, gl_FragCoord.z, 1.0);
+      
 }
 
