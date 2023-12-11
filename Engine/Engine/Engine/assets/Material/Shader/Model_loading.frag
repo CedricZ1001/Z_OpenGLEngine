@@ -24,9 +24,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
     vec3 directionToLight = normalize(-light.direction);
     float diffuseIntensity = max(dot(normal,directionToLight),0.0);
 
-    vec3 reflectDirection = reflect(-directionToLight, normal);
-    float specularIntensity = pow(max(dot(viewDir, reflectDirection),0.0),64);
-
+   // vec3 reflectDirection = reflect(-directionToLight, normal);
+   // float specularIntensity = pow(max(dot(viewDir, reflectDirection),0.0),64);
+   float specularIntensity = pow(max(dot(normal, normalize(directionToLight + viewDir)),0.0),64);
     vec3 ambient = light.ambient * texture(texture_diffuse1,TexCoords).rgb;
     vec3 diffuse = light.diffuse * diffuseIntensity * texture(texture_diffuse1,TexCoords).rgb;
     vec3 specular = light.specular * specularIntensity * texture(texture_specular1,TexCoords).rgb;
@@ -42,3 +42,4 @@ void main(){
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     FragColor = vec4(result , 1.0);
 }
+

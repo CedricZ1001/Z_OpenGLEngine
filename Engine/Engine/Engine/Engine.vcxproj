@@ -167,6 +167,8 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Material\Shader\cubeMap.frag" />
+    <None Include="assets\Material\Shader\cubeMap.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
     <None Include="assets\Material\Shader\frameBuffer.frag" />

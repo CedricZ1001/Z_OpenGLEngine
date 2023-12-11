@@ -91,6 +91,51 @@ glm::vec3 cubePositions[] = {
 	  glm::vec3(-1.3f,  1.0f, -20.5f)
 	};
 
+float cubeVertices[] = {
+	// positions          // normals
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+};
+
 float transparentVertices[] = {
 	// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
 	0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
@@ -113,8 +158,52 @@ float quadVertices[] = { // vertex attributes for a quad that fills the entire s
 	 1.0f,  1.0f,  1.0f, 1.0f
 };
 
-vector<glm::vec3> vegetation
-{
+float skyboxVertices[] = {
+	// positions          
+	-1.0f,  1.0f, -1.0f,
+	-1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+
+	-1.0f, -1.0f,  1.0f,
+	-1.0f, -1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f,  1.0f,
+	-1.0f, -1.0f,  1.0f,
+
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+
+	-1.0f, -1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f, -1.0f,  1.0f,
+	-1.0f, -1.0f,  1.0f,
+
+	-1.0f,  1.0f, -1.0f,
+	 1.0f,  1.0f, -1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f, -1.0f,
+
+	-1.0f, -1.0f, -1.0f,
+	-1.0f, -1.0f,  1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	-1.0f, -1.0f,  1.0f,
+	 1.0f, -1.0f,  1.0f
+};
+
+vector<glm::vec3> vegetation{
 	glm::vec3(-5.0f, 0.0f, -0.48f),
 	glm::vec3(5.0f, 0.0f, 0.51f),
 	glm::vec3(0.0f, 0.0f, 0.7f),
@@ -214,7 +303,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 #pragma endregion
 
 #pragma region loadCubeMap
-unsigned int LoadCubeMap(vector<std::string> faces)
+unsigned int LoadCubeMap(vector<std::string> &faces)
 {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
@@ -299,17 +388,7 @@ int main(int argc, char* argv[]) {
 	Loadimg* awesome = new Loadimg("assets/Material/Texture/awesomeface.png",GL_RGBA, GL_RGBA);
 	//Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
 	//Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
-	//load skybox
-	vector<std::string> faces
-	{
-		"right.jpg",
-		"left.jpg",
-		"top.jpg",
-		"bottom.jpg",
-		"front.jpg",
-		"back.jpg"
-	};
-	unsigned int cubemapTexture = LoadCubeMap(faces);
+	
 
 #pragma endregion
 	
@@ -319,6 +398,19 @@ int main(int argc, char* argv[]) {
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
 	Model model(path);
+
+	// cube VAO
+	unsigned int cubeVAO, cubeVBO;
+	glGenVertexArrays(1, &cubeVAO);
+	glGenBuffers(1, &cubeVBO);
+	glBindVertexArray(cubeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+
 	unsigned int transparentVAO, transparentVBO;
 	glGenVertexArrays(1, &transparentVAO);
 	glGenBuffers(1, &transparentVBO);
@@ -349,10 +441,30 @@ int main(int argc, char* argv[]) {
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
+	// skybox VAO
+	unsigned int skyboxVAO, skyboxVBO;
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	vector<std::string> faces
+	{
+		"assets/Material/Texture/skybox/right.jpg",
+		"assets/Material/Texture/skybox/left.jpg",
+		"assets/Material/Texture/skybox/top.jpg",
+		"assets/Material/Texture/skybox/bottom.jpg",
+		"assets/Material/Texture/skybox/front.jpg",
+		"assets/Material/Texture/skybox/back.jpg"
+	};
+	unsigned int cubemapTexture = LoadCubeMap(faces);
 	//立方体贴图
-	unsigned int CubeTex;
-	glGenTextures(1, &CubeTex);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, CubeTex);
+	//unsigned int CubeTex;
+	//glGenTextures(1, &CubeTex);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, CubeTex);
 
 	// 生成纹理
 	glGenTextures(1, &texColorBuffer);
@@ -383,7 +495,11 @@ int main(int argc, char* argv[]) {
 	Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
 	Shader* grassShader = new Shader("assets/Material/Shader/vegetation.vert", "assets/Material/Shader/vegetation.frag");
 	Shader* screenShader = new Shader("assets/Material/Shader/frameBuffer.vert", "assets/Material/Shader/frameBuffer.frag");
+	Shader* skyboxShader = new Shader("assets/Material/Shader/skybox.vert", "assets/Material/Shader/skybox.frag");
+	Shader* cubeShader = new Shader("assets/Material/Shader/cubeMap.vert", "assets/Material/Shader/cubeMap.frag");
+	
 	screenShader->SetUniform1i("screenTexture", 0);
+	cubeShader->SetUniform1i("screenTexture", 0);
 #pragma endregion
 	#pragma region Init Material
 	//Material* myMaterial = new Material(myshader,
@@ -434,7 +550,7 @@ int main(int argc, char* argv[]) {
 
 		// Set MVPMatrixs
 		modelMat = glm::mat4(1.0f);
-		modelMat = glm::translate(modelMat,glm::vec3(0, -1, 0));
+		modelMat = glm::translate(modelMat,glm::vec3(0, -10, 0));
 		viewMat = mycamera->GetViewMatrix();
 		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
@@ -449,11 +565,13 @@ int main(int argc, char* argv[]) {
 		myshader->SetUniform3fv("dirLight.specular", glm::vec3(1, 1, 1));
 
 		myshader->SetUniform3fv("dirLight.viewPos", mycamera->position);
+
 		// Set Model
 		//glBindVertexArray(VAO);
 		
 		// DrawCall
 		model.Draw(*myshader);
+
 		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		//glStencilMask(0x00); // 禁止模板缓冲的写入
 		//glDisable(GL_DEPTH_TEST);
@@ -472,6 +590,20 @@ int main(int argc, char* argv[]) {
 		//glStencilMask(0xFF);
 		//glStencilFunc(GL_ALWAYS, 0, 0xFF);
 		//glEnable(GL_DEPTH_TEST);
+
+		// cubes
+		cubeShader->Use();
+		modelMat = glm::translate(modelMat, glm::vec3(4.0, 4.0, 0));
+		cubeShader->SetUniformMatrix4fv("model", modelMat);
+		cubeShader->SetUniformMatrix4fv("view", viewMat);
+		cubeShader->SetUniformMatrix4fv("projection", projMat);
+		cubeShader->SetUniform3fv("cameraPos", mycamera->position);
+		glBindVertexArray(cubeVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
 		grassShader->Use();
 		glBindVertexArray(transparentVAO);
 		glBindTexture(GL_TEXTURE_2D, transparentTex->TexBuffer);
@@ -480,6 +612,7 @@ int main(int argc, char* argv[]) {
 		for (unsigned int i = 0; i < vegetation.size(); i++)
 		{
 			modelMat = glm::mat4(1.0f);
+			modelMat = glm::translate(modelMat, glm::vec3(0, -9, 0));
 			modelMat = glm::translate(modelMat, vegetation[i]);
 			modelMat = glm::scale(modelMat, glm::vec3(2, 2, 2));
 			grassShader->SetUniformMatrix4fv("model", modelMat);
@@ -487,7 +620,21 @@ int main(int argc, char* argv[]) {
 			grassShader->SetUniformMatrix4fv("projection", projMat);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-	
+
+		// draw skybox as last
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader->Use();
+		viewMat = glm::mat3(viewMat); // remove translation from the view matrix
+		skyboxShader->SetUniformMatrix4fv("view", viewMat);
+		skyboxShader->SetUniformMatrix4fv("projection", projMat);
+		// skybox cube
+		glBindVertexArray(skyboxVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // set depth function back to default
+
 		// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
@@ -499,6 +646,8 @@ int main(int argc, char* argv[]) {
 		glBindVertexArray(quadVAO);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);	// use the color attachment texture as the texture of the quad plane
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		
 
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
