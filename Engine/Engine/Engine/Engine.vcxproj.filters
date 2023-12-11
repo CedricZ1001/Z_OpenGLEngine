@@ -85,15 +85,17 @@
     <None Include="assets\Material\Shader\PointLight.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
     <None Include="packages.config" />
-    <None Include="assets\Material\Shader\DirectionalLight.frag">
-      <Filter>源文件</Filter>
-    </None>
     <None Include="assets\Material\Shader\Model_loading.vert" />
     <None Include="assets\Material\Shader\Model_loading.frag" />
     <None Include="assets\Material\Shader\stencil_testing.frag" />
     <None Include="assets\Material\Shader\stencil_testing.vert" />
     <None Include="assets\Material\Shader\vegetation.frag" />
     <None Include="assets\Material\Shader\vegetation.vert" />
+    <None Include="assets\Material\Shader\frameBuffer.frag" />
+    <None Include="assets\Material\Shader\frameBuffer.vert" />
+    <None Include="assets\Material\Shader\skybox.frag" />
+    <None Include="assets\Material\Shader\skybox.vert" />
+    <None Include="assets\Material\Shader\DirectionalLight.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

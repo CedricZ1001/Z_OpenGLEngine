@@ -20,4 +20,5 @@ Loadimg::Loadimg(const char* Path,GLint inputbit, GLint outputbit)
 		std::cout << "load image failed!";
 	}
 	stbi_image_free(data);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
