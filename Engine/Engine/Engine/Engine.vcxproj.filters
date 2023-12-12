@@ -102,6 +102,8 @@
     <None Include="assets\Material\Shader\fragment.frag" />
     <None Include="assets\Material\Shader\geometry.geom" />
     <None Include="assets\Material\Shader\explode.geom" />
+    <None Include="assets\Material\Shader\explode.frag" />
+    <None Include="assets\Material\Shader\explode.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

@@ -37,7 +37,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
 //uniform samplerCube skybox;
 void main(){
    //vec3 norm = normalize(Normal);
-   vec3 norm = texture(texture_height1,TexCoords).rgb;
+   vec3 normalMapValue  = texture(texture_normal1,TexCoords).rgb;
+   vec3 norm =  normalize(normalMapValue  * 2.0 - 1.0);
+
    vec3 viewDir = normalize(viewPos - FragPos);
    
    vec3 result = CalcDirLight(dirLight, norm, viewDir);

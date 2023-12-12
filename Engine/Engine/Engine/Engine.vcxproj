@@ -171,7 +171,9 @@
     <None Include="assets\Material\Shader\cubeMap.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
+    <None Include="assets\Material\Shader\explode.frag" />
     <None Include="assets\Material\Shader\explode.geom" />
+    <None Include="assets\Material\Shader\explode.vert" />
     <None Include="assets\Material\Shader\fragment.frag" />
     <None Include="assets\Material\Shader\frameBuffer.frag" />
     <None Include="assets\Material\Shader\frameBuffer.vert" />
