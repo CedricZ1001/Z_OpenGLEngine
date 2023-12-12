@@ -180,6 +180,9 @@
     <None Include="assets\Material\Shader\geometry.geom" />
     <None Include="assets\Material\Shader\Model_loading.frag" />
     <None Include="assets\Material\Shader\Model_loading.vert" />
+    <None Include="assets\Material\Shader\normal_visualization.frag" />
+    <None Include="assets\Material\Shader\normal_visualization.geom" />
+    <None Include="assets\Material\Shader\normal_visualization.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
     <None Include="assets\Material\Shader\PointLight.vert" />
     <None Include="assets\Material\Shader\skybox.frag" />

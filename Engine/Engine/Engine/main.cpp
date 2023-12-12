@@ -493,6 +493,7 @@ int main(int argc, char* argv[]) {
 		"assets/Material/Texture/skybox/front.jpg",
 		"assets/Material/Texture/skybox/back.jpg"
 	};
+
 	unsigned int cubemapTexture = LoadCubeMap(faces);
 	//立方体贴图
 	//unsigned int CubeTex;
@@ -519,6 +520,7 @@ int main(int argc, char* argv[]) {
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 #pragma endregion
 
 	#pragma region Init Shader
@@ -526,7 +528,7 @@ int main(int argc, char* argv[]) {
 	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
 	//Shader* myshader = new Shader("assets/Material/Shader/explode.vert", "assets/Material/Shader/explode.frag", "assets/Material/Shader/explode.geom");
 	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
-	Shader* normalShader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
+	//Shader* normalShader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
 	Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
 	Shader* grassShader = new Shader("assets/Material/Shader/vegetation.vert", "assets/Material/Shader/vegetation.frag");
 	Shader* screenShader = new Shader("assets/Material/Shader/frameBuffer.vert", "assets/Material/Shader/frameBuffer.frag");
@@ -541,7 +543,9 @@ int main(int argc, char* argv[]) {
 
 	screenShader->SetUniform1i("screenTexture", 0);
 	cubeShader->SetUniform1i("screenTexture", 0);
+
 #pragma endregion
+
 	#pragma region Init Material
 	//Material* myMaterial = new Material(myshader,
 	//	glm::vec3(0.7f, 0.5f, 0.3f),

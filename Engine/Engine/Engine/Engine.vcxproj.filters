@@ -104,6 +104,9 @@
     <None Include="assets\Material\Shader\explode.geom" />
     <None Include="assets\Material\Shader\explode.frag" />
     <None Include="assets\Material\Shader\explode.vert" />
+    <None Include="assets\Material\Shader\normal_visualization.frag" />
+    <None Include="assets\Material\Shader\normal_visualization.geom" />
+    <None Include="assets\Material\Shader\normal_visualization.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">
