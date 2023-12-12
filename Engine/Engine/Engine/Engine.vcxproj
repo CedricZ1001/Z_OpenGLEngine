@@ -171,8 +171,11 @@
     <None Include="assets\Material\Shader\cubeMap.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
+    <None Include="assets\Material\Shader\explode.geom" />
+    <None Include="assets\Material\Shader\fragment.frag" />
     <None Include="assets\Material\Shader\frameBuffer.frag" />
     <None Include="assets\Material\Shader\frameBuffer.vert" />
+    <None Include="assets\Material\Shader\geometry.geom" />
     <None Include="assets\Material\Shader\Model_loading.frag" />
     <None Include="assets\Material\Shader\Model_loading.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
@@ -185,6 +188,7 @@
     <None Include="assets\Material\Shader\stencil_testing.vert" />
     <None Include="assets\Material\Shader\vegetation.frag" />
     <None Include="assets\Material\Shader\vegetation.vert" />
+    <None Include="assets\Material\Shader\vertex.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

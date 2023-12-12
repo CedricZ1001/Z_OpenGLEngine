@@ -98,6 +98,10 @@
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\cubeMap.frag" />
     <None Include="assets\Material\Shader\cubeMap.vert" />
+    <None Include="assets\Material\Shader\vertex.vert" />
+    <None Include="assets\Material\Shader\fragment.frag" />
+    <None Include="assets\Material\Shader\geometry.geom" />
+    <None Include="assets\Material\Shader\explode.geom" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

@@ -33,15 +33,22 @@ void main()
         vec2( 0.0f,   -offset), // 正下
         vec2( offset, -offset)  // 右下
     );
-    //模糊
+    //default
     float kernel[9] = float[](
+        0, 0, 0,
+        0, 1, 0,
+        0, 0, 0
+    );
+
+    //模糊
+    /*float kernel[9] = float[](
     1.0 / 16, 2.0 / 16, 1.0 / 16,
     2.0 / 16, 4.0 / 16, 2.0 / 16,
     1.0 / 16, 2.0 / 16, 1.0 / 16  
-    );
+    );*/
 
     //锐化
-   /* float kernel[9] = float[](
+    /*float kernel[9] = float[](
         2, 2, 2,
         2, -15, 2,
         2, 2, 2

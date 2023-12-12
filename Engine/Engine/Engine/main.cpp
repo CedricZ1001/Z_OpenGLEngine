@@ -16,6 +16,7 @@
 #include"Mesh.h"
 #include"Model.h"
 
+
 #pragma region Config
 // Screen
 const unsigned int SCR_WIDTH = 1980;
@@ -202,6 +203,13 @@ float skyboxVertices[] = {
 	-1.0f, -1.0f,  1.0f,
 	 1.0f, -1.0f,  1.0f
 };
+//顶点
+float points[] = {
+	-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // 左上
+	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // 右上
+	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // 右下
+	-0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // 左下
+};
 
 vector<glm::vec3> vegetation{
 	glm::vec3(-5.0f, 0.0f, -0.48f),
@@ -342,7 +350,7 @@ int main(int argc, char* argv[]) {
 	#pragma region Open Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);//3.3开始使用可编程渲染管线
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3开始使用可编程渲染管线
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//早期固定流水线，现在可编程化流水线一般都使用GLFW_OPENGL_CORE_PROFILE，另一个配置GLFW_OPENGL_COMPAT_PROFILE可以使用过时的特性和固定流水线
 	
 #ifdef __APPLE__
@@ -453,6 +461,29 @@ int main(int argc, char* argv[]) {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
+	// UBO set uniform 
+	GLuint uboMatrices;
+	glGenBuffers(1, &uboMatrices);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+
+	//test VAO VBO
+	unsigned int testVAO, testVBO;
+	glGenVertexArrays(1, &testVAO);
+	glGenBuffers(1, &testVBO);
+	glBindVertexArray(testVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, testVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2*sizeof(float)));
+
+	
+
+
 	vector<std::string> faces
 	{
 		"assets/Material/Texture/skybox/right.jpg",
@@ -493,13 +524,19 @@ int main(int argc, char* argv[]) {
 	#pragma region Init Shader
 	//init shader
 	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
-	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
+	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag", "assets/Material/Shader/explode.geom");
 	Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
 	Shader* grassShader = new Shader("assets/Material/Shader/vegetation.vert", "assets/Material/Shader/vegetation.frag");
 	Shader* screenShader = new Shader("assets/Material/Shader/frameBuffer.vert", "assets/Material/Shader/frameBuffer.frag");
 	Shader* skyboxShader = new Shader("assets/Material/Shader/skybox.vert", "assets/Material/Shader/skybox.frag");
 	Shader* cubeShader = new Shader("assets/Material/Shader/cubeMap.vert", "assets/Material/Shader/cubeMap.frag");
-	
+	Shader* testShader = new Shader("assets/Material/Shader/vertex.vert", "assets/Material/Shader/fragment.frag", "assets/Material/Shader/geometry.geom");
+
+
+	//GLuint blockIndex = glGetUniformBlockIndex(cubeShader->ID, "Matrices");
+	//glUniformBlockBinding(cubeShader->ID, blockIndex, 0);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
+
 	screenShader->SetUniform1i("screenTexture", 0);
 	cubeShader->SetUniform1i("screenTexture", 0);
 #pragma endregion
@@ -523,8 +560,13 @@ int main(int argc, char* argv[]) {
 	glm::mat4 modelMat;
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
-	
-	
+
+	//uniform数量
+	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
+	//cout << GL_MAX_FRAGMENT_UNIFORM_COMPONENTS << endl; //35657
+	// 
+	//unifrom大小限制
+	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
 #pragma endregion
 
 	#pragma region Render Loop
@@ -533,7 +575,7 @@ int main(int argc, char* argv[]) {
 		// per-frame time logic
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
-		cout << 1 / deltaTime << endl;
+		//cout << 1 / deltaTime << endl;
 		lastFrame = currentFrame;
 
 		// ProcessInput
@@ -545,6 +587,10 @@ int main(int argc, char* argv[]) {
 		glClearColor(0, 0, 0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 
+		/*testShader->Use();
+		glBindVertexArray(testVAO);
+		glDrawArrays(GL_POINTS, 0, 4);*/
+
 		// Shader Program
 		myshader->Use();
 		//glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -555,11 +601,17 @@ int main(int argc, char* argv[]) {
 		modelMat = glm::translate(modelMat,glm::vec3(0, -10, 0));
 		viewMat = mycamera->GetViewMatrix();
 		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		
+		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(viewMat));
+		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(projMat));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		// Uniform
 		myshader->SetUniformMatrix4fv("model", modelMat);
 		myshader->SetUniformMatrix4fv("view", viewMat);
 		myshader->SetUniformMatrix4fv("projection", projMat);
+		myshader->SetUniform1f("time", glfwGetTime());
 
 		myshader->SetUniform3fv("dirLight.direction", mycamera->forward);
 		myshader->SetUniform3fv("dirLight.ambient", glm::vec3(0.2, 0.2, 0.2));
@@ -597,8 +649,9 @@ int main(int argc, char* argv[]) {
 		cubeShader->Use();
 		modelMat = glm::translate(modelMat, glm::vec3(4.0, 4.0, 0));
 		cubeShader->SetUniformMatrix4fv("model", modelMat);
-		cubeShader->SetUniformMatrix4fv("view", viewMat);
-		cubeShader->SetUniformMatrix4fv("projection", projMat);
+		//cubeShader->SetUniformMatrix4fv("view", viewMat);
+		//cubeShader->SetUniformMatrix4fv("projection", projMat);
+
 		cubeShader->SetUniform3fv("cameraPos", mycamera->position);
 		glBindVertexArray(cubeVAO);
 		glActiveTexture(GL_TEXTURE0);
@@ -626,9 +679,9 @@ int main(int argc, char* argv[]) {
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader->Use();
-		viewMat = glm::mat3(viewMat); // remove translation from the view matrix
-		skyboxShader->SetUniformMatrix4fv("view", viewMat);
-		skyboxShader->SetUniformMatrix4fv("projection", projMat);
+		//viewMat = glm::mat3(viewMat); // remove translation from the view matrix
+		//skyboxShader->SetUniformMatrix4fv("view", viewMat);
+		//skyboxShader->SetUniformMatrix4fv("projection", projMat);
 		// skybox cube
 		glBindVertexArray(skyboxVAO);
 		glActiveTexture(GL_TEXTURE0);

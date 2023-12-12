@@ -10,8 +10,10 @@ class Shader
 public:
 	std::string vertexString;
 	std::string fragmentString;
+	std::string geometryString;
 	const char* vertexSource;
 	const char* fragmentSource;
+	const char* geometrySource;
 	unsigned int ID;// Shader program ID
 
 	enum slot
@@ -21,6 +23,8 @@ public:
 	};
 
 	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
+
 	void Use() const;
 
 	void SetUniform1i(const char* paramNameString, unsigned int  value) const;

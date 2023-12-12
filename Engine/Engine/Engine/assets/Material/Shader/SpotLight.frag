@@ -1,4 +1,4 @@
-#version 330 core
+#version 420 core
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoord;

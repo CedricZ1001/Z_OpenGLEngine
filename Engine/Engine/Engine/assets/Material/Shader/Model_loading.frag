@@ -1,4 +1,4 @@
-#version 330 core
+#version 420 core
 in vec2 TexCoords;
 in vec3 Normal;
 in vec3 FragPos;
@@ -34,15 +34,20 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
 
     return (ambient + diffuse + specular);
 }
-
+//uniform samplerCube skybox;
 void main(){
-    vec3 norm = normalize(Normal);
-    //vec3 norm = texture(texture_height1,TexCoords).rgb;
-    vec3 viewDir = normalize(viewPos - FragPos);
-
-    vec3 result = CalcDirLight(dirLight, norm, viewDir);
-    //FragColor = vec4(result , 1.0);
-    FragColor = vec4(gl_FragCoord.z ,gl_FragCoord.z, gl_FragCoord.z, 1.0);
-      
+   //vec3 norm = normalize(Normal);
+   vec3 norm = texture(texture_height1,TexCoords).rgb;
+   vec3 viewDir = normalize(viewPos - FragPos);
+   
+   vec3 result = CalcDirLight(dirLight, norm, viewDir);
+   FragColor = vec4(result , 1.0);
+   //FragColor = vec4(gl_FragCoord.z ,gl_FragCoord.z, gl_FragCoord.z, 1.0);
+     
+   ////reflract
+   //float ratio = 1.00 / 1.52;
+   //vec3 I = normalize(FragPos - viewPos);
+   //vec3 R = refract(I, normalize(Normal), ratio);
+   //FragColor = vec4(texture(skybox, R).rgb, 1.0);
 }
 

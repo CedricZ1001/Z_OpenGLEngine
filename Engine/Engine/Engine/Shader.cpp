@@ -63,6 +63,80 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	glDeleteShader(fragment);
 }
 
+Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+{
+	std::ifstream vertexFile;
+	std::ifstream fragmentFile;
+	std::ifstream geometryFile;
+
+	std::stringstream vertexSStream;
+	std::stringstream fragmentSStream;
+	std::stringstream geometrySStream;
+
+
+	vertexFile.open(vertexPath);
+	fragmentFile.open(fragmentPath);
+	geometryFile.open(geometryPath);
+
+	vertexFile.exceptions(std::ifstream::failbit || std::ifstream::badbit);
+	fragmentFile.exceptions(std::ifstream::failbit || std::ifstream::badbit);
+	geometryFile.exceptions(std::ifstream::failbit || std::ifstream::badbit);
+
+
+	try
+	{
+		if (!vertexFile.is_open() || !fragmentFile.is_open() || !geometryFile.is_open())
+		{
+			throw std::exception("open file error!");
+		}
+		vertexSStream << vertexFile.rdbuf();
+		fragmentSStream << fragmentFile.rdbuf();
+		geometrySStream << geometryFile.rdbuf();
+
+		vertexString = vertexSStream.str();
+		fragmentString = fragmentSStream.str();
+		geometryString = geometrySStream.str();
+
+		vertexSource = vertexString.c_str();
+		fragmentSource = fragmentString.c_str();
+		geometrySource = geometryString.c_str();
+
+	}
+	catch (const std::exception& e)
+	{
+		printf(e.what());
+	}
+	//init Shader
+	unsigned int vertex, fragment, geometry;
+
+	vertex = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex, 1, &vertexSource, NULL);
+	glCompileShader(vertex);
+	checkCompileErrors(vertex, "VERTEX");
+
+	fragment = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment, 1, &fragmentSource, NULL);
+	glCompileShader(fragment);
+	checkCompileErrors(fragment, "FRAGMENT");
+
+	geometry = glCreateShader(GL_GEOMETRY_SHADER);
+	glShaderSource(geometry, 1, &geometrySource, NULL);
+	glCompileShader(geometry);
+	checkCompileErrors(geometry, "GEOMETRY");
+
+	ID = glCreateProgram();
+	glAttachShader(ID, vertex);
+	glAttachShader(ID, fragment);
+	glAttachShader(ID, geometry);
+
+	glLinkProgram(ID);
+	checkCompileErrors(ID, "PROGRAM");
+
+	glDeleteShader(vertex);
+	glDeleteShader(fragment);
+	glDeleteShader(geometry);
+}
+
 void Shader::checkCompileErrors(unsigned int ID, std::string type){
 	int success;
 	char infoLog[512];
