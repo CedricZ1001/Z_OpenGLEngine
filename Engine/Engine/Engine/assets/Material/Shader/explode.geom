@@ -7,7 +7,6 @@ in VS_OUT {
 } gs_in[];
 
 out vec2 TexCoords; 
-
 uniform float time;
 
 vec4 explode(vec4 position, vec3 normal)

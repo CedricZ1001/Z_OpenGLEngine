@@ -1,3 +1,6 @@
 ﻿  main.cpp
-D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\Engine\main.cpp(616,45): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  Engine.vcxproj -> D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(587,19): warning C4244: “参数”: 从“double”转换到“unsigned int”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(604,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(608,18): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\main.cpp(656,45): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\Engine\x64\Debug\Engine.exe

@@ -107,6 +107,8 @@
     <None Include="assets\Material\Shader\normal_visualization.frag" />
     <None Include="assets\Material\Shader\normal_visualization.geom" />
     <None Include="assets\Material\Shader\normal_visualization.vert" />
+    <None Include="assets\Material\Shader\planet.frag" />
+    <None Include="assets\Material\Shader\planet.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

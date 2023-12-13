@@ -183,6 +183,8 @@
     <None Include="assets\Material\Shader\normal_visualization.frag" />
     <None Include="assets\Material\Shader\normal_visualization.geom" />
     <None Include="assets\Material\Shader\normal_visualization.vert" />
+    <None Include="assets\Material\Shader\planet.frag" />
+    <None Include="assets\Material\Shader\planet.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
     <None Include="assets\Material\Shader\PointLight.vert" />
     <None Include="assets\Material\Shader\skybox.frag" />

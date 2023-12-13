@@ -92,6 +92,8 @@ glm::vec3 cubePositions[] = {
 	  glm::vec3(-1.3f,  1.0f, -20.5f)
 	};
 
+
+
 float cubeVertices[] = {
 	// positions          // normals
 	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -158,6 +160,7 @@ float quadVertices[] = { // vertex attributes for a quad that fills the entire s
 	 1.0f, -1.0f,  1.0f, 0.0f,
 	 1.0f,  1.0f,  1.0f, 1.0f
 };
+
 
 float skyboxVertices[] = {
 	// positions          
@@ -358,12 +361,14 @@ int main(int argc, char* argv[]) {
 #endif
 
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MY OpenGL Game", NULL, NULL);
+
 	// Open GLFW window
 	if (window == NULL) {
 		printf("Failed to create GLFW window");
 		glfwTerminate();
 		return -1;
 	}
+
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
@@ -407,6 +412,8 @@ int main(int argc, char* argv[]) {
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
 	Model model(path);
+	path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\planet\\planet.obj";
+	Model planet(path);
 
 	// cube VAO
 	unsigned int cubeVAO, cubeVBO;
@@ -528,13 +535,14 @@ int main(int argc, char* argv[]) {
 	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
 	//Shader* myshader = new Shader("assets/Material/Shader/explode.vert", "assets/Material/Shader/explode.frag", "assets/Material/Shader/explode.geom");
 	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
-	//Shader* normalShader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
-	Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
+	Shader* normalShader = new Shader("assets/Material/Shader/normal_visualization.vert", "assets/Material/Shader/normal_visualization.frag","assets/Material/Shader/normal_visualization.geom");
+	Shader* planetShader = new Shader("assets/Material/Shader/planet.vert", "assets/Material/Shader/planet.frag");
+	//Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
 	Shader* grassShader = new Shader("assets/Material/Shader/vegetation.vert", "assets/Material/Shader/vegetation.frag");
 	Shader* screenShader = new Shader("assets/Material/Shader/frameBuffer.vert", "assets/Material/Shader/frameBuffer.frag");
 	Shader* skyboxShader = new Shader("assets/Material/Shader/skybox.vert", "assets/Material/Shader/skybox.frag");
 	Shader* cubeShader = new Shader("assets/Material/Shader/cubeMap.vert", "assets/Material/Shader/cubeMap.frag");
-	Shader* testShader = new Shader("assets/Material/Shader/vertex.vert", "assets/Material/Shader/fragment.frag", "assets/Material/Shader/geometry.geom");
+	//Shader* testShader = new Shader("assets/Material/Shader/vertex.vert", "assets/Material/Shader/fragment.frag", "assets/Material/Shader/geometry.geom");
 
 
 	//GLuint blockIndex = glGetUniformBlockIndex(cubeShader->ID, "Matrices");
@@ -573,15 +581,45 @@ int main(int argc, char* argv[]) {
 	// 
 	//unifrom大小限制
 	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
+	unsigned int amount = 2000;
+	glm::mat4* modelMatrices;
+	modelMatrices = new glm::mat4[amount];
+	srand(glfwGetTime()); // 初始化随机种子    
+	float radius = 50.0;
+	float offset = 2.5f;
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		glm::mat4 planetModelMat(1.0f);
+		// 1. 位移：分布在半径为 'radius' 的圆形上，偏移的范围是 [-offset, offset]
+		float angle = (float)i / (float)amount * 360.0f;
+		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float x = sin(angle) * radius + displacement;
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float y = displacement * 0.4f; // 让行星带的高度比x和z的宽度要小
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float z = cos(angle) * radius + displacement;
+		planetModelMat = glm::translate(planetModelMat, glm::vec3(x, y, z));
+
+		// 2. 缩放：在 0.05 和 0.25f 之间缩放
+		float scale = (rand() % 20) / 100.0f + 0.05;
+		planetModelMat = glm::scale(planetModelMat, glm::vec3(scale));
+
+		// 3. 旋转：绕着一个（半）随机选择的旋转轴向量进行随机的旋转
+		float rotAngle = (rand() % 360);
+		planetModelMat = glm::rotate(planetModelMat, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+
+		// 4. 添加到矩阵的数组中
+		modelMatrices[i] = planetModelMat;
+	}
 #pragma endregion
 
 	#pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
-
+		
 		// per-frame time logic
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
-		//cout << 1 / deltaTime << endl;
+		cout << 1 / deltaTime << endl;
 		lastFrame = currentFrame;
 
 		// ProcessInput
@@ -615,23 +653,35 @@ int main(int argc, char* argv[]) {
 
 		// Uniform
 		myshader->SetUniformMatrix4fv("model", modelMat);
-		myshader->SetUniformMatrix4fv("view", viewMat);
-		myshader->SetUniformMatrix4fv("projection", projMat);
 		myshader->SetUniform1f("time", glfwGetTime());
 
 		myshader->SetUniform3fv("dirLight.direction", mycamera->forward);
 		myshader->SetUniform3fv("dirLight.ambient", glm::vec3(0.2, 0.2, 0.2));
 		myshader->SetUniform3fv("dirLight.diffuse", glm::vec3(0.8, 0.8, 0.8));
 		myshader->SetUniform3fv("dirLight.specular", glm::vec3(1, 1, 1));
-
+		model.Draw(*myshader);
 		myshader->SetUniform3fv("dirLight.viewPos", mycamera->position);
-
+		normalShader->Use();
+		normalShader->SetUniformMatrix4fv("model", modelMat);
+		model.Draw(*normalShader);
 		// Set Model
 		//glBindVertexArray(VAO);
 		
 		// DrawCall
-		model.Draw(*myshader);
-
+		
+		planetShader->Use();
+		glm::mat4 planetModelMat(1.0f);
+		planetModelMat = glm::translate(planetModelMat, glm::vec3(18.0f, -3.0f, 0.0f));
+		planetModelMat = glm::scale(planetModelMat, glm::vec3(4.0f, 4.0f, 4.0f));
+		planetShader->SetUniformMatrix4fv("model", planetModelMat);
+		planet.Draw(*planetShader);
+		for (unsigned int i = 0; i < amount; i++)
+		{
+			planetShader->SetUniformMatrix4fv("model", modelMatrices[i]);
+			planet.Draw(*planetShader);
+		}
+		
+		
 		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		//glStencilMask(0x00); // 禁止模板缓冲的写入
 		//glDisable(GL_DEPTH_TEST);
@@ -685,9 +735,6 @@ int main(int argc, char* argv[]) {
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader->Use();
-		//viewMat = glm::mat3(viewMat); // remove translation from the view matrix
-		//skyboxShader->SetUniformMatrix4fv("view", viewMat);
-		//skyboxShader->SetUniformMatrix4fv("projection", projMat);
 		// skybox cube
 		glBindVertexArray(skyboxVAO);
 		glActiveTexture(GL_TEXTURE0);
