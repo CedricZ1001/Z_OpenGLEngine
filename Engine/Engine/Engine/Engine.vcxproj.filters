@@ -13,18 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{c8d6f4cc-3eb8-4e75-bbd6-371cc07f9ec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalog">
+      <UniqueIdentifier>{c9de781f-aec6-4cff-9ac3-403a8de3ce90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Loadimg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
@@ -45,11 +45,14 @@
     <ClCompile Include="Model.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChapterShadow.cpp">
+      <Filter>Catalog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -77,38 +80,101 @@
     <ClInclude Include="Model.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\Material\Shader\SpotLight.frag" />
-    <None Include="assets\Material\Shader\SpotLight.vert" />
-    <None Include="assets\Material\Shader\PointLight.frag" />
-    <None Include="assets\Material\Shader\PointLight.vert" />
-    <None Include="assets\Material\Shader\DirectionalLight.vert" />
-    <None Include="packages.config" />
-    <None Include="assets\Material\Shader\Model_loading.vert" />
-    <None Include="assets\Material\Shader\Model_loading.frag" />
-    <None Include="assets\Material\Shader\stencil_testing.frag" />
-    <None Include="assets\Material\Shader\stencil_testing.vert" />
-    <None Include="assets\Material\Shader\vegetation.frag" />
-    <None Include="assets\Material\Shader\vegetation.vert" />
-    <None Include="assets\Material\Shader\frameBuffer.frag" />
-    <None Include="assets\Material\Shader\frameBuffer.vert" />
-    <None Include="assets\Material\Shader\skybox.frag" />
-    <None Include="assets\Material\Shader\skybox.vert" />
-    <None Include="assets\Material\Shader\DirectionalLight.frag" />
-    <None Include="assets\Material\Shader\cubeMap.frag" />
-    <None Include="assets\Material\Shader\cubeMap.vert" />
-    <None Include="assets\Material\Shader\vertex.vert" />
-    <None Include="assets\Material\Shader\fragment.frag" />
-    <None Include="assets\Material\Shader\geometry.geom" />
-    <None Include="assets\Material\Shader\explode.geom" />
-    <None Include="assets\Material\Shader\explode.frag" />
-    <None Include="assets\Material\Shader\explode.vert" />
-    <None Include="assets\Material\Shader\normal_visualization.frag" />
-    <None Include="assets\Material\Shader\normal_visualization.geom" />
-    <None Include="assets\Material\Shader\normal_visualization.vert" />
-    <None Include="assets\Material\Shader\planet.frag" />
-    <None Include="assets\Material\Shader\planet.vert" />
+    <None Include="assets\Material\Shader\cubeMap.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\cubeMap.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\DirectionalLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\DirectionalLight.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\explode.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\explode.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\explode.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\fragment.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\frameBuffer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\frameBuffer.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\geometry.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\Model_loading.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\Model_loading.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\normal_visualization.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\normal_visualization.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\normal_visualization.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="packages.config">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\planet.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\planet.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\PointLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\PointLight.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\skybox.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\skybox.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\SpotLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\SpotLight.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\stencil_testing.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\stencil_testing.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\vegetation.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\vegetation.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\vertex.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">
