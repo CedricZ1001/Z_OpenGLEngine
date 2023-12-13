@@ -355,7 +355,7 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3开始使用可编程渲染管线
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//早期固定流水线，现在可编程化流水线一般都使用GLFW_OPENGL_CORE_PROFILE，另一个配置GLFW_OPENGL_COMPAT_PROFILE可以使用过时的特性和固定流水线
-	
+	//glfwWindowHint(GLFW_SAMPLES, 4);//4xMSAA
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// on MacOS  you need to add
 #endif
@@ -385,6 +385,7 @@ int main(int argc, char* argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+	//glEnable(GL_MULTISAMPLE);//开启多重采样
 	//glEnable(GL_STENCIL_TEST);
 	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -581,13 +582,17 @@ int main(int argc, char* argv[]) {
 	// 
 	//unifrom大小限制
 	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
-	unsigned int amount = 2000;
+	unsigned int amount = 1000;
 	glm::mat4* modelMatrices;
 	modelMatrices = new glm::mat4[amount];
-	srand(glfwGetTime()); // 初始化随机种子    
-	float radius = 50.0;
-	float offset = 2.5f;
-	for (unsigned int i = 0; i < amount; i++)
+	glm::mat4 planetModelMat(1.0f);
+	planetModelMat = glm::translate(planetModelMat, glm::vec3(18.0f, -3.0f, 0.0f));
+	planetModelMat = glm::scale(planetModelMat, glm::vec3(4.0f, 4.0f, 4.0f));
+	modelMatrices[0] = planetModelMat;
+	srand(glfwGetTime()); // 初始化随机种子
+	float radius = 75.0f;
+	float offset = 20.0f;
+	for (unsigned int i = 1; i < amount; i++)
 	{
 		glm::mat4 planetModelMat(1.0f);
 		// 1. 位移：分布在半径为 'radius' 的圆形上，偏移的范围是 [-offset, offset]
@@ -611,6 +616,36 @@ int main(int argc, char* argv[]) {
 		// 4. 添加到矩阵的数组中
 		modelMatrices[i] = planetModelMat;
 	}
+
+	// 顶点缓冲对象
+	unsigned int planetVertexBuffer;
+	glGenBuffers(1, &planetVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, planetVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+
+	for (unsigned int i = 0; i < planet.meshes.size(); i++)
+	{
+		unsigned int VAO = planet.meshes[i].VAO;
+		glBindVertexArray(VAO);
+		// 顶点属性
+		GLsizei vec4Size = sizeof(glm::vec4);
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(vec4Size));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		glBindVertexArray(0);
+	}
+
 #pragma endregion
 
 	#pragma region Render Loop
@@ -644,7 +679,7 @@ int main(int argc, char* argv[]) {
 		modelMat = glm::mat4(1.0f);
 		modelMat = glm::translate(modelMat,glm::vec3(0, -10, 0));
 		viewMat = mycamera->GetViewMatrix();
-		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
 		
 		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(viewMat));
@@ -661,15 +696,15 @@ int main(int argc, char* argv[]) {
 		myshader->SetUniform3fv("dirLight.specular", glm::vec3(1, 1, 1));
 		model.Draw(*myshader);
 		myshader->SetUniform3fv("dirLight.viewPos", mycamera->position);
-		normalShader->Use();
+		/*normalShader->Use();
 		normalShader->SetUniformMatrix4fv("model", modelMat);
-		model.Draw(*normalShader);
+		model.Draw(*normalShader);*/
 		// Set Model
 		//glBindVertexArray(VAO);
 		
 		// DrawCall
 		
-		planetShader->Use();
+		/*planetShader->Use();
 		glm::mat4 planetModelMat(1.0f);
 		planetModelMat = glm::translate(planetModelMat, glm::vec3(18.0f, -3.0f, 0.0f));
 		planetModelMat = glm::scale(planetModelMat, glm::vec3(4.0f, 4.0f, 4.0f));
@@ -679,6 +714,22 @@ int main(int argc, char* argv[]) {
 		{
 			planetShader->SetUniformMatrix4fv("model", modelMatrices[i]);
 			planet.Draw(*planetShader);
+		}*/
+		// draw planet
+		planetShader->Use();
+		/*planetShader->SetUniformMatrix4fv("model", planetModelMat);
+		planet.Draw(*planetShader);*/
+
+		
+		for (unsigned int i = 0; i < planet.meshes.size(); i++)
+		{
+			planetShader->SetUniform1i("texture_diffuse1", 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, planet.textures_loaded[0].id);
+			glBindVertexArray(planet.meshes[i].VAO);
+			glDrawElementsInstanced(
+				GL_TRIANGLES, planet.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount
+			);
 		}
 		
 		
@@ -754,7 +805,6 @@ int main(int argc, char* argv[]) {
 		glBindVertexArray(quadVAO);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);	// use the color attachment texture as the texture of the quad plane
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
 		
 
 		// Clean up, prepare for next render loop
