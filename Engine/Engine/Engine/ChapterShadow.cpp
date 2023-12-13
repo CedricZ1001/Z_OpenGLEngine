@@ -139,16 +139,7 @@ float cubeVertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
-float transparentVertices[] = {
-	// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
-	0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-	0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
-	1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
 
-	0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-	1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
-	1.0f,  0.5f,  0.0f,  1.0f,  0.0f
-};
 
 float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 	// positions   // texCoords
@@ -206,21 +197,7 @@ float skyboxVertices[] = {
 	-1.0f, -1.0f,  1.0f,
 	 1.0f, -1.0f,  1.0f
 };
-//顶点
-float points[] = {
-	-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // 左上
-	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // 右上
-	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // 右下
-	-0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // 左下
-};
 
-vector<glm::vec3> vegetation{
-	glm::vec3(-5.0f, 0.0f, -0.48f),
-	glm::vec3(5.0f, 0.0f, 0.51f),
-	glm::vec3(0.0f, 0.0f, 0.7f),
-	glm::vec3(-2.5f, 0.0f, -2.3f),
-	glm::vec3(2.5f, 0.0f, -0.6f)
-};
 
 #pragma endregion
 
@@ -228,20 +205,10 @@ vector<glm::vec3> vegetation{
 
 LightDirectional* light = new LightDirectional(glm::vec3(10.0f, 10.0f, -5.0f), glm::vec3(glm::radians(45.0f), 0, 0));
 
-//LightPoint* light = new LightPoint(glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(glm::radians(45.0f), 0, 0));
-
-//LightSpot* light = new LightSpot(
-//	glm::vec3(0.0f, 0.0f, 5.0f),
-//	glm::vec3(0, 0, -1), 
-//	glm::vec3(0.5f, 0.5f, 0.5f),
-//	glm::vec3(0.8f, 0.8f, 0.8f),
-//	glm::vec3(1.0f, 1.0f, 1.0f));
-
 #pragma endregion
 
 #pragma region Camera Declare
 //init camera
-//Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f));
 #pragma endregion
 
@@ -385,26 +352,23 @@ int main(int argc, char* argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	//glEnable(GL_MULTISAMPLE);//开启多重采样
-	//glEnable(GL_STENCIL_TEST);
-	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glEnable(GL_BLEND);//混合模式
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_PROGRAM_POINT_SIZE);//启用顶点图元
 #pragma endregion
 
 #pragma region Load IMG
 //load img
 	Loadimg* awesome = new Loadimg("assets/Material/Texture/awesomeface.png", GL_RGBA, GL_RGBA);
-	//Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
-	//Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
 
+	vector<std::string> faces
+	{
+		"assets/Material/Texture/skybox/right.jpg",
+		"assets/Material/Texture/skybox/left.jpg",
+		"assets/Material/Texture/skybox/top.jpg",
+		"assets/Material/Texture/skybox/bottom.jpg",
+		"assets/Material/Texture/skybox/front.jpg",
+		"assets/Material/Texture/skybox/back.jpg"
+	};
 
+	unsigned int cubemapTexture = LoadCubeMap(faces);
 #pragma endregion
 
 #pragma region Init VBO and VAO
@@ -413,8 +377,6 @@ int main(int argc, char* argv[]) {
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
 	Model model(path);
-	path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\planet\\planet.obj";
-	Model planet(path);
 
 	// cube VAO
 	unsigned int cubeVAO, cubeVBO;
@@ -428,19 +390,6 @@ int main(int argc, char* argv[]) {
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
-	unsigned int transparentVAO, transparentVBO;
-	glGenVertexArrays(1, &transparentVAO);
-	glGenBuffers(1, &transparentVBO);
-	glBindVertexArray(transparentVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, transparentVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glBindVertexArray(0);
-
-
 	// screen quad VAO
 	unsigned int quadVAO, quadVBO;
 	glGenVertexArrays(1, &quadVAO);
@@ -452,12 +401,6 @@ int main(int argc, char* argv[]) {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
-	Loadimg* transparentTex = new Loadimg("assets/Material/Texture/grass.png", GL_RGBA, GL_RGBA);
-
-	unsigned int FBO, texColorBuffer, RBO;
-	glGenFramebuffers(1, &FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	// skybox VAO
 	unsigned int skyboxVAO, skyboxVBO;
@@ -476,38 +419,9 @@ int main(int argc, char* argv[]) {
 	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-
-	//test VAO VBO
-	unsigned int testVAO, testVBO;
-	glGenVertexArrays(1, &testVAO);
-	glGenBuffers(1, &testVBO);
-	glBindVertexArray(testVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, testVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-
-
-
-
-	vector<std::string> faces
-	{
-		"assets/Material/Texture/skybox/right.jpg",
-		"assets/Material/Texture/skybox/left.jpg",
-		"assets/Material/Texture/skybox/top.jpg",
-		"assets/Material/Texture/skybox/bottom.jpg",
-		"assets/Material/Texture/skybox/front.jpg",
-		"assets/Material/Texture/skybox/back.jpg"
-	};
-
-	unsigned int cubemapTexture = LoadCubeMap(faces);
-	//立方体贴图
-	//unsigned int CubeTex;
-	//glGenTextures(1, &CubeTex);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, CubeTex);
-
+	unsigned int FBO, texColorBuffer, RBO;
+	glGenFramebuffers(1, &FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	// 生成纹理
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
@@ -529,25 +443,35 @@ int main(int argc, char* argv[]) {
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	
+	//深度贴图
+	GLuint depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SCR_WIDTH, SCR_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	//深度缓冲
+	GLuint depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 #pragma endregion
 
 #pragma region Init Shader
 	//init shader
-	//Shader* myshader = new Shader("assets/Material/Shader/SpotLight.vert", "assets/Material/Shader/SpotLight.frag");
-	//Shader* myshader = new Shader("assets/Material/Shader/explode.vert", "assets/Material/Shader/explode.frag", "assets/Material/Shader/explode.geom");
 	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
-	Shader* normalShader = new Shader("assets/Material/Shader/normal_visualization.vert", "assets/Material/Shader/normal_visualization.frag", "assets/Material/Shader/normal_visualization.geom");
-	Shader* planetShader = new Shader("assets/Material/Shader/planet.vert", "assets/Material/Shader/planet.frag");
-	//Shader* shaderSingleColor = new Shader("assets/Material/Shader/stencil_testing.vert", "assets/Material/Shader/stencil_testing.frag");
-	Shader* grassShader = new Shader("assets/Material/Shader/vegetation.vert", "assets/Material/Shader/vegetation.frag");
 	Shader* screenShader = new Shader("assets/Material/Shader/frameBuffer.vert", "assets/Material/Shader/frameBuffer.frag");
 	Shader* skyboxShader = new Shader("assets/Material/Shader/skybox.vert", "assets/Material/Shader/skybox.frag");
 	Shader* cubeShader = new Shader("assets/Material/Shader/cubeMap.vert", "assets/Material/Shader/cubeMap.frag");
-	//Shader* testShader = new Shader("assets/Material/Shader/vertex.vert", "assets/Material/Shader/fragment.frag", "assets/Material/Shader/geometry.geom");
 
-
-	//GLuint blockIndex = glGetUniformBlockIndex(cubeShader->ID, "Matrices");
-	//glUniformBlockBinding(cubeShader->ID, blockIndex, 0);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
 
 	screenShader->SetUniform1i("screenTexture", 0);
@@ -556,17 +480,7 @@ int main(int argc, char* argv[]) {
 #pragma endregion
 
 #pragma region Init Material
-	//Material* myMaterial = new Material(myshader,
-	//	glm::vec3(0.7f, 0.5f, 0.3f),
-	//	glm::vec3(0.3f, 0.2f, 0.2f),
-	//	glm::vec3(1.0f, 1.0f, 1.0f),
-	//	64);
 
-	//Material* containerMaterial = new Material(myshader,
-	//	container->TexBuffer,
-	//	glm::vec3(1.0f, 1.0f, 1.0f),
-	//	container_specular->TexBuffer,
-	//	64);
 
 #pragma endregion
 
@@ -582,69 +496,6 @@ int main(int argc, char* argv[]) {
 	// 
 	//unifrom大小限制
 	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
-	unsigned int amount = 1000;
-	glm::mat4* modelMatrices;
-	modelMatrices = new glm::mat4[amount];
-	glm::mat4 planetModelMat(1.0f);
-	planetModelMat = glm::translate(planetModelMat, glm::vec3(18.0f, -3.0f, 0.0f));
-	planetModelMat = glm::scale(planetModelMat, glm::vec3(4.0f, 4.0f, 4.0f));
-	modelMatrices[0] = planetModelMat;
-	srand(glfwGetTime()); // 初始化随机种子
-	float radius = 75.0f;
-	float offset = 20.0f;
-	for (unsigned int i = 1; i < amount; i++)
-	{
-		glm::mat4 planetModelMat(1.0f);
-		// 1. 位移：分布在半径为 'radius' 的圆形上，偏移的范围是 [-offset, offset]
-		float angle = (float)i / (float)amount * 360.0f;
-		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		float x = sin(angle) * radius + displacement;
-		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		float y = displacement * 0.4f; // 让行星带的高度比x和z的宽度要小
-		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		float z = cos(angle) * radius + displacement;
-		planetModelMat = glm::translate(planetModelMat, glm::vec3(x, y, z));
-
-		// 2. 缩放：在 0.05 和 0.25f 之间缩放
-		float scale = (rand() % 20) / 100.0f + 0.05;
-		planetModelMat = glm::scale(planetModelMat, glm::vec3(scale));
-
-		// 3. 旋转：绕着一个（半）随机选择的旋转轴向量进行随机的旋转
-		float rotAngle = (rand() % 360);
-		planetModelMat = glm::rotate(planetModelMat, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
-
-		// 4. 添加到矩阵的数组中
-		modelMatrices[i] = planetModelMat;
-	}
-
-	// 顶点缓冲对象
-	unsigned int planetVertexBuffer;
-	glGenBuffers(1, &planetVertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, planetVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
-
-	for (unsigned int i = 0; i < planet.meshes.size(); i++)
-	{
-		unsigned int VAO = planet.meshes[i].VAO;
-		glBindVertexArray(VAO);
-		// 顶点属性
-		GLsizei vec4Size = sizeof(glm::vec4);
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(vec4Size));
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
-
-		glVertexAttribDivisor(3, 1);
-		glVertexAttribDivisor(4, 1);
-		glVertexAttribDivisor(5, 1);
-		glVertexAttribDivisor(6, 1);
-
-		glBindVertexArray(0);
-	}
 
 #pragma endregion
 
@@ -666,9 +517,6 @@ int main(int argc, char* argv[]) {
 		glClearColor(0, 0, 0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
 
-		/*testShader->Use();
-		glBindVertexArray(testVAO);
-		glDrawArrays(GL_POINTS, 0, 4);*/
 
 		// Shader Program
 		myshader->Use();
@@ -696,61 +544,7 @@ int main(int argc, char* argv[]) {
 		myshader->SetUniform3fv("dirLight.specular", glm::vec3(1, 1, 1));
 		model.Draw(*myshader);
 		myshader->SetUniform3fv("dirLight.viewPos", mycamera->position);
-		/*normalShader->Use();
-		normalShader->SetUniformMatrix4fv("model", modelMat);
-		model.Draw(*normalShader);*/
-		// Set Model
-		//glBindVertexArray(VAO);
 
-		// DrawCall
-
-		/*planetShader->Use();
-		glm::mat4 planetModelMat(1.0f);
-		planetModelMat = glm::translate(planetModelMat, glm::vec3(18.0f, -3.0f, 0.0f));
-		planetModelMat = glm::scale(planetModelMat, glm::vec3(4.0f, 4.0f, 4.0f));
-		planetShader->SetUniformMatrix4fv("model", planetModelMat);
-		planet.Draw(*planetShader);
-		for (unsigned int i = 0; i < amount; i++)
-		{
-			planetShader->SetUniformMatrix4fv("model", modelMatrices[i]);
-			planet.Draw(*planetShader);
-		}*/
-		// draw planet
-		planetShader->Use();
-		/*planetShader->SetUniformMatrix4fv("model", planetModelMat);
-		planet.Draw(*planetShader);*/
-
-
-		for (unsigned int i = 0; i < planet.meshes.size(); i++)
-		{
-			planetShader->SetUniform1i("texture_diffuse1", 0);
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, planet.textures_loaded[0].id);
-			glBindVertexArray(planet.meshes[i].VAO);
-			glDrawElementsInstanced(
-				GL_TRIANGLES, planet.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount
-			);
-		}
-
-
-		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		//glStencilMask(0x00); // 禁止模板缓冲的写入
-		//glDisable(GL_DEPTH_TEST);
-		//shaderSingleColor->Use();
-
-		//modelMat = glm::mat4(1.0f);
-		//modelMat = glm::scale(modelMat, glm::vec3(1.005, 1.005, 1.005));
-		//viewMat = mycamera->GetViewMatrix();
-		//projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-		//// Uniform
-		//shaderSingleColor->SetUniformMatrix4fv("model", modelMat);
-		//shaderSingleColor->SetUniformMatrix4fv("view", viewMat);
-		//shaderSingleColor->SetUniformMatrix4fv("projection", projMat);
-		//model.Draw(*shaderSingleColor);
-		//glStencilMask(0xFF);
-		//glStencilFunc(GL_ALWAYS, 0, 0xFF);
-		//glEnable(GL_DEPTH_TEST);
 
 		// cubes
 		cubeShader->Use();
@@ -766,23 +560,6 @@ int main(int argc, char* argv[]) {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
-		grassShader->Use();
-		glBindVertexArray(transparentVAO);
-		glBindTexture(GL_TEXTURE_2D, transparentTex->TexBuffer);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		for (unsigned int i = 0; i < vegetation.size(); i++)
-		{
-			modelMat = glm::mat4(1.0f);
-			modelMat = glm::translate(modelMat, glm::vec3(0, -9, 0));
-			modelMat = glm::translate(modelMat, vegetation[i]);
-			modelMat = glm::scale(modelMat, glm::vec3(2, 2, 2));
-			grassShader->SetUniformMatrix4fv("model", modelMat);
-			grassShader->SetUniformMatrix4fv("view", viewMat);
-			grassShader->SetUniformMatrix4fv("projection", projMat);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
-
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader->Use();
@@ -797,6 +574,7 @@ int main(int argc, char* argv[]) {
 		// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+
 		// clear all relevant buffers
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -805,7 +583,6 @@ int main(int argc, char* argv[]) {
 		glBindVertexArray(quadVAO);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);	// use the color attachment texture as the texture of the quad plane
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
 
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
