@@ -169,6 +169,8 @@
   <ItemGroup>
     <None Include="assets\Material\Shader\cubeMap.frag" />
     <None Include="assets\Material\Shader\cubeMap.vert" />
+    <None Include="assets\Material\Shader\debug_quad.frag" />
+    <None Include="assets\Material\Shader\debug_quad.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
     <None Include="assets\Material\Shader\explode.frag" />
@@ -187,6 +189,8 @@
     <None Include="assets\Material\Shader\planet.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
     <None Include="assets\Material\Shader\PointLight.vert" />
+    <None Include="assets\Material\Shader\shadow_mapping_depth.frag" />
+    <None Include="assets\Material\Shader\shadow_mapping_depth.vert" />
     <None Include="assets\Material\Shader\skybox.frag" />
     <None Include="assets\Material\Shader\skybox.vert" />
     <None Include="assets\Material\Shader\SpotLight.frag" />

@@ -175,6 +175,18 @@
     <None Include="assets\Material\Shader\vertex.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="assets\Material\Shader\debug_quad.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\debug_quad.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\shadow_mapping_depth.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\shadow_mapping_depth.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">
