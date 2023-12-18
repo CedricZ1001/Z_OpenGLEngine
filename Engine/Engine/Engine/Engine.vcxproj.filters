@@ -187,6 +187,12 @@
     <None Include="assets\Material\Shader\shadow_mapping_depth.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="assets\Material\Shader\shadow_mapping.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\shadow_mapping.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

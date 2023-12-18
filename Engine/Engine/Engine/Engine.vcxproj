@@ -189,6 +189,8 @@
     <None Include="assets\Material\Shader\planet.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
     <None Include="assets\Material\Shader\PointLight.vert" />
+    <None Include="assets\Material\Shader\shadow_mapping.frag" />
+    <None Include="assets\Material\Shader\shadow_mapping.vert" />
     <None Include="assets\Material\Shader\shadow_mapping_depth.frag" />
     <None Include="assets\Material\Shader\shadow_mapping_depth.vert" />
     <None Include="assets\Material\Shader\skybox.frag" />

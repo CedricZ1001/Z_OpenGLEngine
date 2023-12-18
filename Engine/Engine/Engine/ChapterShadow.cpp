@@ -166,7 +166,7 @@ Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f));
 
 #pragma region Input Declare
 
-void ProcessInput(GLFWwindow* window) { //ÊäÈë¼ì²â
+void ProcessInput(GLFWwindow* window) { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
@@ -297,23 +297,6 @@ void renderQuad()
 	glBindVertexArray(0);
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		mycamera->ProcessKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		mycamera->ProcessKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		mycamera->ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		mycamera->ProcessKeyboard(RIGHT, deltaTime);
-}
-
 // renderCube() renders a 1x1 3D cube in NDC.
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
@@ -416,6 +399,7 @@ void renderScene(const Shader& shader)
 	model = glm::scale(model, glm::vec3(0.25));
 	shader.SetUniformMatrix4fv("model", model);
 	renderCube();
+
 }
 
 int main(int argc, char* argv[]) {
@@ -423,8 +407,8 @@ int main(int argc, char* argv[]) {
 #pragma region Open Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3¿ªÊ¼Ê¹ÓÃ¿É±à³ÌäÖÈ¾¹ÜÏß
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//ÔçÆÚ¹Ì¶¨Á÷Ë®Ïß£¬ÏÖÔÚ¿É±à³Ì»¯Á÷Ë®ÏßÒ»°ã¶¼Ê¹ÓÃGLFW_OPENGL_CORE_PROFILE£¬ÁíÒ»¸öÅäÖÃGLFW_OPENGL_COMPAT_PROFILE¿ÉÒÔÊ¹ÓÃ¹ýÊ±µÄÌØÐÔºÍ¹Ì¶¨Á÷Ë®Ïß
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3ï¿½ï¿½Ê¼Ê¹ï¿½Ã¿É±ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//ï¿½ï¿½ï¿½Ú¹Ì¶ï¿½ï¿½ï¿½Ë®ï¿½ß£ï¿½ï¿½ï¿½ï¿½Ú¿É±ï¿½Ì»ï¿½ï¿½ï¿½Ë®ï¿½ï¿½Ò»ï¿½ã¶¼Ê¹ï¿½ï¿½GLFW_OPENGL_CORE_PROFILEï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½GLFW_OPENGL_COMPAT_PROFILEï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¹ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ÔºÍ¹Ì¶ï¿½ï¿½ï¿½Ë®ï¿½ï¿½
 	//glfwWindowHint(GLFW_SAMPLES, 4);//4xMSAA
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// on MacOS  you need to add
@@ -444,14 +428,14 @@ int main(int argc, char* argv[]) {
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	//Init GLEW
-	//glewExperimental = true; //ÊµÑéÐÔÄ£Ê½
+	//glewExperimental = true; //Êµï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	if (glewInit() != GLEW_OK) {
 		printf("Failed to initialize GLEW");
 		glfwTerminate();
 		return -1;
 	}
 
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //ÉèÖÃÊÓ¿Ú(Viewport)µÄ´óÐ¡ ¼°¶¨ÒåÆÁÄ»ÉÏ»æÖÆÍ¼ÐÎµÄÎ»ÖÃºÍ´óÐ¡
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½(Viewport)ï¿½Ä´ï¿½Ð¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ï»ï¿½ï¿½ï¿½Í¼ï¿½Îµï¿½Î»ï¿½ÃºÍ´ï¿½Ð¡
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -477,10 +461,10 @@ int main(int argc, char* argv[]) {
 
 #pragma region Init VBO and VAO
 //Mesh cube(vertices);
-	std::filesystem::path exePath = argv[0];
-	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
+	//std::filesystem::path exePath = argv[0];
+	//string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
-	Model model(path);
+	//Model model(path);
 
 	// cube VAO
 	unsigned int cubeVAO, cubeVBO;
@@ -542,14 +526,15 @@ int main(int argc, char* argv[]) {
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-	// Éú³ÉÎÆÀí
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
-	// ½«Ëü¸½¼Óµ½µ±Ç°°ó¶¨µÄÖ¡»º³å¶ÔÏó
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Ç°ï¿½ó¶¨µï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
 
 	glGenRenderbuffers(1, &RBO);
@@ -576,16 +561,14 @@ int main(int argc, char* argv[]) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	// attach depth texture as FBO's depth buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	
 
 #pragma endregion
 
@@ -597,11 +580,15 @@ int main(int argc, char* argv[]) {
 	Shader* cubeShader = new Shader("assets/Material/Shader/cubeMap.vert", "assets/Material/Shader/cubeMap.frag");
 	Shader* debugDepthQuad = new Shader("assets/Material/Shader/debug_quad.vert", "assets/Material/Shader/debug_quad.frag");
 	Shader* simpleDepthShader = new Shader("assets/Material/Shader/shadow_mapping_depth.vert", "assets/Material/Shader/shadow_mapping_depth.frag");
+	Shader* shadowMapping = new Shader("assets/Material/Shader/shadow_mapping.vert", "assets/Material/Shader/shadow_mapping.frag");
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
 
 	screenShader->SetUniform1i("screenTexture", 0);
 	cubeShader->SetUniform1i("screenTexture", 0);
+	shadowMapping->Use();
+	shadowMapping->SetUniform1i("diffuseTexture", 0);
+	shadowMapping->SetUniform1i("shadowMap", 1);
 	debugDepthQuad->Use();
 	debugDepthQuad->SetUniform1i("depthMap", 0);
 
@@ -619,16 +606,18 @@ int main(int argc, char* argv[]) {
 	glm::mat4 modelMat;
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
-
-	//uniformÊýÁ¿
+	//uniformï¿½ï¿½ï¿½ï¿½
 	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
 	//cout << GL_MAX_FRAGMENT_UNIFORM_COMPONENTS << endl; //35657
 	// 
-	//unifrom´óÐ¡ÏÞÖÆ
+	//unifromï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
 	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
 
 #pragma endregion
-
+	std::filesystem::path exePath = argv[0];
+	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
+	/*cout << path << endl;*/
+	Model suitman(path);
 #pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
 
@@ -640,12 +629,23 @@ int main(int argc, char* argv[]) {
 
 		// input
 		// -----
-		processInput(window);
+		ProcessInput(window);
 
 		// render
 		// ------
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Set MVPMatrixs
+		modelMat = glm::mat4(1.0f);
+		modelMat = glm::translate(modelMat, glm::vec3(0, -10, 0));
+		viewMat = mycamera->GetViewMatrix();
+		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
+
+		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(viewMat));
+		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(projMat));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		// 1. render depth of scene to texture (from light's perspective)
 		// --------------------------------------------------------------
@@ -664,12 +664,34 @@ int main(int argc, char* argv[]) {
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
+		glCullFace(GL_FRONT);
 		renderScene(*simpleDepthShader);
+		glCullFace(GL_BACK);
+		//modelMat = glm::mat4(1.0f);
+		//shadowMapping->SetUniformMatrix4fv("model", modelMat);
+		//suitman.Draw(*simpleDepthShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// reset viewport
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// 2. render scene as normal using the generated depth/shadow map  
+// --------------------------------------------------------------
+		shadowMapping->Use();
+		// set light uniforms
+		shadowMapping->SetUniform3fv("viewPos", mycamera->position);
+		shadowMapping->SetUniform3fv("lightPos", lightPos);
+		shadowMapping->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+		renderScene(*shadowMapping);
+		//modelMat = glm::mat4(1.0f);
+		//shadowMapping->SetUniformMatrix4fv("model", modelMat);
+		//suitman.Draw(*shadowMapping);
+
 
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------
@@ -678,7 +700,7 @@ int main(int argc, char* argv[]) {
 		debugDepthQuad->SetUniform1f("far_plane", far_plane);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		renderQuad();
+		//renderQuad();
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
