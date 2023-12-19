@@ -167,6 +167,10 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Material\Shader\basicLight.frag" />
+    <None Include="assets\Material\Shader\basicLight.vert" />
+    <None Include="assets\Material\Shader\cubeLight.frag" />
+    <None Include="assets\Material\Shader\cubeLight.vert" />
     <None Include="assets\Material\Shader\cubeMap.frag" />
     <None Include="assets\Material\Shader\cubeMap.vert" />
     <None Include="assets\Material\Shader\debug_quad.frag" />
@@ -185,6 +189,8 @@
     <None Include="assets\Material\Shader\normal_visualization.frag" />
     <None Include="assets\Material\Shader\normal_visualization.geom" />
     <None Include="assets\Material\Shader\normal_visualization.vert" />
+    <None Include="assets\Material\Shader\Phong.frag" />
+    <None Include="assets\Material\Shader\Phong.vert" />
     <None Include="assets\Material\Shader\planet.frag" />
     <None Include="assets\Material\Shader\planet.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />

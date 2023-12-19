@@ -193,6 +193,24 @@
     <None Include="assets\Material\Shader\shadow_mapping.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="assets\Material\Shader\cubeLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\cubeLight.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\basicLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\basicLight.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\Phong.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\Phong.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">
