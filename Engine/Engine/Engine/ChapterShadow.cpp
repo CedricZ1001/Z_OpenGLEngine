@@ -375,7 +375,7 @@ void renderCube()
 unsigned int planeVAO;
 // renders the 3D scene
 // --------------------
-void renderScene(const Shader& shader)
+void renderScene(const Shader& shader,glm::vec3 &cube)
 {
 	// floor
 	glm::mat4 model = glm::mat4(1.0f);
@@ -385,18 +385,21 @@ void renderScene(const Shader& shader)
 	// cubes
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
+	model = glm::translate(model, cube); 
 	model = glm::scale(model, glm::vec3(0.5f));
 	shader.SetUniformMatrix4fv("model", model);
 	renderCube();
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
 	model = glm::scale(model, glm::vec3(0.5f));
+	model = glm::translate(model, cube);
 	shader.SetUniformMatrix4fv("model", model);
 	renderCube();
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 2.0));
 	model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
 	model = glm::scale(model, glm::vec3(0.25));
+	model = glm::translate(model, cube);
 	shader.SetUniformMatrix4fv("model", model);
 	renderCube();
 
@@ -561,8 +564,10 @@ int main(int argc, char* argv[]) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 	// attach depth texture as FBO's depth buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
@@ -618,6 +623,7 @@ int main(int argc, char* argv[]) {
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	/*cout << path << endl;*/
 	Model suitman(path);
+	glm::vec3 cubePos;
 #pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
 
@@ -627,6 +633,13 @@ int main(int argc, char* argv[]) {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+
+
+		float radius = 5.0f; // 光源旋转半径
+		float lightAngle = glfwGetTime(); // 使用时间作为旋转角度
+		cubePos.x = sin(lightAngle) * radius;
+		cubePos.y = 0.0f; // 如果你想在y轴上旋转，保持y坐标不变
+		cubePos.z = cos(lightAngle) * radius;
 		// input
 		// -----
 		ProcessInput(window);
@@ -662,10 +675,8 @@ int main(int argc, char* argv[]) {
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
 		glCullFace(GL_FRONT);
-		renderScene(*simpleDepthShader);
+		renderScene(*simpleDepthShader, cubePos);
 		glCullFace(GL_BACK);
 		//modelMat = glm::mat4(1.0f);
 		//shadowMapping->SetUniformMatrix4fv("model", modelMat);
@@ -687,7 +698,7 @@ int main(int argc, char* argv[]) {
 		glBindTexture(GL_TEXTURE_2D, leather->TexBuffer);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		renderScene(*shadowMapping);
+		renderScene(*shadowMapping, cubePos);
 		//modelMat = glm::mat4(1.0f);
 		//shadowMapping->SetUniformMatrix4fv("model", modelMat);
 		//suitman.Draw(*shadowMapping);
