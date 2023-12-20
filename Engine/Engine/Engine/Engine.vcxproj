@@ -144,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ChapterShadow.cpp" />
+    <ClCompile Include="Chapter3DShadow.cpp" />
     <ClCompile Include="LightDirectional.cpp" />
     <ClCompile Include="LightPoint.cpp" />
     <ClCompile Include="LightSpot.cpp" />
@@ -173,6 +173,8 @@
     <None Include="assets\Material\Shader\cubeLight.vert" />
     <None Include="assets\Material\Shader\cubeMap.frag" />
     <None Include="assets\Material\Shader\cubeMap.vert" />
+    <None Include="assets\Material\Shader\cube_shader_mapping.frag" />
+    <None Include="assets\Material\Shader\cube_shader_mapping.vert" />
     <None Include="assets\Material\Shader\debug_quad.frag" />
     <None Include="assets\Material\Shader\debug_quad.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
@@ -195,10 +197,13 @@
     <None Include="assets\Material\Shader\planet.vert" />
     <None Include="assets\Material\Shader\PointLight.frag" />
     <None Include="assets\Material\Shader\PointLight.vert" />
+    <None Include="assets\Material\Shader\point_shadows_depth.frag" />
+    <None Include="assets\Material\Shader\point_shadows_depth.geom" />
+    <None Include="assets\Material\Shader\point_shadows_depth.vert" />
     <None Include="assets\Material\Shader\shadow_mapping.frag" />
     <None Include="assets\Material\Shader\shadow_mapping.vert" />
-    <None Include="assets\Material\Shader\shadow_mapping_depth.frag" />
-    <None Include="assets\Material\Shader\shadow_mapping_depth.vert" />
+    <None Include="assets\Material\Shader\simple_mapping_depth.frag" />
+    <None Include="assets\Material\Shader\simple_mapping_depth.vert" />
     <None Include="assets\Material\Shader\skybox.frag" />
     <None Include="assets\Material\Shader\skybox.vert" />
     <None Include="assets\Material\Shader\SpotLight.frag" />

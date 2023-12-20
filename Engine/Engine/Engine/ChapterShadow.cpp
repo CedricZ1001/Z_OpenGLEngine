@@ -579,23 +579,25 @@ int main(int argc, char* argv[]) {
 
 #pragma region Init Shader
 	//init shader
-	Shader* myshader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
-	Shader* screenShader = new Shader("assets/Material/Shader/frameBuffer.vert", "assets/Material/Shader/frameBuffer.frag");
+	Shader* modelShader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
 	Shader* skyboxShader = new Shader("assets/Material/Shader/skybox.vert", "assets/Material/Shader/skybox.frag");
 	Shader* cubeShader = new Shader("assets/Material/Shader/cubeMap.vert", "assets/Material/Shader/cubeMap.frag");
+	Shader* cubeLightShader = new Shader("assets/Material/Shader/cubeLight.vert", "assets/Material/Shader/cubeLight.frag");
+	//2d shadowmap
 	Shader* debugDepthQuad = new Shader("assets/Material/Shader/debug_quad.vert", "assets/Material/Shader/debug_quad.frag");
-	Shader* simpleDepthShader = new Shader("assets/Material/Shader/shadow_mapping_depth.vert", "assets/Material/Shader/shadow_mapping_depth.frag");
+	Shader* simpleDepthShader = new Shader("assets/Material/Shader/simple_mapping_depth.vert", "assets/Material/Shader/simple_mapping_depth.frag");
 	Shader* shadowMapping = new Shader("assets/Material/Shader/shadow_mapping.vert", "assets/Material/Shader/shadow_mapping.frag");
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
 
-	screenShader->SetUniform1i("screenTexture", 0);
 	cubeShader->SetUniform1i("screenTexture", 0);
 	shadowMapping->Use();
 	shadowMapping->SetUniform1i("diffuseTexture", 0);
 	shadowMapping->SetUniform1i("shadowMap", 1);
 	debugDepthQuad->Use();
 	debugDepthQuad->SetUniform1i("depthMap", 0);
+
+
 
 	glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
 
@@ -712,6 +714,13 @@ int main(int argc, char* argv[]) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//renderQuad();
+		cubeLightShader->Use();
+		glm::mat4 lightmodel(1.0f);
+		lightmodel = glm::translate(lightmodel, lightPos);
+		lightmodel = glm::scale(lightmodel, glm::vec3(0.2f));
+		cubeLightShader->SetUniformMatrix4fv("model",lightmodel);
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

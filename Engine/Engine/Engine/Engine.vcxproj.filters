@@ -48,7 +48,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ChapterShadow.cpp">
+    <ClCompile Include="Chapter3DShadow.cpp">
       <Filter>Catalog</Filter>
     </ClCompile>
   </ItemGroup>
@@ -181,10 +181,10 @@
     <None Include="assets\Material\Shader\debug_quad.vert">
       <Filter>Shader</Filter>
     </None>
-    <None Include="assets\Material\Shader\shadow_mapping_depth.frag">
+    <None Include="assets\Material\Shader\simple_mapping_depth.frag">
       <Filter>Shader</Filter>
     </None>
-    <None Include="assets\Material\Shader\shadow_mapping_depth.vert">
+    <None Include="assets\Material\Shader\simple_mapping_depth.vert">
       <Filter>Shader</Filter>
     </None>
     <None Include="assets\Material\Shader\shadow_mapping.frag">
@@ -209,6 +209,21 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="assets\Material\Shader\Phong.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\cube_shader_mapping.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\cube_shader_mapping.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\point_shadows_depth.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\point_shadows_depth.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\point_shadows_depth.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
