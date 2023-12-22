@@ -48,7 +48,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Chapter3DShadow.cpp">
+    <ClCompile Include="ChapterGamma.cpp">
       <Filter>Catalog</Filter>
     </ClCompile>
   </ItemGroup>

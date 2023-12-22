@@ -144,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Chapter3DShadow.cpp" />
+    <ClCompile Include="ChapterGamma.cpp" />
     <ClCompile Include="LightDirectional.cpp" />
     <ClCompile Include="LightPoint.cpp" />
     <ClCompile Include="LightSpot.cpp" />

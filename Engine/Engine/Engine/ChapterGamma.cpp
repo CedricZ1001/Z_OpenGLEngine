@@ -206,12 +206,12 @@ float skyboxVertices[] = {
 	-1.0f, -1.0f,  1.0f,
 	 1.0f, -1.0f,  1.0f
 };
-//¶¥µã
+//ï¿½ï¿½ï¿½ï¿½
 float points[] = {
-	-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // ×óÉÏ
-	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // ÓÒÉÏ
-	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // ÓÒÏÂ
-	-0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // ×óÏÂ
+	-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // ï¿½ï¿½ï¿½ï¿½
+	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // ï¿½ï¿½ï¿½ï¿½
+	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // ï¿½ï¿½ï¿½ï¿½
+	-0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // ï¿½ï¿½ï¿½ï¿½
 };
 
 vector<glm::vec3> vegetation{
@@ -247,7 +247,7 @@ Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f));
 
 #pragma region Input Declare
 
-void ProcessInput(GLFWwindow* window) { //ÊäÈë¼ì²â
+void ProcessInput(GLFWwindow* window) { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
@@ -353,8 +353,8 @@ int main(int argc, char* argv[]) {
 #pragma region Open Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3¿ªÊ¼Ê¹ÓÃ¿É±à³ÌäÖÈ¾¹ÜÏß
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//ÔçÆÚ¹Ì¶¨Á÷Ë®Ïß£¬ÏÖÔÚ¿É±à³Ì»¯Á÷Ë®ÏßÒ»°ã¶¼Ê¹ÓÃGLFW_OPENGL_CORE_PROFILE£¬ÁíÒ»¸öÅäÖÃGLFW_OPENGL_COMPAT_PROFILE¿ÉÒÔÊ¹ÓÃ¹ýÊ±µÄÌØÐÔºÍ¹Ì¶¨Á÷Ë®Ïß
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3ï¿½ï¿½Ê¼Ê¹ï¿½Ã¿É±ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//ï¿½ï¿½ï¿½Ú¹Ì¶ï¿½ï¿½ï¿½Ë®ï¿½ß£ï¿½ï¿½ï¿½ï¿½Ú¿É±ï¿½Ì»ï¿½ï¿½ï¿½Ë®ï¿½ï¿½Ò»ï¿½ã¶¼Ê¹ï¿½ï¿½GLFW_OPENGL_CORE_PROFILEï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½GLFW_OPENGL_COMPAT_PROFILEï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¹ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ÔºÍ¹Ì¶ï¿½ï¿½ï¿½Ë®ï¿½ï¿½
 	//glfwWindowHint(GLFW_SAMPLES, 4);//4xMSAA
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// on MacOS  you need to add
@@ -374,18 +374,18 @@ int main(int argc, char* argv[]) {
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	//Init GLEW
-	//glewExperimental = true; //ÊµÑéÐÔÄ£Ê½
+	//glewExperimental = true; //Êµï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	if (glewInit() != GLEW_OK) {
 		printf("Failed to initialize GLEW");
 		glfwTerminate();
 		return -1;
 	}
 
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //ÉèÖÃÊÓ¿Ú(Viewport)µÄ´óÐ¡ ¼°¶¨ÒåÆÁÄ»ÉÏ»æÖÆÍ¼ÐÎµÄÎ»ÖÃºÍ´óÐ¡
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½(Viewport)ï¿½Ä´ï¿½Ð¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ï»ï¿½ï¿½ï¿½Í¼ï¿½Îµï¿½Î»ï¿½ÃºÍ´ï¿½Ð¡
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	//glEnable(GL_MULTISAMPLE);//¿ªÆô¶àÖØ²ÉÑù
+	//glEnable(GL_MULTISAMPLE);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
 	//glEnable(GL_STENCIL_TEST);
 	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -393,9 +393,9 @@ int main(int argc, char* argv[]) {
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glEnable(GL_BLEND);//»ìºÏÄ£Ê½
+	//glEnable(GL_BLEND);//ï¿½ï¿½ï¿½Ä£Ê½
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_PROGRAM_POINT_SIZE);//ÆôÓÃ¶¥µãÍ¼Ôª
+	//glEnable(GL_PROGRAM_POINT_SIZE);//ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½Í¼Ôª
 #pragma endregion
 
 #pragma region Load IMG
@@ -503,19 +503,19 @@ int main(int argc, char* argv[]) {
 	};
 
 	unsigned int cubemapTexture = LoadCubeMap(faces);
-	//Á¢·½ÌåÌùÍ¼
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
 	//unsigned int CubeTex;
 	//glGenTextures(1, &CubeTex);
 	//glBindTexture(GL_TEXTURE_CUBE_MAP, CubeTex);
 
-	// Éú³ÉÎÆÀí
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	// ½«Ëü¸½¼Óµ½µ±Ç°°ó¶¨µÄÖ¡»º³å¶ÔÏó
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Ç°ï¿½ó¶¨µï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
 
 	glGenRenderbuffers(1, &RBO);
@@ -576,48 +576,48 @@ int main(int argc, char* argv[]) {
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
 
-	//uniformÊýÁ¿
+	//uniformï¿½ï¿½ï¿½ï¿½
 	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
 	//cout << GL_MAX_FRAGMENT_UNIFORM_COMPONENTS << endl; //35657
 	// 
-	//unifrom´óÐ¡ÏÞÖÆ
+	//unifromï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
 	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
-	unsigned int amount = 1000;
+	unsigned int amount = 10000;
 	glm::mat4* modelMatrices;
 	modelMatrices = new glm::mat4[amount];
 	glm::mat4 planetModelMat(1.0f);
 	planetModelMat = glm::translate(planetModelMat, glm::vec3(18.0f, -3.0f, 0.0f));
 	planetModelMat = glm::scale(planetModelMat, glm::vec3(4.0f, 4.0f, 4.0f));
 	modelMatrices[0] = planetModelMat;
-	srand(glfwGetTime()); // ³õÊ¼»¯Ëæ»úÖÖ×Ó
+	srand(glfwGetTime()); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	float radius = 75.0f;
 	float offset = 20.0f;
 	for (unsigned int i = 1; i < amount; i++)
 	{
 		glm::mat4 planetModelMat(1.0f);
-		// 1. Î»ÒÆ£º·Ö²¼ÔÚ°ë¾¶Îª 'radius' µÄÔ²ÐÎÉÏ£¬Æ«ÒÆµÄ·¶Î§ÊÇ [-offset, offset]
+		// 1. Î»ï¿½Æ£ï¿½ï¿½Ö²ï¿½ï¿½Ú°ë¾¶Îª 'radius' ï¿½ï¿½Ô²ï¿½ï¿½ï¿½Ï£ï¿½Æ«ï¿½ÆµÄ·ï¿½Î§ï¿½ï¿½ [-offset, offset]
 		float angle = (float)i / (float)amount * 360.0f;
 		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
 		float x = sin(angle) * radius + displacement;
 		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		float y = displacement * 0.4f; // ÈÃÐÐÐÇ´øµÄ¸ß¶È±ÈxºÍzµÄ¿í¶ÈÒªÐ¡
+		float y = displacement * 0.4f; // ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½Ä¸ß¶È±ï¿½xï¿½ï¿½zï¿½Ä¿ï¿½ï¿½ÒªÐ¡
 		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
 		float z = cos(angle) * radius + displacement;
 		planetModelMat = glm::translate(planetModelMat, glm::vec3(x, y, z));
 
-		// 2. Ëõ·Å£ºÔÚ 0.05 ºÍ 0.25f Ö®¼äËõ·Å
+		// 2. ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½ 0.05 ï¿½ï¿½ 0.25f Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		float scale = (rand() % 20) / 100.0f + 0.05;
 		planetModelMat = glm::scale(planetModelMat, glm::vec3(scale));
 
-		// 3. Ðý×ª£ºÈÆ×ÅÒ»¸ö£¨°ë£©Ëæ»úÑ¡ÔñµÄÐý×ªÖáÏòÁ¿½øÐÐËæ»úµÄÐý×ª
+		// 3. ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ë£©ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
 		float rotAngle = (rand() % 360);
 		planetModelMat = glm::rotate(planetModelMat, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
 
-		// 4. Ìí¼Óµ½¾ØÕóµÄÊý×éÖÐ
+		// 4. ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		modelMatrices[i] = planetModelMat;
 	}
 
-	// ¶¥µã»º³å¶ÔÏó
+	// ï¿½ï¿½ï¿½ã»ºï¿½ï¿½ï¿½ï¿½ï¿½
 	unsigned int planetVertexBuffer;
 	glGenBuffers(1, &planetVertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, planetVertexBuffer);
@@ -627,7 +627,7 @@ int main(int argc, char* argv[]) {
 	{
 		unsigned int VAO = planet.meshes[i].VAO;
 		glBindVertexArray(VAO);
-		// ¶¥µãÊôÐÔ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		GLsizei vec4Size = sizeof(glm::vec4);
 		glEnableVertexAttribArray(3);
 		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
@@ -734,7 +734,7 @@ int main(int argc, char* argv[]) {
 
 
 		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		//glStencilMask(0x00); // ½ûÖ¹Ä£°å»º³åµÄÐ´Èë
+		//glStencilMask(0x00); // ï¿½ï¿½Ö¹Ä£ï¿½å»ºï¿½ï¿½ï¿½Ð´ï¿½ï¿½
 		//glDisable(GL_DEPTH_TEST);
 		//shaderSingleColor->Use();
 
@@ -809,7 +809,7 @@ int main(int argc, char* argv[]) {
 
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
-		glfwPollEvents();//Ö´ÐÐÊÂ¼þ
+		glfwPollEvents();//Ö´ï¿½ï¿½ï¿½Â¼ï¿½
 
 	}
 #pragma endregion
