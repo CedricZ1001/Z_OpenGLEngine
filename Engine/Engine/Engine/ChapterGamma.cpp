@@ -15,6 +15,9 @@
 #include"LightSpot.h"
 #include"Mesh.h"
 #include"Model.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 
 #pragma region Config
@@ -582,7 +585,7 @@ int main(int argc, char* argv[]) {
 	// 
 	//unifrom��С����
 	//cout << GL_MAX_UNIFORM_BLOCK_SIZE << endl; //35376
-	unsigned int amount = 10000;
+	unsigned int amount = 1000;
 	glm::mat4* modelMatrices;
 	modelMatrices = new glm::mat4[amount];
 	glm::mat4 planetModelMat(1.0f);
@@ -647,6 +650,16 @@ int main(int argc, char* argv[]) {
 	}
 
 #pragma endregion
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 420");
 
 #pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -806,7 +819,16 @@ int main(int argc, char* argv[]) {
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);	// use the color attachment texture as the texture of the quad plane
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
+		// Start the Dear ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 
+		ImGui::Begin("Hello, world!");
+
+		ImGui::End();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
 		glfwPollEvents();//ִ���¼�
@@ -816,6 +838,9 @@ int main(int argc, char* argv[]) {
 
 #pragma region Exit Program
 	// Exit Program
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 	glfwTerminate();
 	return 0;
 #pragma endregion

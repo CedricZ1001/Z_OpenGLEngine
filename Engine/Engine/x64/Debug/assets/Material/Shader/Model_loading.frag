@@ -28,6 +28,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
    float specularIntensity = pow(max(dot(normal, normalize(directionToLight + viewDir)),0.0),64);
     vec3 ambient = light.ambient * texture(texture_diffuse1,TexCoords).rgb;
     vec3 diffuse = light.diffuse * diffuseIntensity * texture(texture_diffuse1,TexCoords).rgb;
+    
     vec3 specular = light.specular * specularIntensity * texture(texture_specular1,TexCoords).rgb;
 
     return (ambient + diffuse + specular);

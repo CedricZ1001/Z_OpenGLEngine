@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;$(projectDir)ImGUI;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;$(projectDir)ImGUI;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;$(projectDir)ImGUI;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\OpenGL\glm;D:\OpenGL\glfw-3.3.8.bin.WIN64\include;$(projectDir)ImGUI;D:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -145,6 +145,13 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChapterGamma.cpp" />
+    <ClCompile Include="ImGUI\imgui.cpp" />
+    <ClCompile Include="ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="ImGUI\imgui_impl_glfw.cpp" />
+    <ClCompile Include="ImGUI\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="LightDirectional.cpp" />
     <ClCompile Include="LightPoint.cpp" />
     <ClCompile Include="LightSpot.cpp" />
@@ -156,6 +163,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ImGUI\imconfig.h" />
+    <ClInclude Include="ImGUI\imgui.h" />
+    <ClInclude Include="ImGUI\imgui_impl_glfw.h" />
+    <ClInclude Include="ImGUI\imgui_impl_opengl3.h" />
+    <ClInclude Include="ImGUI\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="ImGUI\imgui_internal.h" />
+    <ClInclude Include="ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="ImGUI\imstb_textedit.h" />
+    <ClInclude Include="ImGUI\imstb_truetype.h" />
     <ClInclude Include="LightDirectional.h" />
     <ClInclude Include="LightPoint.h" />
     <ClInclude Include="LightSpot.h" />

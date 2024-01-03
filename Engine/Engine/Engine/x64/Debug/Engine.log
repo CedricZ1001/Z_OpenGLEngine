@@ -1,12 +1,12 @@
 ﻿  ChapterGamma.cpp
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(592,19): warning C4244: “参数”: 从“double”转换到“unsigned int”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(609,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(613,18): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(635,82): warning C4312: “类型强制转换”: 从“GLsizei”转换到更大的“void *”
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(637,86): warning C4312: “类型强制转换”: 从“GLsizei”转换到更大的“void *”
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(639,86): warning C4312: “类型强制转换”: 从“GLsizei”转换到更大的“void *”
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(691,45): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(732,4): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(595,19): warning C4244: “参数”: 从“double”转换到“unsigned int”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(612,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(616,18): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(638,82): warning C4312: “类型强制转换”: 从“GLsizei”转换到更大的“void *”
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(640,86): warning C4312: “类型强制转换”: 从“GLsizei”转换到更大的“void *”
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(642,86): warning C4312: “类型强制转换”: 从“GLsizei”转换到更大的“void *”
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(704,45): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp(745,4): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
 glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“”(使用“glew32s.lib(glew.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
 LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
 LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library

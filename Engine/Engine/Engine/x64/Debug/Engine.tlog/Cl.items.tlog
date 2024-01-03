@@ -1,5 +1,12 @@
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\Camera.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\Camera.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ChapterGamma.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\ChapterGamma.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui_demo.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui_demo.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui_draw.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui_draw.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui_impl_glfw.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui_impl_glfw.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui_impl_opengl3.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui_impl_opengl3.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui_tables.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui_tables.obj
+D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\ImGUI\imgui_widgets.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\imgui_widgets.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\LightDirectional.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\LightDirectional.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\LightPoint.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\LightPoint.obj
 D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\LightSpot.cpp;D:\Workplace\hub\RealTimeRendering\Engine\Engine\Engine\x64\Debug\LightSpot.obj

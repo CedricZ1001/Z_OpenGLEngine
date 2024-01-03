@@ -71,6 +71,6 @@ void main()
         color += sampleTex[i] * kernel[i];
 
     FragColor = vec4(color, 1.0);
-   float gamma = 2.2;
-    FragColor.rgb = pow(FragColor.rgb, vec3(1.0/gamma));
+   //float gamma = 2.2;
+   //FragColor.rgb = pow(FragColor.rgb, vec3(1.0/gamma));
 }
