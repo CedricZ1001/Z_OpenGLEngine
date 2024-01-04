@@ -72,7 +72,7 @@
     <ClCompile Include="ImGUI\imgui_widgets.cpp">
       <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="ChapterGamma.cpp">
+    <ClCompile Include="ChapterLight.cpp">
       <Filter>Catalog</Filter>
     </ClCompile>
   </ItemGroup>

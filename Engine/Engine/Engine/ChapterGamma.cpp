@@ -273,10 +273,10 @@ void ProcessInput(GLFWwindow* window) { //������
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-		mycamera->ProcessKeyboard(LIFT, deltaTime);
+		mycamera->ProcessKeyboard(DOWN, deltaTime);
 	}
 	else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-		mycamera->ProcessKeyboard(DOWN, deltaTime);
+		mycamera->ProcessKeyboard(LIFT, deltaTime);
 	}
 }
 
@@ -660,6 +660,7 @@ int main(int argc, char* argv[]) {
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 420");
+	bool drawLight = false;
 
 #pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -823,9 +824,9 @@ int main(int argc, char* argv[]) {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
-		ImGui::Begin("Hello, world!");
-
+		ImGui::Begin("Customize the settings");
+			ImGui::Text("This is some useful text.");
+			ImGui::Checkbox("DrawLight", &drawLight);
 		ImGui::End();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

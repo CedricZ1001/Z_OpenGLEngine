@@ -15,6 +15,9 @@
 #include"LightSpot.h"
 #include"Mesh.h"
 #include"Model.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 
 #pragma region Config
@@ -26,10 +29,15 @@ const unsigned int SCR_HEIGHT = 1080;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool isFirstMouse = true;
+bool handleMouseMovement = false;
 
 //time
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+void DrawDirLight(Shader* shader, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
+void DrawBasicBox(Shader* shader,glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightColor, unsigned int cubeVAO);
+void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
 
 #pragma endregion
 
@@ -242,12 +250,44 @@ LightDirectional* light = new LightDirectional(glm::vec3(10.0f, 10.0f, -5.0f), g
 #pragma region Camera Declare
 //init camera
 //Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-Camera* mycamera = new Camera(glm::vec3(0, 0, 3.0f));
+Camera* mycamera = new Camera(glm::vec3(3, 3, 15.0f));
 #pragma endregion
 
 #pragma region Input Declare
 
-void ProcessInput(GLFWwindow* window) { //������
+void mouse_callback(GLFWwindow* window, double xPosIn, double yPosIn) {
+
+	if (!handleMouseMovement) {
+		return;
+	}
+	float xPos = static_cast<float>(xPosIn);
+	float yPos = static_cast<float>(yPosIn);
+
+	if (isFirstMouse) {
+		lastX = xPos;
+		lastY = yPos;
+		isFirstMouse = false;
+	}
+
+	float xOffset = xPos - lastX;
+	float yOffset = lastY - yPos;
+
+	lastX = xPos;
+	lastY = yPos;
+
+	mycamera->ProcessMouseMovement(xOffset, yOffset);
+}
+
+void ProcessInput(GLFWwindow* window) { 
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_RELEASE) {
+		handleMouseMovement = false;
+		isFirstMouse = true;
+	}
+	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
+		handleMouseMovement = true;
+	}
+	
+
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
@@ -277,25 +317,7 @@ void ProcessInput(GLFWwindow* window) { //������
 	}
 }
 
-void mouse_callback(GLFWwindow* window, double xPosIn, double yPosIn) {
 
-	float xPos = static_cast<float>(xPosIn);
-	float yPos = static_cast<float>(yPosIn);
-
-	if (isFirstMouse) {
-		lastX = xPos;
-		lastY = yPos;
-		isFirstMouse = false;
-	}
-
-	float xOffset = xPos - lastX;
-	float yOffset = lastY - yPos;
-
-	lastX = xPos;
-	lastY = yPos;
-
-	mycamera->ProcessMouseMovement(xOffset, yOffset);
-}
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -314,6 +336,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 #pragma endregion
 
 #pragma region loadCubeMap
+
 unsigned int LoadCubeMap(vector<std::string>& faces)
 {
 	unsigned int textureID;
@@ -353,8 +376,8 @@ int main(int argc, char* argv[]) {
 #pragma region Open Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);//3.3��ʼʹ�ÿɱ����Ⱦ����
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//���ڹ̶���ˮ�ߣ����ڿɱ�̻���ˮ��һ�㶼ʹ��GLFW_OPENGL_CORE_PROFILE����һ������GLFW_OPENGL_COMPAT_PROFILE����ʹ�ù�ʱ�����Ժ͹̶���ˮ��
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_SAMPLES, 4);//4xMSAA
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// on MacOS  you need to add
@@ -374,28 +397,18 @@ int main(int argc, char* argv[]) {
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	//Init GLEW
-	//glewExperimental = true; //ʵ����ģʽ
+	//glewExperimental = true; 
 	if (glewInit() != GLEW_OK) {
 		printf("Failed to initialize GLEW");
 		glfwTerminate();
 		return -1;
 	}
 
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //�����ӿ�(Viewport)�Ĵ�С ��������Ļ�ϻ���ͼ�ε�λ�úʹ�С
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); 
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	//glEnable(GL_MULTISAMPLE);//�������ز���
-	//glEnable(GL_STENCIL_TEST);
-	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glEnable(GL_BLEND);//���ģʽ
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_PROGRAM_POINT_SIZE);//���ö���ͼԪ
+
 #pragma endregion
 
 #pragma region Load IMG
@@ -422,7 +435,6 @@ int main(int argc, char* argv[]) {
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
 
-
 	// UBO set uniform 
 	GLuint uboMatrices;
 	glGenBuffers(1, &uboMatrices);
@@ -431,19 +443,15 @@ int main(int argc, char* argv[]) {
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
-
-
 #pragma endregion
 
 #pragma region Init Shader
 	//init shader
-	Shader* cudeLight = new Shader("assets/Material/Shader/cubeLight.vert", "assets/Material/Shader/cubeLight.frag");
+	Shader* cubeLight = new Shader("assets/Material/Shader/cubeLight.vert", "assets/Material/Shader/cubeLight.frag");
 	Shader* basicLightShader = new Shader("assets/Material/Shader/basicLight.vert", "assets/Material/Shader/basicLight.frag");
-	Shader* PhoneShader = new Shader("assets/Material/Shader/Phong.vert", "assets/Material/Shader/Phong.frag");
-
+	Shader* PhongShader = new Shader("assets/Material/Shader/Phong.vert", "assets/Material/Shader/Phong.frag");
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
-
 
 #pragma endregion
 
@@ -462,12 +470,34 @@ int main(int argc, char* argv[]) {
 
 #pragma endregion
 
-#pragma region Perpare MVP
+#pragma region Perpare before rendering
 //model mat
 	glm::mat4 modelMat;
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
 
+	glm::vec3 lightPos;
+	glm::vec3 lightColor(1.0f);
+	float light_pos_value = 0;
+	float radius = 5.0f; // 光源旋转半径
+	float lightAngle = light_pos_value; // 使用时间作为旋转角度
+
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 420");
+	bool isDrawDirLight = true;
+	bool isDrawBasicBox = true;
+	bool isDrawPhongBox = true;
+	bool isLightCircularMotion = true;
+
+	glm::vec3 lastDirlightColor(1.0f);
+	glm::vec3 basicBoxColor(1.0f, 0.5f, 0.31f);
+	glm::vec3 phongBoxColor(1.0f, 0.5f, 0.31f);
+
+	glm::vec3 phongBoxPosition(2.0f, 0.0f, 0.0f);
+	glm::vec3 basicBoxPosition(0.0f, 0.0f, 0.0f);
 	//uniform����
 	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
 	//cout << GL_MAX_FRAGMENT_UNIFORM_COMPONENTS << endl; //35657
@@ -477,13 +507,6 @@ int main(int argc, char* argv[]) {
 
 #pragma endregion
 
-	glm::vec3 lightPos;
-
-	float radius = 5.0f; // 光源旋转半径
-	float lightAngle = glfwGetTime(); // 使用时间作为旋转角度
-	lightPos.x = sin(lightAngle) * radius;
-	lightPos.y = 0.0f; // 如果你想在y轴上旋转，保持y坐标不变
-	lightPos.z = cos(lightAngle) * radius;
 
 #pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -491,12 +514,18 @@ int main(int argc, char* argv[]) {
 		// per-frame time logic
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
-		cout << 1 / deltaTime << endl;
+		//cout << 1 / deltaTime << endl;
 		lastFrame = currentFrame;
-
-		float lightAngle = glfwGetTime(); // 使用时间作为旋转角度
+		
+		
+		if (isLightCircularMotion) {
+			lightAngle = currentFrame;// 使用时间作为旋转角度
+		}
+		else {
+			lightAngle = light_pos_value;
+		}
 		lightPos.x = sin(lightAngle) * radius;
-		lightPos.y = 5.0f; // 如果你想在y轴上旋转，保持y坐标不变
+		lightPos.y = 1.0f; // 如果你想在y轴上旋转，保持y坐标不变
 		lightPos.z = cos(lightAngle) * radius;
 
 		// ProcessInput
@@ -505,58 +534,120 @@ int main(int argc, char* argv[]) {
 		//glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
 		glClearColor(0, 0, 0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT.
+		
+		//bind UBO 
 		viewMat = mycamera->GetViewMatrix();
 		projMat = glm::perspective(glm::radians(mycamera->zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
-
 		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(viewMat));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(projMat));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-
-		cudeLight->Use();
-		modelMat = glm::mat4(1.0f);
-		modelMat = glm::translate(modelMat, lightPos);
-		modelMat = glm::scale(modelMat, glm::vec3(0.3f));
-		cudeLight->SetUniformMatrix4fv("model", modelMat);
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-
-		basicLightShader->Use();
-		modelMat = glm::mat4(1.0f);
-		basicLightShader->SetUniformMatrix4fv("model", modelMat);
-		basicLightShader->SetUniform3fv("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-		basicLightShader->SetUniform3fv("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-
-		PhoneShader->Use();
-		modelMat = glm::mat4(1.0f);
-		modelMat = glm::translate(modelMat, glm::vec3(2.0, 0.0, 0.0));
-		PhoneShader->SetUniformMatrix4fv("model", modelMat);
-		PhoneShader->SetUniform3fv("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-		PhoneShader->SetUniform3fv("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		PhoneShader->SetUniform3fv("lightPos", lightPos);
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
 		
+		//light
+		if (!isDrawDirLight) {
+			lightColor = glm::vec3(0.0f);
+		}
+		else{
+			lightColor = lastDirlightColor;
+			DrawDirLight(cubeLight, lightPos, lightColor, cubeVAO);
+		}
+
+		//model
+		if (isDrawBasicBox) {
+			DrawBasicBox(basicLightShader, basicBoxPosition, basicBoxColor, lightColor, cubeVAO);
+		}
+		if (isDrawPhongBox) {
+			DrawPhongBox(PhongShader, phongBoxPosition, phongBoxColor, lightPos, lightColor, cubeVAO);
+		}
 		
+
+		//ImGUI
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		ImGui::Begin("Customize setting");
+		if (ImGui::TreeNode("Light")) {
+			if (ImGui::TreeNode("DirectionLight")) { // 可展开的分组
+				ImGui::Checkbox("Draw Directional Light", &isDrawDirLight);
+				ImGui::Checkbox("circular motion", &isLightCircularMotion);
+				ImGui::SliderFloat("Light Position", &light_pos_value, 0.0f, 6.28f);
+				ImGui::ColorEdit3("Light Color", (float*)&lastDirlightColor);
+				ImGui::TreePop(); // 结束分组
+			}
+			ImGui::TreePop(); // 结束分组
+		}
+		if (ImGui::TreeNode("Model")) {
+			if (ImGui::TreeNode("BasicBox")) {
+				ImGui::Checkbox("Draw BasicBox", &isDrawBasicBox);
+				ImGui::ColorEdit3("Color", (float*)&basicBoxColor);
+				ImGui::SliderFloat3("position", (float*)&basicBoxPosition, -20.0f, 20.0f, "%.1f");
+				ImGui::TreePop(); // 结束分组
+			}
+			if (ImGui::TreeNode("PhongBox")) {
+				ImGui::Checkbox("Draw PhongBox", &isDrawPhongBox);
+				ImGui::ColorEdit3("Color", (float*)&phongBoxColor);
+				ImGui::SliderFloat3("position", (float*)&phongBoxPosition, -20.0f, 20.0f, "%.1f");
+				ImGui::TreePop(); // 结束分组
+			}
+			ImGui::TreePop();
+		}
+		ImGui::End();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Clean up, prepare for next render loop
 		glfwSwapBuffers(window);
-		glfwPollEvents();//ִ���¼�
-
+		glfwPollEvents();
 	}
 #pragma endregion
 
 #pragma region Exit Program
 	// Exit Program
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
 	glfwTerminate();
 	return 0;
 #pragma endregion
 
 }
 
+void DrawDirLight(Shader* shader, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO) {
+
+	shader->Use();
+	glm::mat4 modelMat(1.0f);
+	modelMat = glm::translate(modelMat, lightPos);
+	modelMat = glm::scale(modelMat, glm::vec3(0.3f));
+	shader->SetUniformMatrix4fv("model", modelMat);
+	shader->SetUniform3fv("lightColor", lightColor);
+	glBindVertexArray(cubeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
+
+void DrawBasicBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightColor, unsigned int cubeVAO) {
+
+	shader->Use();
+	glm::mat4 modelMat(1.0f);
+	modelMat = glm::translate(modelMat, position);
+	shader->SetUniformMatrix4fv("model", modelMat);
+	shader->SetUniform3fv("objectColor", objectColor);
+	shader->SetUniform3fv("lightColor", lightColor);
+	glBindVertexArray(cubeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
+
+void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO) {
+	shader->Use();
+	glm::mat4 modelMat(1.0f);
+	modelMat = glm::translate(modelMat, position);
+	shader->SetUniformMatrix4fv("model", modelMat);
+	shader->SetUniform3fv("objectColor", objectColor);
+	shader->SetUniform3fv("lightColor", lightColor);
+	shader->SetUniform3fv("lightPos", lightPos);
+	glBindVertexArray(cubeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
