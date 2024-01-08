@@ -286,7 +286,7 @@ void ProcessInput(GLFWwindow* window) {
 	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
 		handleMouseMovement = true;
 	}
-	
+	 
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
