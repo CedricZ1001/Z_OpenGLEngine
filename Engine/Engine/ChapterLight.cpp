@@ -38,6 +38,8 @@ float lastFrame = 0.0f;
 void DrawDirLight(Shader* shader, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
 void DrawBasicBox(Shader* shader,glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightColor, unsigned int cubeVAO);
 void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
+void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO, unsigned int diffuse, unsigned int specular);
+unsigned int loadTexture(char const* path);
 
 #pragma endregion
 
@@ -413,11 +415,14 @@ int main(int argc, char* argv[]) {
 
 #pragma region Load IMG
 //load img
-	Loadimg* awesome = new Loadimg("assets/Material/Texture/awesomeface.png", GL_RGBA, GL_RGBA);
+	//Loadimg* awesome = new Loadimg("assets/Material/Texture/awesomeface.png", GL_RGBA, GL_RGBA);
 	//Loadimg* container = new Loadimg("assets/Material/Texture/container.png", GL_RGBA, GL_RGBA);
 	//Loadimg* container_specular = new Loadimg("assets/Material/Texture/container_specular.png", GL_RGBA, GL_RGBA);
+	unsigned int container = loadTexture("assets/Material/Texture/container.png");
+	unsigned int container_specular = loadTexture("assets/Material/Texture/container_specular.png");
 
-
+	cout << container << endl;
+	cout << container_specular<< endl;
 #pragma endregion
 
 #pragma region Init VBO and VAO
@@ -428,11 +433,15 @@ int main(int argc, char* argv[]) {
 	glGenBuffers(1, &cubeVBO);
 	glBindVertexArray(cubeVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+
+
 
 
 	// UBO set uniform 
@@ -450,6 +459,7 @@ int main(int argc, char* argv[]) {
 	Shader* cubeLight = new Shader("assets/Material/Shader/cubeLight.vert", "assets/Material/Shader/cubeLight.frag");
 	Shader* basicLightShader = new Shader("assets/Material/Shader/basicLight.vert", "assets/Material/Shader/basicLight.frag");
 	Shader* PhongShader = new Shader("assets/Material/Shader/Phong.vert", "assets/Material/Shader/Phong.frag");
+	Shader* PointLightShader = new Shader("assets/Material/Shader/PointLight.vert", "assets/Material/Shader/PointLight.frag");
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
 
@@ -490,6 +500,7 @@ int main(int argc, char* argv[]) {
 	bool isDrawDirLight = true;
 	bool isDrawBasicBox = true;
 	bool isDrawPhongBox = true;
+	bool isDrawTextureBox = true;
 	bool isLightCircularMotion = true;
 
 	glm::vec3 lastDirlightColor(1.0f);
@@ -498,6 +509,8 @@ int main(int argc, char* argv[]) {
 
 	glm::vec3 phongBoxPosition(2.0f, 0.0f, 0.0f);
 	glm::vec3 basicBoxPosition(0.0f, 0.0f, 0.0f);
+	glm::vec3 textureBoxPosition(-2.0f, 0.0f, 0.0f);
+
 	//uniform����
 	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
 	//cout << GL_MAX_FRAGMENT_UNIFORM_COMPONENTS << endl; //35657
@@ -559,6 +572,9 @@ int main(int argc, char* argv[]) {
 		if (isDrawPhongBox) {
 			DrawPhongBox(PhongShader, phongBoxPosition, phongBoxColor, lightPos, lightColor, cubeVAO);
 		}
+		if (isDrawTextureBox) {
+			DrawTextureBox(PointLightShader, textureBoxPosition, lightPos, lightColor, cubeVAO, container, container_specular);
+		}
 		
 
 		//ImGUI
@@ -587,6 +603,11 @@ int main(int argc, char* argv[]) {
 				ImGui::Checkbox("Draw PhongBox", &isDrawPhongBox);
 				ImGui::ColorEdit3("Color", (float*)&phongBoxColor);
 				ImGui::SliderFloat3("position", (float*)&phongBoxPosition, -20.0f, 20.0f, "%.1f");
+				ImGui::TreePop(); // 结束分组
+			}
+			if (ImGui::TreeNode("TextureBox")) {
+				ImGui::Checkbox("Draw PhongBox", &isDrawTextureBox);
+				ImGui::SliderFloat3("position", (float*)&textureBoxPosition, -20.0f, 20.0f, "%.1f");
 				ImGui::TreePop(); // 结束分组
 			}
 			ImGui::TreePop();
@@ -650,4 +671,69 @@ void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm
 	glBindVertexArray(cubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO, unsigned int diffuse, unsigned int specular) {
+	shader->Use();
+	glm::mat4 modelMat(1.0f);
+	modelMat = glm::translate(modelMat, position);
+	shader->SetUniformMatrix4fv("modelMat", modelMat);
+	shader->SetUniform1i("material.diffuse", 0);
+	shader->SetUniform1i("material.specular", 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, diffuse);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, specular);
+	shader->SetUniform1f("material.shininess", 64.0f);
+
+	shader->SetUniform1f("pointLight.constant", 1.0f);
+	shader->SetUniform1f("pointLight.linear", 0.09f);
+	shader->SetUniform1f("pointLight.quadratic", 0.032f);
+
+	shader->SetUniform3fv("pointLight.color", lightColor);
+	shader->SetUniform3fv("viewPos", mycamera->position);
+	shader->SetUniform3fv("pointLight.position", lightPos);
+	glBindVertexArray(cubeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
+
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor) {
+
+}
+
+unsigned int loadTexture(char const* path){
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height, nrComponents;
+	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+	if (data)
+	{
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Texture failed to load at path: " << path << std::endl;
+		stbi_image_free(data);
+	}
+
+	return textureID;
 }
