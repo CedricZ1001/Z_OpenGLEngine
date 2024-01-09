@@ -40,6 +40,7 @@ void DrawBasicBox(Shader* shader,glm::vec3 position, glm::vec3 objectColor, glm:
 void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
 void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO, unsigned int diffuse, unsigned int specular);
 unsigned int loadTexture(char const* path);
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model);
 
 #pragma endregion
 
@@ -460,6 +461,7 @@ int main(int argc, char* argv[]) {
 	Shader* basicLightShader = new Shader("assets/Material/Shader/basicLight.vert", "assets/Material/Shader/basicLight.frag");
 	Shader* PhongShader = new Shader("assets/Material/Shader/Phong.vert", "assets/Material/Shader/Phong.frag");
 	Shader* PointLightShader = new Shader("assets/Material/Shader/PointLight.vert", "assets/Material/Shader/PointLight.frag");
+	Shader* ModelShader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
 
@@ -497,11 +499,12 @@ int main(int argc, char* argv[]) {
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 420");
+	bool isLightCircularMotion = true;
 	bool isDrawDirLight = true;
 	bool isDrawBasicBox = true;
 	bool isDrawPhongBox = true;
 	bool isDrawTextureBox = true;
-	bool isLightCircularMotion = true;
+	bool isDrawNanosuit = true;
 
 	glm::vec3 lastDirlightColor(1.0f);
 	glm::vec3 basicBoxColor(1.0f, 0.5f, 0.31f);
@@ -510,6 +513,14 @@ int main(int argc, char* argv[]) {
 	glm::vec3 phongBoxPosition(2.0f, 0.0f, 0.0f);
 	glm::vec3 basicBoxPosition(0.0f, 0.0f, 0.0f);
 	glm::vec3 textureBoxPosition(-2.0f, 0.0f, 0.0f);
+	glm::vec3 NanosuitPosition(5.0f, -1.0f, 0.0f);
+
+	std::filesystem::path exePath = argv[0];
+	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
+	Model Nanosuit(path);
+
+	path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\planet\\planet.obj";
+	Model planet(path);
 
 	//uniform����
 	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
@@ -575,6 +586,9 @@ int main(int argc, char* argv[]) {
 		if (isDrawTextureBox) {
 			DrawTextureBox(PointLightShader, textureBoxPosition, lightPos, lightColor, cubeVAO, container, container_specular);
 		}
+		if (isDrawNanosuit) {
+			DrawModel(ModelShader, NanosuitPosition, lightPos, lightColor, Nanosuit);
+		}
 		
 
 		//ImGUI
@@ -608,6 +622,11 @@ int main(int argc, char* argv[]) {
 			if (ImGui::TreeNode("TextureBox")) {
 				ImGui::Checkbox("Draw PhongBox", &isDrawTextureBox);
 				ImGui::SliderFloat3("position", (float*)&textureBoxPosition, -20.0f, 20.0f, "%.1f");
+				ImGui::TreePop(); // 结束分组
+			}
+			if (ImGui::TreeNode("Nanosuit")) {
+				ImGui::Checkbox("Draw Nanosuit", &isDrawNanosuit);
+				ImGui::SliderFloat3("position", (float*)&NanosuitPosition, -20.0f, 20.0f, "%.1f");
 				ImGui::TreePop(); // 结束分组
 			}
 			ImGui::TreePop();
@@ -691,14 +710,36 @@ void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm:
 	shader->SetUniform1f("pointLight.quadratic", 0.032f);
 
 	shader->SetUniform3fv("pointLight.color", lightColor);
-	shader->SetUniform3fv("viewPos", mycamera->position);
+	shader->SetUniform3fv("pointLight.ambient", glm::vec3(0.2f));
+	shader->SetUniform3fv("pointLight.diffuse", glm::vec3(0.8f));
+	shader->SetUniform3fv("pointLight.specular", glm::vec3(1.0f));
 	shader->SetUniform3fv("pointLight.position", lightPos);
+
+	shader->SetUniform3fv("viewPos", mycamera->position);
 	glBindVertexArray(cubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 
-void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor) {
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor,Model model) {
+	shader->Use();
+	glm::mat4 modelMat(1.0f);
+	modelMat = glm::translate(modelMat, position);
+	shader->SetUniformMatrix4fv("model", modelMat);
+	shader->SetUniform1f("material.shininess", 64.0f);
+
+	shader->SetUniform1f("pointLight.constant", 1.0f);
+	shader->SetUniform1f("pointLight.linear", 0.09f);
+	shader->SetUniform1f("pointLight.quadratic", 0.032f);
+
+	shader->SetUniform3fv("light.color", lightColor);
+	shader->SetUniform3fv("light.ambient", glm::vec3(0.2f));
+	shader->SetUniform3fv("light.diffuse", glm::vec3(0.8f));
+	shader->SetUniform3fv("light.specular", glm::vec3(1.0f));
+	shader->SetUniform3fv("light.position", lightPos);
+	shader->SetUniform3fv("viewPos", mycamera->position);
+
+	model.Draw(*shader);
 
 }
 

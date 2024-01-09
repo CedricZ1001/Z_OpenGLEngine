@@ -6,23 +6,24 @@ in mat3 TBN;
 
 out vec4 FragColor;
 
-struct DirLight {
-    vec3 direction;
+struct Light {
+    vec3 position;
+    vec3 color;
 	
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
 };
 
-uniform DirLight dirLight;
+uniform Light light;
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
 uniform sampler2D texture_height1;
 uniform vec3 viewPos;
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
-    vec3 directionToLight = normalize(-light.direction);
+vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir){
+    vec3 directionToLight = normalize(light.position-FragPos);
     float diffuseIntensity = max(dot(normal,directionToLight),0.0);
 
    float specularIntensity = pow(max(dot(normal, normalize(directionToLight + viewDir)),0.0),64);
@@ -31,7 +32,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
     
     vec3 specular = light.specular * specularIntensity * texture(texture_specular1,TexCoords).rgb;
 
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse + specular)*light.color;
 }
 
 void main(){
@@ -42,7 +43,7 @@ void main(){
 
    vec3 viewDir = normalize(viewPos - FragPos);
    
-   vec3 result = CalcDirLight(dirLight, norm, viewDir);
+   vec3 result = CalcDirLight(light, norm, viewDir);
    FragColor = vec4(result , 1.0);
 
 }
