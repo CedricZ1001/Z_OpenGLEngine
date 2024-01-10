@@ -40,7 +40,7 @@ void DrawBasicBox(Shader* shader,glm::vec3 position, glm::vec3 objectColor, glm:
 void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
 void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO, unsigned int diffuse, unsigned int specular);
 unsigned int loadTexture(char const* path);
-void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model);
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model, bool useNormalMap);
 
 #pragma endregion
 
@@ -492,6 +492,7 @@ int main(int argc, char* argv[]) {
 	glm::vec3 lightColor(1.0f);
 	float light_pos_value = 0;
 	float radius = 5.0f; // 光源旋转半径
+	float lightheight = 0.0f;
 	float lightAngle = light_pos_value; // 使用时间作为旋转角度
 
 	ImGui::CreateContext();
@@ -505,6 +506,7 @@ int main(int argc, char* argv[]) {
 	bool isDrawPhongBox = true;
 	bool isDrawTextureBox = true;
 	bool isDrawNanosuit = true;
+	bool isDrawMario = true;
 
 	glm::vec3 lastDirlightColor(1.0f);
 	glm::vec3 basicBoxColor(1.0f, 0.5f, 0.31f);
@@ -514,13 +516,18 @@ int main(int argc, char* argv[]) {
 	glm::vec3 basicBoxPosition(0.0f, 0.0f, 0.0f);
 	glm::vec3 textureBoxPosition(-2.0f, 0.0f, 0.0f);
 	glm::vec3 NanosuitPosition(5.0f, -1.0f, 0.0f);
+	glm::vec3 MarioPosition(-5.0f, -1.0f, 0.0f);
 
 	std::filesystem::path exePath = argv[0];
 	string path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\nanosuit\\nanosuit.obj";
 	Model Nanosuit(path);
 
-	path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\planet\\planet.obj";
-	Model planet(path);
+	/*path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\planet\\planet.obj";
+	Model planet(path);*/
+
+	path = exePath.parent_path().parent_path().parent_path().string() + "\\Engine\\assets\\Model\\mario\\0.obj";
+	Model Mario(path);
+
 
 	//uniform����
 	//cout << GL_MAX_VERTEX_UNIFORM_COMPONENTS << endl; //35658
@@ -549,7 +556,7 @@ int main(int argc, char* argv[]) {
 			lightAngle = light_pos_value;
 		}
 		lightPos.x = sin(lightAngle) * radius;
-		lightPos.y = 1.0f; // 如果你想在y轴上旋转，保持y坐标不变
+		lightPos.y = lightheight; // 如果你想在y轴上旋转，保持y坐标不变
 		lightPos.z = cos(lightAngle) * radius;
 
 		// ProcessInput
@@ -587,7 +594,10 @@ int main(int argc, char* argv[]) {
 			DrawTextureBox(PointLightShader, textureBoxPosition, lightPos, lightColor, cubeVAO, container, container_specular);
 		}
 		if (isDrawNanosuit) {
-			DrawModel(ModelShader, NanosuitPosition, lightPos, lightColor, Nanosuit);
+			DrawModel(ModelShader, NanosuitPosition, lightPos, lightColor, Nanosuit,true);
+		}
+		if (isDrawMario) {
+			DrawModel(ModelShader, MarioPosition, lightPos, lightColor, Mario,false);
 		}
 		
 
@@ -600,7 +610,9 @@ int main(int argc, char* argv[]) {
 			if (ImGui::TreeNode("DirectionLight")) { // 可展开的分组
 				ImGui::Checkbox("Draw Directional Light", &isDrawDirLight);
 				ImGui::Checkbox("circular motion", &isLightCircularMotion);
-				ImGui::SliderFloat("Light Position", &light_pos_value, 0.0f, 6.28f);
+				ImGui::SliderFloat("Light angle", &light_pos_value, 0.0f, 6.28f);
+				ImGui::SliderFloat("Light height", &lightheight, -20, 20);
+				ImGui::SliderFloat("Light radius", &radius, 0, 50);
 				ImGui::ColorEdit3("Light Color", (float*)&lastDirlightColor);
 				ImGui::TreePop(); // 结束分组
 			}
@@ -627,6 +639,11 @@ int main(int argc, char* argv[]) {
 			if (ImGui::TreeNode("Nanosuit")) {
 				ImGui::Checkbox("Draw Nanosuit", &isDrawNanosuit);
 				ImGui::SliderFloat3("position", (float*)&NanosuitPosition, -20.0f, 20.0f, "%.1f");
+				ImGui::TreePop(); // 结束分组
+			}
+			if (ImGui::TreeNode("Mario")) {
+				ImGui::Checkbox("Draw Mario", &isDrawMario);
+				ImGui::SliderFloat3("position", (float*)&MarioPosition, -20.0f, 20.0f, "%.1f");
 				ImGui::TreePop(); // 结束分组
 			}
 			ImGui::TreePop();
@@ -719,9 +736,11 @@ void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm:
 	glBindVertexArray(cubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
-void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor,Model model) {
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model, bool useNormalMap) {
 	shader->Use();
 	glm::mat4 modelMat(1.0f);
 	modelMat = glm::translate(modelMat, position);
@@ -738,6 +757,7 @@ void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3
 	shader->SetUniform3fv("light.specular", glm::vec3(1.0f));
 	shader->SetUniform3fv("light.position", lightPos);
 	shader->SetUniform3fv("viewPos", mycamera->position);
+	shader->SetUniform1i("useNormalMap", useNormalMap);
 
 	model.Draw(*shader);
 

@@ -21,6 +21,7 @@ uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
 uniform sampler2D texture_height1;
 uniform vec3 viewPos;
+uniform bool useNormalMap;
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir){
     vec3 directionToLight = normalize(light.position-FragPos);
@@ -36,13 +37,16 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir){
 }
 
 void main(){
-   vec3 normalMapValue  = texture(texture_normal1,TexCoords).rgb;
-   vec3 norm =  normalize(normalMapValue  * 2.0 - 1.0);
-   norm = normalize(TBN * norm);
-   //vec3 norm = normalize(Normal);
+   vec3 norm;
+   if (useNormalMap) {
+        vec3 normalMapValue = texture(texture_normal1, TexCoords).rgb;
+        norm = normalize(normalMapValue * 2.0 - 1.0);
+        norm = normalize(TBN * norm);
+   } else {
+       norm = normalize(Normal);
+   }
 
    vec3 viewDir = normalize(viewPos - FragPos);
-   
    vec3 result = CalcDirLight(light, norm, viewDir);
    FragColor = vec4(result , 1.0);
 

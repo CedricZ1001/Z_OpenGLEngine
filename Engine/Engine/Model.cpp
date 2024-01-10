@@ -177,7 +177,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
         stbi_image_free(data);
     }
     else {
-        cout << "Texture failed to load at path" << path << endl;
+        cout << "Texture failed to load at path " << path << endl;
         stbi_image_free(data);
     }
     return textureID;
