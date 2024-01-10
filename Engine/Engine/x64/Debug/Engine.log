@@ -1,4 +1,23 @@
-﻿  ChapterLight.cpp
+﻿  Camera.cpp
+  ChapterLight.cpp
+D:\workspace\Cedric_Z1\RealTimeRendering\Engine\Engine\ChapterLight.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  LightDirectional.cpp
+  LightPoint.cpp
+  LightSpot.cpp
+  Loadimg.cpp
+  Material.cpp
+  Mesh.cpp
+  Model.cpp
+  Shader.cpp
+  正在生成代码...
+  LINK : 没有找到 D:\workspace\Cedric_Z1\RealTimeRendering\Engine\x64\Debug\Engine.exe 或上一个增量链接没有生成它；正在执行完全链接
 glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“”(使用“glew32s.lib(glew.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
 LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
 LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
@@ -36,4 +55,4 @@ LINK : warning LNK4217: 符号“__glewUniformMatrix2fv”(在“ glew32s.lib(gl
 LINK : warning LNK4217: 符号“__glewUniformMatrix3fv”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __cdecl Shader::SetUniformMatrix3fv(char const *,struct glm::tmat3x3<float,0> const &)const " (?SetUniformMatrix3fv@Shader@@QEBAXPEBDAEBU?$tmat3x3@M$0A@@glm@@@Z)”中)导入
 LINK : warning LNK4217: 符号“__glewUniformMatrix4fv”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __cdecl Shader::SetUniformMatrix4fv(char const *,struct glm::tmat4x4<float,0> const &)const " (?SetUniformMatrix4fv@Shader@@QEBAXPEBDAEBU?$tmat4x4@M$0A@@glm@@@Z)”中)导入
 LINK : warning LNK4217: 符号“__glewUseProgram”(在“ glew32s.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __cdecl Shader::Use(void)const " (?Use@Shader@@QEBAXXZ)”中)导入
-  Engine.vcxproj -> D:\Workplace\hub\RealTimeRendering\Engine\x64\Debug\Engine.exe
+  Engine.vcxproj -> D:\workspace\Cedric_Z1\RealTimeRendering\Engine\x64\Debug\Engine.exe
