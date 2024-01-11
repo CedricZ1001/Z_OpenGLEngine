@@ -35,12 +35,12 @@ bool handleMouseMovement = false;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-void DrawDirLight(Shader* shader, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
+void DrawPointLight(Shader* shader, LightPoint* light, unsigned int cubeVAO);
 void DrawBasicBox(Shader* shader,glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightColor, unsigned int cubeVAO);
 void DrawPhongBox(Shader* shader, glm::vec3 position, glm::vec3 objectColor, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO);
 void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO, unsigned int diffuse, unsigned int specular);
 unsigned int loadTexture(char const* path);
-void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model, bool useNormalMap);
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model, bool useDiffuseMap = false, bool useSpecularMap = false, bool useNormalMap = false);
 
 #pragma endregion
 
@@ -422,8 +422,6 @@ int main(int argc, char* argv[]) {
 	unsigned int container = loadTexture("assets/Material/Texture/container.png");
 	unsigned int container_specular = loadTexture("assets/Material/Texture/container_specular.png");
 
-	cout << container << endl;
-	cout << container_specular<< endl;
 #pragma endregion
 
 #pragma region Init VBO and VAO
@@ -488,6 +486,11 @@ int main(int argc, char* argv[]) {
 	glm::mat4 viewMat;
 	glm::mat4 projMat;
 
+	int FPS = 0;
+
+	LightDirectional* dirLight = new LightDirectional(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f));
+	LightPoint* pointLight = new LightPoint(glm::vec3(0.0f), glm::vec3(1.0f));
+
 	glm::vec3 lightPos;
 	glm::vec3 lightColor(1.0f);
 	float light_pos_value = 0;
@@ -497,18 +500,38 @@ int main(int argc, char* argv[]) {
 
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImFontConfig font_config;
+	font_config.SizePixels = 40.0f;
+	ImFont* big_font = io.Fonts->AddFontDefault(&font_config); 
+
+	font_config.SizePixels = 16.0f;
+	ImFont* defaultFont = io.Fonts->AddFontDefault(&font_config); 
+
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 420");
+
+
 	bool isLightCircularMotion = true;
+	bool isDrawPointLight = true;
 	bool isDrawDirLight = true;
+
 	bool isDrawBasicBox = true;
 	bool isDrawPhongBox = true;
 	bool isDrawTextureBox = true;
 	bool isDrawNanosuit = true;
 	bool isDrawMario = true;
 
+	bool DrawNanosuitDiffuseMap = true;
+	bool DrawNanosuitSpecularMap = true;
+	bool DrawNanosuitNormalMap = true;
+
+	bool DrawMarioDiffuseMap = true;
+
+	bool isDepthTest = true;
+
 	glm::vec3 lastDirlightColor(1.0f);
+	glm::vec3 lightCentre(0.0f);
 	glm::vec3 basicBoxColor(1.0f, 0.5f, 0.31f);
 	glm::vec3 phongBoxColor(1.0f, 0.5f, 0.31f);
 
@@ -538,7 +561,6 @@ int main(int argc, char* argv[]) {
 
 #pragma endregion
 
-
 #pragma region Render Loop
 	while (!glfwWindowShouldClose(window)) {
 
@@ -546,18 +568,9 @@ int main(int argc, char* argv[]) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		//cout << 1 / deltaTime << endl;
+		FPS = int(1 / deltaTime);
 		lastFrame = currentFrame;
 		
-		
-		if (isLightCircularMotion) {
-			lightAngle = currentFrame;// 使用时间作为旋转角度
-		}
-		else {
-			lightAngle = light_pos_value;
-		}
-		lightPos.x = sin(lightAngle) * radius;
-		lightPos.y = lightheight; // 如果你想在y轴上旋转，保持y坐标不变
-		lightPos.z = cos(lightAngle) * radius;
 
 		// ProcessInput
 		ProcessInput(window);
@@ -574,45 +587,86 @@ int main(int argc, char* argv[]) {
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(projMat));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		
+		//button
+		if (isDepthTest) {
+			glEnable(GL_DEPTH_TEST);
+		}
+		else {
+			glDisable(GL_DEPTH_TEST);
+		}
+
 		//light
-		if (!isDrawDirLight) {
-			lightColor = glm::vec3(0.0f);
+		if (!isDrawPointLight) {
+			pointLight->color = glm::vec3(0.0f);
 		}
 		else{
-			lightColor = lastDirlightColor;
-			DrawDirLight(cubeLight, lightPos, lightColor, cubeVAO);
+			pointLight->color = lastDirlightColor;
+			if (isLightCircularMotion) {
+				lightAngle = currentFrame;// 使用时间作为旋转角度
+			}
+			else {
+				lightAngle = light_pos_value;
+			}
+
+			pointLight->position.x = sin(lightAngle) * radius + lightCentre.x;
+			pointLight->position.y = lightheight + lightCentre.y; // 如果你想在y轴上旋转，保持y坐标不变
+			pointLight->position.z = cos(lightAngle) * radius + lightCentre.z;
+			DrawPointLight(cubeLight, pointLight, cubeVAO);
 		}
+
+		
 
 		//model
 		if (isDrawBasicBox) {
-			DrawBasicBox(basicLightShader, basicBoxPosition, basicBoxColor, lightColor, cubeVAO);
+			DrawBasicBox(basicLightShader, basicBoxPosition, basicBoxColor, pointLight->color, cubeVAO);
 		}
 		if (isDrawPhongBox) {
-			DrawPhongBox(PhongShader, phongBoxPosition, phongBoxColor, lightPos, lightColor, cubeVAO);
+			DrawPhongBox(PhongShader, phongBoxPosition, phongBoxColor, pointLight->position, pointLight->color, cubeVAO);
 		}
 		if (isDrawTextureBox) {
-			DrawTextureBox(PointLightShader, textureBoxPosition, lightPos, lightColor, cubeVAO, container, container_specular);
+			DrawTextureBox(PointLightShader, textureBoxPosition, pointLight->position, pointLight->color, cubeVAO, container, container_specular);
 		}
 		if (isDrawNanosuit) {
-			DrawModel(ModelShader, NanosuitPosition, lightPos, lightColor, Nanosuit,true);
+			DrawModel(ModelShader, NanosuitPosition, pointLight->position, pointLight->color, Nanosuit, DrawNanosuitDiffuseMap, DrawNanosuitSpecularMap, DrawNanosuitNormalMap);
 		}
 		if (isDrawMario) {
-			DrawModel(ModelShader, MarioPosition, lightPos, lightColor, Mario,false);
+			DrawModel(ModelShader, MarioPosition, pointLight->position, pointLight->color, Mario, DrawMarioDiffuseMap);
 		}
 		
 
-		//ImGUI
+
+		
+
+
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		// 获取FPS
+		std::string fps_text = "FPS: " + std::to_string((int)ImGui::GetIO().Framerate);
+		// 设置文本位置和颜色
+		ImVec2 text_pos = ImVec2(10.0f, 10.0f);
+		ImVec4 text_color = ImVec4(0, 1.0f, 0, 1.0f);
+		// 绘制文本
+		ImGui::PushFont(big_font);
+		ImGui::GetBackgroundDrawList()->AddText(text_pos, ImGui::ColorConvertFloat4ToU32(text_color), fps_text.c_str());
+		ImGui::PopFont();
+
+		ImGui::PushFont(defaultFont);
 		ImGui::Begin("Customize setting");
+		if (ImGui::TreeNode("Render Setting")) {
+			ImGui::Checkbox("DepthTest", &isDepthTest);
+			ImGui::TreePop(); // 结束分组
+		}
+
 		if (ImGui::TreeNode("Light")) {
-			if (ImGui::TreeNode("DirectionLight")) { // 可展开的分组
-				ImGui::Checkbox("Draw Directional Light", &isDrawDirLight);
+			if (ImGui::TreeNode("PointLight")) { // 可展开的分组
+				ImGui::Checkbox("Draw Point Light", &isDrawPointLight);
 				ImGui::Checkbox("circular motion", &isLightCircularMotion);
 				ImGui::SliderFloat("Light angle", &light_pos_value, 0.0f, 6.28f);
 				ImGui::SliderFloat("Light height", &lightheight, -20, 20);
 				ImGui::SliderFloat("Light radius", &radius, 0, 50);
+				ImGui::SliderFloat3("the centre of the circle", (float*)&lightCentre, - 30.0f, 30.0f, "%.1f");
 				ImGui::ColorEdit3("Light Color", (float*)&lastDirlightColor);
 				ImGui::TreePop(); // 结束分组
 			}
@@ -638,16 +692,21 @@ int main(int argc, char* argv[]) {
 			}
 			if (ImGui::TreeNode("Nanosuit")) {
 				ImGui::Checkbox("Draw Nanosuit", &isDrawNanosuit);
+				ImGui::Checkbox("Draw diffuse Map", &DrawNanosuitDiffuseMap);
+				ImGui::Checkbox("Draw specular Map", &DrawNanosuitSpecularMap);
+				ImGui::Checkbox("Draw normal Map", &DrawNanosuitNormalMap);
 				ImGui::SliderFloat3("position", (float*)&NanosuitPosition, -20.0f, 20.0f, "%.1f");
 				ImGui::TreePop(); // 结束分组
 			}
 			if (ImGui::TreeNode("Mario")) {
 				ImGui::Checkbox("Draw Mario", &isDrawMario);
+				ImGui::Checkbox("Draw diffuse Map", &DrawMarioDiffuseMap);
 				ImGui::SliderFloat3("position", (float*)&MarioPosition, -20.0f, 20.0f, "%.1f");
 				ImGui::TreePop(); // 结束分组
 			}
 			ImGui::TreePop();
 		}
+		ImGui::PopFont();
 		ImGui::End();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -670,14 +729,14 @@ int main(int argc, char* argv[]) {
 
 }
 
-void DrawDirLight(Shader* shader, glm::vec3 lightPos, glm::vec3 lightColor, unsigned int cubeVAO) {
+void DrawPointLight(Shader* shader, LightPoint* light, unsigned int cubeVAO) {
 
 	shader->Use();
 	glm::mat4 modelMat(1.0f);
-	modelMat = glm::translate(modelMat, lightPos);
+	modelMat = glm::translate(modelMat, light->position);
 	modelMat = glm::scale(modelMat, glm::vec3(0.3f));
 	shader->SetUniformMatrix4fv("model", modelMat);
-	shader->SetUniform3fv("lightColor", lightColor);
+	shader->SetUniform3fv("lightColor", light->color);
 	glBindVertexArray(cubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
@@ -740,7 +799,7 @@ void DrawTextureBox(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm:
 
 }
 
-void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model, bool useNormalMap) {
+void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3 lightColor, Model model, bool useDiffuseMap, bool useSpecularMap , bool useNormalMap) {
 	shader->Use();
 	glm::mat4 modelMat(1.0f);
 	modelMat = glm::translate(modelMat, position);
@@ -757,10 +816,11 @@ void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3
 	shader->SetUniform3fv("light.specular", glm::vec3(1.0f));
 	shader->SetUniform3fv("light.position", lightPos);
 	shader->SetUniform3fv("viewPos", mycamera->position);
+
+	shader->SetUniform1i("useDiffuseMap", useDiffuseMap);
+	shader->SetUniform1i("useSpecularMap", useSpecularMap);
 	shader->SetUniform1i("useNormalMap", useNormalMap);
-
 	model.Draw(*shader);
-
 }
 
 unsigned int loadTexture(char const* path){

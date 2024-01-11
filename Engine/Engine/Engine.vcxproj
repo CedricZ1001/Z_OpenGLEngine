@@ -172,6 +172,7 @@
     <ClInclude Include="ImGUI\imstb_rectpack.h" />
     <ClInclude Include="ImGUI\imstb_textedit.h" />
     <ClInclude Include="ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="LightDirectional.h" />
     <ClInclude Include="LightPoint.h" />
     <ClInclude Include="LightSpot.h" />
