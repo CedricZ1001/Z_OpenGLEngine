@@ -460,6 +460,7 @@ int main(int argc, char* argv[]) {
 	Shader* PhongShader = new Shader("assets/Material/Shader/Phong.vert", "assets/Material/Shader/Phong.frag");
 	Shader* PointLightShader = new Shader("assets/Material/Shader/PointLight.vert", "assets/Material/Shader/PointLight.frag");
 	Shader* ModelShader = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
+	Shader* DepthBuffer = new Shader("assets/Material/Shader/Model_loading.vert", "assets/Material/Shader/Model_loading.frag");
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboMatrices);
 
@@ -822,6 +823,7 @@ void DrawModel(Shader* shader, glm::vec3 position, glm::vec3 lightPos, glm::vec3
 	shader->SetUniform1i("useNormalMap", useNormalMap);
 	model.Draw(*shader);
 }
+
 
 unsigned int loadTexture(char const* path){
 	unsigned int textureID;

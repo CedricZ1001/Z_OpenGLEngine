@@ -49,7 +49,6 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir){
     else{
         specular = light.specular * specularIntensity;
     }
-
     return (ambient + diffuse + specular)*light.color;
 }
 

@@ -280,6 +280,12 @@
     <None Include="assets\Material\Shader\point_shadows_depth.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="assets\Material\Shader\DepthBuffer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="assets\Material\Shader\DepthBuffer.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Material\Texture\container.png">

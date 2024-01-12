@@ -194,6 +194,8 @@
     <None Include="assets\Material\Shader\cube_shader_mapping.vert" />
     <None Include="assets\Material\Shader\debug_quad.frag" />
     <None Include="assets\Material\Shader\debug_quad.vert" />
+    <None Include="assets\Material\Shader\DepthBuffer.frag" />
+    <None Include="assets\Material\Shader\DepthBuffer.vert" />
     <None Include="assets\Material\Shader\DirectionalLight.frag" />
     <None Include="assets\Material\Shader\DirectionalLight.vert" />
     <None Include="assets\Material\Shader\explode.frag" />
